@@ -24,7 +24,7 @@
 	if(isset($_SESSION['username'])){
 	?>
 		<div id="nav">
-			<?php include './menu_list.php';?>
+			<?php include ' 	./menu_list.php';?>
 		</div>
 	<?php 
 	}else{
