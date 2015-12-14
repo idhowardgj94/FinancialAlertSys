@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+
+<?php
+session_start(); 
+//session_destroy();
+?>
 <html>
 <head>
 	<meta http-equiv="content-type" content="text/html"; charset="utf-8">
@@ -24,13 +28,13 @@
 	if(isset($_SESSION['username'])){
 	?>
 		<div id="nav">
-			<?php include ' 	./menu_list.php';?>
+			<?php include './menu_list.php';?>
 		</div>
 	<?php 
 	}else{
 		echo '您無權觀看此頁面！';
 		session_destroy();
-		echo '<meta http-equiv=REFRESH CONTENT=2;url=login.php>';
+		//echo '<meta http-equiv=REFRESH CONTENT=2;url=login.php>';
 		#重新導向到login.php
 	}		
 	?>
