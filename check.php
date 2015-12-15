@@ -11,6 +11,7 @@ function check_input($str){
 	}
 	
 	if(!is_numeric($str)){
+	
 	//不是數字的話，則加上單引號
 		$str = "'" . mysqli_real_escape_string($GLOBALS['dbn'], $str) . "'";
 	}

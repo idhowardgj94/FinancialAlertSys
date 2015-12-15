@@ -118,7 +118,7 @@
 
 
 <ul class="navigation">
-	<li id="menu_risk_at_value"><a herf="#">企業財務風險監控</a>
+	<li id="menu_risk_at_value"><a href="#">企業財務風險監控</a>
 		<ul>
 			<li><a href="#">台灣公司</a>
 				<ul>

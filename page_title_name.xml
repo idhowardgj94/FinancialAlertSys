@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<page_title_name>
+<top100_title>公司代號</top100_title>
+<top100_title>公司名稱</top100_title>
+<top100_title>信用評分</top100_title>
+<top100_title>資產總額(千元)</top100_title>
+<top100_title>營業收入淨額(千元)</top100_title>
+<top100_title>稅後淨利(千元)</top100_title>
+<top100_title>毛利率(%)</top100_title>
+<top100_title>營益率(%)</top100_title>
+<top100_title>每股盈餘(元)</top100_title>
+<top100_title>每元資本營收槓桿</top100_title>
+<top100_title>ROA(%)</top100_title>
+<top100_title>ROE(%)</top100_title>
+<top100_title>競爭力總分</top100_title>
+<top100_title>競爭力名次</top100_title>
+
+<financial_title number="9">獲利能力</financial_title>
+<financial_title number="4">償債能力</financial_title>
+<financial_title number="4">經營能力</financial_title>
+<financial_title number="2">資本結構</financial_title>
+<financial_title number="5">現金流量</financial_title>
+
+<financial_data_title>毛利率</financial_data_title>
+<financial_data_title>營業利益率</financial_data_title>
+<financial_data_title>稅前淨利率</financial_data_title>
+<financial_data_title>每股營業額(元)</financial_data_title>
+<financial_data_title>每股營業利益(元)</financial_data_title>
+<financial_data_title>每股稅前淨利(元)</financial_data_title>
+<financial_data_title>股東權益報酬率</financial_data_title>
+<financial_data_title>資產報酬率</financial_data_title>
+<financial_data_title>每股盈餘(元)</financial_data_title>
+<financial_data_title>流動比率</financial_data_title>
+<financial_data_title>速動比率</financial_data_title>
+<financial_data_title>負債比率</financial_data_title>
+<financial_data_title>利息保障倍數</financial_data_title>
+<financial_data_title>應收帳款週轉率(次)</financial_data_title>
+<financial_data_title>存貨週轉率(次)</financial_data_title>
+<financial_data_title>固定資產週轉率(次)</financial_data_title>
+<financial_data_title>總資產週轉率(次)</financial_data_title>
+<financial_data_title>負債對淨值比率</financial_data_title>
+<financial_data_title>長期資金適合率</financial_data_title>
+<financial_data_title>營業現金流量</financial_data_title>
+<financial_data_title>理財現金流量</financial_data_title>
+<financial_data_title>融資現金流量</financial_data_title>
+<financial_data_title>現金增資</financial_data_title>
+<financial_data_title>營業+理財現金流量</financial_data_title>
+
+</page_title_name>
