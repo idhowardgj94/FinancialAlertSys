@@ -23,13 +23,12 @@ function searchCompanyValueatRisk(e, status){
 		// 取消表單提交 ex: submit
 		e.preventDefault();
 		// do somthing with inputs
-
 		var searchString = document.getElementById('serchInput').value;
 		searchString = Trim(searchString);
 		searchCompany(searchString, status);
 		//var jumpindex = parseInt(index) * 31;
 		//$('div.g_Body').scrollTop(jumpindex);
-
+		
 		return false;
 	//});
 }
@@ -38,11 +37,9 @@ function searchChinaCompanyValueatRisk(e) {
 	// 取消表單提交 ex: submit
 	e.preventDefault();
 	// do somthing with inputs
-					
 	var searchString = document.getElementById('serchInput').value;
 	searchString = Trim(searchString);
 	searchChinaCompany(searchString);
-
 	return false;
 }
 
@@ -91,6 +88,7 @@ function searchCompany(searchString, status) {
 			}
 		}
 	});
+	alert("end searchcompany222	");
 }
 
 function searchChinaCompany(searchString) {
