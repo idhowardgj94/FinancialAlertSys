@@ -863,7 +863,7 @@ class db_controller_unit {
 	 */
 	function getFinancialTitleName($class) {
 		$dname = "page_title_name.xml"; // xml檔名
-		                               
+		                                
 		// 建立XML操作物件
 		$doc = new DOMDocument ();
 		$doc->load ( $dname );
@@ -1013,5 +1013,4 @@ class db_controller_unit {
 		
 		return $financial_index_data;
 	}
-		
 }

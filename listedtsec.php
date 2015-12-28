@@ -18,6 +18,8 @@
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/valueatrisk_page_action.js"></script>
+<script type="text/javascript" src="Grid.js"></script>
+		<!-- 會將grid中前三排的部分（g_title）固定起來 -->
 </head>
 <body onload="changeColor()">
 	
@@ -45,7 +47,7 @@
 		$object->printValueatRisktable ( "taiwan", "上市" );
 		
 		?>
-		<script type="text/javascript" src="Grid.js"></script>
+		
 		<script type="text/javascript">
 		(function(window, document, undefined){
 				"use strict";
@@ -64,6 +66,7 @@
 			
 			for (var i=0, col; col=gridColSortTypes[i]; i++) {
 				gridColAlign[i] = (col === "number") ? "right" : "left";
+				//number靠右對齊，文字靠左對齊
 			}
 			
 			var myGrid = new Grid("demoGrid", {

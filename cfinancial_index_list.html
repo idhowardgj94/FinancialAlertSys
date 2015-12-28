@@ -1,0 +1,66 @@
+<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
+
+<h3>Select</h3>
+
+<form name="CompanyListForm" id="CompanyListForm">
+<table id="CompanyIDserch">
+<tr>
+	<td style="width: 110px; height: 24px; color:#fff;" align="left">公司代號/名稱</td>
+	<td style="width: 130px; height: 24px" align="left">
+		<input size="5" id="searchInputAdv"></input>
+	</td>
+</tr>
+<tr>
+<td></td>
+<td  align="right">
+<input type="button" value="確認" onClick="jumpPage(document.getElementById('searchInputAdv').value)">
+</td>
+</tr>
+
+</table>
+
+<br>
+------------------------------------
+<br><br>
+
+<table id="CompanyListTable">
+<tr>
+
+	<td style="width: 60px; height: 24px; color:#fff;" align="left">類別</td>
+	<td style="width: 180px; height: 24px" align="left">
+		<select name="CompanyListSelect" id="CompanyListStatus" onChange="if(this.options[this.options.selectedIndex].value!='#') { buildCompanyList(this.options[this.options.selectedIndex].value); }">
+		
+		<option value="#">請選擇...</option>
+		<option value="1">上市</option>	
+		<option value="2">上櫃</option>
+		<option value="3">興櫃</option>
+		<option value="4">公開發行</option>
+
+		</select>
+	</td>
+</tr>
+<tr>
+	<td style="color:#fff;" align="left">公司</td>
+	<td align="left">
+		<select name="CompanyList" id="CompanyList">
+
+		<option value="">請選擇公司..</option>
+
+		</select>
+	</td>
+</tr>
+
+<tr>
+<td></td>
+<td  align="right">
+<input type="button" value="確認" onClick="javascript:window.open( document.CompanyListForm.CompanyList.options[document.CompanyListForm.CompanyList.options.selectedIndex].value ,'_self')">
+</td>
+</tr>
+
+</table>
+
+
+</form>
+
+
+</nav>

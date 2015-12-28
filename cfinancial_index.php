@@ -95,7 +95,7 @@ if (isset ( $_SESSION ['username'] )) {
 			})(this, this.document);
 		</script>
 		<script>
-			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+			var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),//這裡是幹麻的
 				showLeft = document.getElementById( 'showLeft' ),
 				
 				body = document.body;
