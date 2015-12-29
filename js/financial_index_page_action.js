@@ -32,12 +32,35 @@ function jumpPage(cid) {
 
 function searchCompanyFiancialIndex(e){
 	// serchInput 當作變數丟到 jumpPage
-				
+	alert('hello, ');
 	// 取消表單提交 ex: submit
 	e.preventDefault();
 	// do somthing with inputs
-	
+	var status = 0;
 	var cid = Trim(document.getElementById('serchInput').value);
+	if(cid==''){
+		cid = Trim(document.getElementById('searchInputAdv').value);
+		status++;
+	}
+	alert(cid);
+	var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
+	var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
+	if(cid.length>20){
+		alert("您輸入的字串長度異常，請重新輸入！");
+		if(status==0)
+			document.getElementById('serchInput').value='';
+		else
+			document.getElementById('searchInputAdv').value='';
+		return false;
+	}
+	else if(pattern_isdigit.test(cid)==false && pattern_isChinese.test(cid)==false){
+		alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
+		if(status==0)
+			document.getElementById('serchInput').value='';
+		else
+			document.getElementById('searchInputAdv').value='';
+		return false;
+	}
 	jumpPage(cid);
 
 	return false;

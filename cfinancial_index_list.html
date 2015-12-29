@@ -1,3 +1,4 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 <nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-left" id="cbp-spmenu-s1">
 
 <h3>Select</h3>
@@ -5,7 +6,7 @@
 <form name="CompanyListForm" id="CompanyListForm">
 <table id="CompanyIDserch">
 <tr>
-	<td style="width: 110px; height: 24px; color:#fff;" align="left">¤½¥q¥N¸¹/¦WºÙ</td>
+	<td style="width: 110px; height: 24px; color:#fff;" align="left">å…¬å¸ä»£è™Ÿ/åç¨±</td>
 	<td style="width: 130px; height: 24px" align="left">
 		<input size="5" id="searchInputAdv"></input>
 	</td>
@@ -13,7 +14,7 @@
 <tr>
 <td></td>
 <td  align="right">
-<input type="button" value="½T»{" onClick="jumpPage(document.getElementById('searchInputAdv').value)">
+<input type="button" value="ç¢ºèª" onClick="searchCompanyFiancialIndex(event)">
 </td>
 </tr>
 
@@ -26,25 +27,25 @@
 <table id="CompanyListTable">
 <tr>
 
-	<td style="width: 60px; height: 24px; color:#fff;" align="left">Ãþ§O</td>
+	<td style="width: 60px; height: 24px; color:#fff;" align="left">é¡žåˆ¥</td>
 	<td style="width: 180px; height: 24px" align="left">
 		<select name="CompanyListSelect" id="CompanyListStatus" onChange="if(this.options[this.options.selectedIndex].value!='#') { buildCompanyList(this.options[this.options.selectedIndex].value); }">
 		
-		<option value="#">½Ð¿ï¾Ü...</option>
-		<option value="1">¤W¥«</option>	
-		<option value="2">¤WÂd</option>
-		<option value="3">¿³Âd</option>
-		<option value="4">¤½¶}µo¦æ</option>
+		<option value="#">è«‹é¸æ“‡...</option>
+		<option value="1">ä¸Šå¸‚</option>	
+		<option value="2">ä¸Šæ«ƒ</option>
+		<option value="3">èˆˆæ«ƒ</option>
+		<option value="4">å…¬é–‹ç™¼è¡Œ</option>
 
 		</select>
 	</td>
 </tr>
 <tr>
-	<td style="color:#fff;" align="left">¤½¥q</td>
+	<td style="color:#fff;" align="left">å…¬å¸</td>
 	<td align="left">
 		<select name="CompanyList" id="CompanyList">
 
-		<option value="">½Ð¿ï¾Ü¤½¥q..</option>
+		<option value="">è«‹é¸æ“‡å…¬å¸..</option>
 
 		</select>
 	</td>
@@ -53,7 +54,7 @@
 <tr>
 <td></td>
 <td  align="right">
-<input type="button" value="½T»{" onClick="javascript:window.open( document.CompanyListForm.CompanyList.options[document.CompanyListForm.CompanyList.options.selectedIndex].value ,'_self')">
+<input type="button" value="ç¢ºèª" onClick="javascript:window.open( document.CompanyListForm.CompanyList.options[document.CompanyListForm.CompanyList.options.selectedIndex].value ,'_self')">
 </td>
 </tr>
 

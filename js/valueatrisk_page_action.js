@@ -19,23 +19,25 @@ function searchCompanyValueatRisk(e, status){
 	// 幫 a.abgne_gotoheader 加上 click 事件
 	//$('a.abgne_gotoheader').click(function(){
 		// offset 以px計 一間公司31px高
-		
+		//alert("我有進來啦");
 		// 取消表單提交 ex: submit
 		e.preventDefault();
 		// do somthing with inputs
 		var searchString = document.getElementById('serchInput').value;
+		
 		var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
-		var pattern_isChinese = /^[/u4e00-/u9fa5]{0,}$/;//只能是漢字
+		var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
 		searchString = Trim(searchString);
 		//檢查長度
+		
 		if(searchString.length>20){
-			alert("您輸入的字串長度異長，請重新輸入！");
-			document.getElementById('searchInput').value='';
+			alert("您輸入的字串長度異常，請重新輸入！");
+			document.getElementById('serchInput').value='';
 			return false;
 		}
 		else if(pattern_isdigit.test(searchString)==false && pattern_isChinese.test(searchString)==false){
 			alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
-			document.getElementById('searchInput').value='';
+			document.getElementById('serchInput').value='';
 			return false;
 		}
 		searchCompany(searchString, status);
@@ -101,7 +103,7 @@ function searchCompany(searchString, status) {
 			}
 		}
 	});
-	alert("end searchcompany222	");
+	//alert("end searchcompany222	");
 }
 
 function searchChinaCompany(searchString) {
