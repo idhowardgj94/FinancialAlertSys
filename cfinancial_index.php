@@ -39,7 +39,7 @@ include './menu_list.php';
 <span style="margin-top:5px; margin-right:5px; float:right;">
 <input style="border-radius: 5px;" size="5" id="serchInput"></input>
 <a href="#" class="abgne_gotoheader"><input type="submit" onclick="searchCompanyFiancialIndex(event);" size="5" value="搜尋"></a>
-<a href="#" id="showLeft"><input type="button" size="5" value="進階" onclick="serchInput.value='';"</a>
+<a href="#" id="showLeft"><input type="button" size="5" value="進階" onclick="serchInput.value='';"></a>
 </span>
 </form>
 

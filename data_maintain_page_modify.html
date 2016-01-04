@@ -1,0 +1,562 @@
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<!--
+	修改單一資料區塊
+-->
+<div id="maintain_modify">
+
+<!--
+	使用者輸入資料區塊
+-->
+<div id="input_data" style="display:block;">
+<form id="input_form" method="post">
+
+
+<!-- 使用者輸入ID區塊 -->
+<span id="cid_input">
+公司代號:<br>
+<input type="text" id="cid_input_value">
+</span>
+
+<!-- 使用者選擇產業區塊 -->
+<span id="sector_input" style="display:none;">
+產業別:<br>
+<select name="selected_sector" id="selected_sector">
+	<!--<option value="電信系統">電信系統</option>
+　		<option value="DRAM">DRAM</option>
+　		<option value="TFT-LCD">TFT-LCD</option>
+	<option value="晶圓代工">晶圓代工</option>
+	<option value="LED">LED</option>
+	<option value="太陽能">太陽能</option>
+	<option value="建築業">建築業</option>-->
+</select>
+</span>
+
+<!-- 使用者選擇集團區塊 -->
+<span id="group_input" style="display:none;">
+集團別:<br>
+<select id="selected_group">
+	<!--<option value="台塑集團">台塑集團</option>
+　		<option value="鴻海集團">鴻海集團</option>
+　		<option value="統一集團">統一集團</option>
+	<option value="宏碁集團">宏碁集團</option>
+	<option value="中鋼集團">中鋼集團</option>
+	<option value="遠東集團">遠東集團</option>
+	<option value="大同集團">大同集團</option>
+	<option value="台積電集團">台積電集團</option>
+	<option value="潤泰集團">潤泰集團</option>-->
+</select>
+</span>
+
+<!-- 使用者輸入season區塊 -->
+<span id="season_input" style="display:none;">
+	<br>
+	年份:<br>
+	<input type="text" name="year" id="season_input_year">
+	<br>
+	季別:<br>
+	<select name="season" id="season_input_value">
+		<option value="Q1">Q1</option>
+　		<option value="Q2">Q2</option>
+　		<option value="Q3">Q3</option>
+		<option value="Q4">Q4</option>
+	</select>
+	
+</span>
+
+<!-- 使用者選擇前百大季別區塊 -->
+<span id="top100_season_input" style="display:none;">
+	年份:<br>
+	<select id="selected_top100_year">
+		<option value="2015">2015</option>
+　		<option value="2014">2014</option>
+　		<option value="2013">2013</option>
+		<option value="2012">2012</option>
+		<option value="2011">2011</option>
+		<option value="2010">2010</option>
+		<option value="2009">2009</option>
+		<option value="2008">2008</option>
+	</select>
+</span>
+
+	<br><br>
+	<input type="button" name="button" id="button" value="輸入" onclick="formSubmit()">
+</form>
+</div>
+
+<!-- 
+	修改危機發生日區塊
+-->
+<div id="crisis_date_info" style="display:none;">
+	修改危機發生年/月<br>
+	<form name="CrisisDateForm">
+	<select name="CrisisDateList" id="crisis_date_list" onChange="if(this.options[this.selectedIndex].value != '#') { change_crisis_date(this.options[this.selectedIndex].value) };">
+	</select>
+	</form>
+	<br>
+	<table>
+		<tr>
+			<td COLSPAN=2>原危機發生年/月</td>
+			<td COLSPAN=2>新危機發生年/月</td>
+		</tr>
+		<tr>
+			<td>年份</td>
+			<td>
+			<p id="crisis_date_value_year"></p>
+			</td>
+			<td COLSPAN=2>
+			<input type="text" id="crisis_date_value_input_year" size="5">
+			</td>
+		</tr>
+		<tr>
+			<td>月份</td>
+			<td>
+			<p id="crisis_date_value_season"></p>
+			</td>
+			<td COLSPAN=2>
+			<select id="crisis_date_value_input_season">
+				<option value="01">01</option>
+		　		<option value="02">02</option>
+		　		<option value="03">03</option>
+				<option value="04">04</option>
+				<option value="05">05</option>
+				<option value="06">06</option>
+				<option value="07">07</option>
+				<option value="08">08</option>
+				<option value="09">09</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+			</select>
+			</td>
+		</tr>
+	</table>
+	<br>
+	
+	
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()">
+</div>
+
+
+<!--
+	修改公司基本資料
+-->
+<div id="cbasic_info" style="display:none;">
+
+<table>
+	<tr>
+		<td>公司代號:</td>
+		<td COLSPAN=2><span id="cbasic_info_id"></span></td>
+	</tr>
+	<tr>
+		<td>公司全名:</td>
+		<td><p id="cbasic_info_name"></p></td>
+		<td><input type="text" id="cbasic_info_name_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司簡稱:</td>
+		<td><p id="cbasic_info_nickname"></p></td>
+		<td><input type="text" id="cbasic_info_nickname_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>狀態:</td>
+		<td><p id="cbasic_info_status"></p></td>
+		<td><form>
+		<select id="cbasic_info_status_input">
+			<option value="#">請選擇..</option>
+			<option value="上市">上市</option>
+	　		<option value="上櫃">上櫃</option>
+	　		<option value="興櫃">興櫃</option>
+			<option value="公開發行">公開發行</option>
+			<option value="下市櫃">下市櫃</option>
+			<option value="null">null</option>
+		</select>
+		</form>
+		</td>
+	</tr>
+	<tr>
+		<td>產業別:</td>
+		<td><p id="cbasic_info_sector"></p></td>
+		<td><form>
+		<select id="cbasic_info_sector_input">
+			<option value="#">請選擇..</option>
+		</select>
+		</form>
+		</td>
+	</tr>
+	<tr>
+		<td>集團別:</td>
+		<td><p id="cbasic_info_group"></p></td>
+		<td>
+		<form>
+		<select id="cbasic_info_group_input">
+			<option value="#">請選擇..</option>
+		</select>
+		</form>
+		</td>
+	</tr>
+</table>
+
+<br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+<!--
+	修改公司風險值/股價/現金流量
+-->
+<div id="cfinancial_info" style="display:none;">
+	<table>
+	<tr><td>公司代號:</td><td><span id="cfinancial_info_id"></span></td></tr>
+	<tr><td>輸入季別:</td><td><span id="cfinancial_info_season"></span></td></tr>
+	<tr><td>公司名稱:</td><td><p id="cfinancial_info_name"></p></td></tr>
+	<tr><td>狀態:</td><td><p id="cfinancial_info_status"></p></td></tr>
+	<tr><td>產業別:</td><td><p id="cfinancial_info_sector"></p></td></tr>
+	<tr><td>集團別:</td><td><p id="cfinancial_info_group"></p></td></tr>
+	</table>
+	<br>
+	<table>
+	<tr>
+		<td>原風險值</td>
+		<td>新風險值</td>
+		<td>原股價</td>
+		<td>新股價</td>
+		<td>原來自營運<br>之現金流量</td>
+		<td>新來自營運<br>之現金流量</td>
+		<td>原投資活動<br>之現金流量</td>
+		<td>新投資活動<br>之現金流量</td>
+		<td>原現金增(減)資</td>
+		<td>新現金增(減)資</td>
+	</tr>
+	<tr>
+		<td>
+		<p id="cfinancial_info_value_at_risk"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_info_value_at_risk_input" size="5">
+		</td>
+		<td>
+		<p id="cfinancial_info_stock"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_info_stock_input" size="5">
+		</td>
+		<td>
+		<p id="cfinancial_info_cashflow_operating"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_info_cashflow_operating_input" size="5">
+		</td>
+		<td>
+		<p id="cfinancial_info_cashflow_investment"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_info_cashflow_investment_input" size="5">
+		</td>
+		<td>
+		<p id="cfinancial_info_proceed_fm_newIssue"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_info_proceed_fm_newIssue_input" size="5">
+		</td>
+	</tr>
+	</table>
+	
+	<br><br>
+	<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+
+<!--
+	修改公司財務指標
+-->
+<div id="cfinancial_index" style="display:none;">
+	<table>
+	<tr><td>公司代號:</td><td><span id="cfinancial_index_id"></span></td></tr>
+	<tr><td>輸入季別:</td><td><span id="cfinancial_index_season"></span><br></td></tr>
+	<tr><td>公司名稱:</td><td><p id="cfinancial_index_name"></p></td></tr>
+	<tr><td>狀態:</td><td><p id="cfinancial_index_status"></p></td></tr>
+	</table>
+	<br>
+	修改項目
+	<select id="selected_cfinancial_index" onChange="if(this.options[this.selectedIndex].value != '#'){change_select_financial_info(this.options[this.selectedIndex].value);}">
+		<option>請選擇..</option>
+		<option value="#">-----獲利能力-----</option>
+		<option value="毛利率">毛利率</option>
+		<option value="營業利益率">營業利益率</option>
+		<option value="稅前淨利率">稅前淨利率</option>
+		<option value="每股營業額(元)">每股營業額(元)</option>
+		<option value="每股營業利益(元)">每股營業利益(元)</option>
+		<option value="每股稅前淨利(元)">每股稅前淨利(元)</option>
+		<option value="股東權益報酬率">股東權益報酬率</option>
+		<option value="資產報酬率">資產報酬率</option>
+		<option value="每股盈餘(元)">每股盈餘(元)</option>
+		<option value="#">-----償債能力-----</option>
+		<option value="流動比率">流動比率</option>
+		<option value="速動比率">速動比率</option>
+		<option value="負債比率">負債比率</option>
+		<option value="利息保障倍數">利息保障倍數</option>
+		<option value="#">-----經營能力-----</option>
+		<option value="應收帳款週轉率(次)">應收帳款週轉率(次)</option>
+		<option value="存貨週轉率(次)">存貨週轉率(次)</option>
+		<option value="固定資產週轉率(次)">固定資產週轉率(次)</option>
+		<option value="總資產週轉率(次)">總資產週轉率(次)</option>
+		<option value="#">-----資本結構-----</option>
+		<option value="負債對淨值比率">負債對淨值比率</option>
+		<option value="長期資金適合率">長期資金適合率</option>
+		<option value="#">-----現金流量-----</option>
+		<option value="營業現金流量">營業現金流量</option>
+		<option value="理財現金流量">理財現金流量</option>
+		<option value="融資現金流量">融資現金流量</option>
+		<option value="現金增資">現金增資</option>
+	</select>
+	<table>
+	<tr>
+		<td>原<span id="cfinancial_index_original">營業毛利率</span></td>
+		<td>新<span id="cfinancial_index_new">營業毛利率</span></td>
+	</tr>
+	<tr>
+		<td>
+		<p id="cfinancial_index_value"></p>
+		</td>
+		<td>
+		<input type="text" id="cfinancial_index_value_input" size="5">
+		</td>
+	</tr>
+	</table>
+	
+	<br><br>
+	<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+
+<!--
+	修改產業數值
+-->
+<div id="sector_info" style="display:none;">
+<table>
+<tr><td>產業別:</td><td><span id="sector_info_name"></span></td></tr>
+<tr><td>輸入季別:</td><td><span id="sector_info_season"></span></td></tr>
+</table>
+<br>
+修改項目
+<select id="selected_sector_info" onChange="if(this.options[this.selectedIndex].value != '#'){change_select_financial_info(this.options[this.selectedIndex].value);}">
+	<option value="#">請選擇..</option>
+	<option value="產業總風險值">產業總風險值</option>
+	<option value="總資產">總資產</option>
+	<option value="產業營業收入(千元)">產業營業收入(千元)</option>
+	<option value="產業稅後獲利(千元)">產業稅後獲利(千元)</option>
+	<option value="產業每股盈餘(元)">產業每股盈餘(元)</option>
+	<option value="營業活動之淨現金流入(千元)">營業活動之淨現金流入(千元)</option>
+	<option value="投資活動之淨現金流入(千元)">投資活動之淨現金流入(千元)</option>
+	<option value="籌資活動之淨現金流入(千元)">籌資活動之淨現金流入(千元)</option>
+	<option value="現金增資(千元)">現金增資(千元)</option>
+</select>
+<table>
+<tr>
+	<td>原<span id="sector_info_original">總風險值</span></td>
+	<td>新<span id="sector_info_new">總風險值</span></td>
+</tr>
+<tr>
+	<td>
+	<p id="sector_info_value"></p>
+	</td>
+	<td>
+	<input type="text" id="sector_info_value_input" size="5">
+	</td>
+</tr>
+</table>
+
+<br><br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+
+
+<!--
+	修改企業集團數值
+-->
+<div id="group_info" style="display:none;">
+<table>
+<tr><td>集團別:</td><td><span id="group_info_name"></span></td></tr>
+<tr><td>輸入季別:</td><td><span id="group_info_season"></span></td></tr>
+</table>
+<br>
+修改項目
+<select id="selected_group_info" onChange="if(this.options[this.selectedIndex].value != '#'){change_select_financial_info(this.options[this.selectedIndex].value);}">
+	<option value="#">請選擇..</option>
+	<option value="集團總風險值">集團總風險值</option>
+	<option value="總資產">總資產</option>
+	<option value="集團營業收入(千元)">集團營業收入(千元)</option>
+	<option value="集團稅後獲利(千元)">集團稅後獲利(千元)</option>
+	<option value="集團每股盈餘(元)">集團每股盈餘(元)</option>
+	<option value="營業活動之淨現金流入(千元)">營業活動之淨現金流入(千元)</option>
+	<option value="投資活動之淨現金流入(千元)">投資活動之淨現金流入(千元)</option>
+	<option value="籌資活動之淨現金流入(千元)">籌資活動之淨現金流入(千元)</option>
+	<option value="現金增資(千元)">現金增資(千元)</option>
+</select>
+<table>
+<tr>
+	<td>原<span id="group_info_original">總風險值</span></td>
+	<td>新<span id="group_info_new">總風險值</span></td>
+</tr>
+<tr>
+	<td>
+	<p id="group_info_value"></p>
+	</td>
+	<td>
+	<input type="text" id="group_info_value_input" size="5">
+	</td>
+</tr>
+</table>
+
+<br><br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+<!--
+	修改中國公司基本資料
+-->
+<div id="china_cbasic_info" style="display:none;">
+
+<table>
+	<tr>
+		<td>公司代號:</td>
+		<td COLSPAN=2><span id="china_cbasic_info_id"></span></td>
+	</tr>
+	<tr>
+		<td>公司名:</td>
+		<td><p id="china_cbasic_info_name"></p></td>
+		<td><input type="text" id="china_cbasic_info_name_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司簡稱:</td>
+		<td><p id="china_cbasic_info_nickname"></p></td>
+		<td><input type="text" id="china_cbasic_info_nickname_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司全名:</td>
+		<td><p id="china_cbasic_info_fullname"></p></td>
+		<td><input type="text" id="china_cbasic_info_fullname_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>狀態:</td>
+		<td><p id="china_cbasic_info_status"></p></td>
+		<td><form>
+		<select id="china_cbasic_info_status_input">
+			<option value="#">請選擇..</option>
+			<option value="T">T</option>
+			<option value="null">null</option>
+		</select>
+		</form>
+		</td>
+	</tr>
+</table>
+
+<br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+<!--
+	修改中國公司風險值/現金流量
+-->
+<div id="china_cfinancial_info" style="display:none;">
+<table>
+<tr><td>公司代號:</td><td><span id="china_cfinancial_info_id"></span></td></tr>
+<tr><td>輸入季別:</td><td><span id="china_cfinancial_info_season"></span></td></tr>
+<tr><td>公司名稱:</td><td><p id="china_cfinancial_info_name"></p></td></tr>
+</table>
+<br>
+<table>
+<tr>
+	<td>原風險值</td>
+	<td>新風險值</td>
+	<td>原來自營運<br>之現金流量</td>
+	<td>新來自營運<br>之現金流量</td>
+	<td>原投資活動<br>之現金流量</td>
+	<td>新投資活動<br>之現金流量</td>
+	<td>原現金增(減)資</td>
+	<td>新現金增(減)資</td>
+</tr>
+<tr>
+	<td>
+	<p id="china_cfinancial_info_value_at_risk"></p>
+	</td>
+	<td>
+	<input type="text" id="china_cfinancial_info_value_at_risk_input" size="5">
+	</td>
+	<td>
+	<p id="china_cfinancial_info_cashflow_operating"></p>
+	</td>
+	<td>
+	<input type="text" id="china_cfinancial_info_cashflow_operating_input" size="5">
+	</td>
+	<td>
+	<p id="china_cfinancial_info_cashflow_investment"></p>
+	</td>
+	<td>
+	<input type="text" id="china_cfinancial_info_cashflow_investment_input" size="5">
+	</td>
+	<td>
+	<p id="china_cfinancial_info_proceed_fm_newIssue"></p>
+	</td>
+	<td>
+	<input type="text" id="china_cfinancial_info_proceed_fm_newIssue_input" size="5">
+	</td>
+</tr>
+</table>
+
+<br><br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+<!--
+	修改前百大頁面資料
+-->
+<div id="top100_data" style="display:none;">
+<table>
+<tr><td>輸入年份:</td><td><span id="top100_year"></span></td></tr>
+<tr><td>
+修改公司</td><td>
+<form name="CodeForm">
+<select name="subtype" id="top100_company_list">
+	<option value="#">請選擇公司...</option>
+</select>
+</form></td></tr>
+</table>
+<br>
+
+修改項目
+<select id="selected_top100_data" onChange="if(this.options[this.selectedIndex].value != '#'){change_select_financial_info(this.options[this.selectedIndex].value);}">
+	<option value="#">請選擇..</option>
+	<option value="資產總額(千元)">資產總額(千元)</option>
+	<option value="營業收入淨額(千元)">營業收入淨額(千元)</option>
+	<option value="稅後淨利(千元)">稅後淨利(千元)</option>
+	<option value="毛利率">毛利率</option>
+	<option value="營益率">營益率</option>
+	<option value="每股盈餘(元)">每股盈餘(元)</option>
+	<option value="每元資本營收槓桿">每元資本營收槓桿</option>
+	<option value="ROA">ROA</option>
+	<option value="ROE">ROE</option>
+	<!--<option value="市值">市值</option>-->
+	<option value="競爭力總分">競爭力總分</option>
+	<option value="競爭力名次">競爭力名次</option>
+</select>
+<table>
+<tr>
+	<td>原<span id="top100_data_original">資產總額(千元)</span></td>
+	<td>新<span id="top100_data_new">資產總額(千元)</span></td>
+</tr>
+<tr>
+	<td>
+	<p id="top100_data_value"></p>
+	</td>
+	<td>
+	<input type="text" id="top100_data_value_input" size="5">
+	</td>
+</tr>
+</table>
+
+<br><br>
+<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmModifyMessage()"> <input type="button" name="button" id="button" value="清除" onclick="clean_info()">
+</div>
+
+</div>

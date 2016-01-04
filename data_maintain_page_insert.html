@@ -1,0 +1,193 @@
+
+<meta charset="UTF-8">
+<!--
+	新增單筆資料
+-->
+<div id="maintain_insert" style="display:none;">
+
+<!--
+	新增公司基本資料
+-->
+<div id="cbasic_info_insert">
+新增公司基本資料 <br>
+<table>
+	<tr>
+		<td>公司代號:</td>
+		<td><input type="text" id="cbasic_info_insert_id_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司全名:</td>
+		<td><input type="text" id="cbasic_info_insert_name_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司簡稱:</td>
+		<td><input type="text" id="cbasic_info_insert_nickname_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>狀態:</td>
+		<td><form>
+		<select id="cbasic_info_insert_status_input">
+			<option value="上市">上市</option>
+	　		<option value="上櫃">上櫃</option>
+	　		<option value="興櫃">興櫃</option>
+			<option value="公開發行">公開發行</option>
+			<option value="下市櫃">下市櫃</option>
+		</select>
+		</form>
+		</td>
+	</tr>
+	<tr>
+		<td>產業別:</td>
+		<td><form><select id="cbasic_info_insert_sector_input"></select></form></td>
+	</tr>
+	<tr>
+		<td>集團別:</td>
+		<td><form><select id="cbasic_info_insert_group_input"></select></form></td>
+	</tr>
+</table>
+
+<br>
+<input type="button" name="button" id="button" value="確認新增" onclick="showConfirmInsertMessage()">
+</div>
+
+<!--
+	新增公司風險值資料
+-->
+<div id="cfinancial_info_insert" style="display:none;">
+	新增公司風險值資料 <br>
+	<table>
+	<tr>
+		<td>公司代號:</td>
+		<td><input type="text" id="cfinancial_info_insert_id" size="5"></td>
+	</tr>
+	<tr>
+		<td>年份:</td>
+		<td><input type="text" id="cfinancial_info_insert_year" size="5"></td>
+	</tr>
+	<tr>
+		<td>季別:</td>
+		<td><select id="cfinancial_info_insert_season">
+			<option value="Q1">Q1</option>
+			<option value="Q2">Q2</option>
+			<option value="Q3">Q3</option>
+			<option value="Q4">Q4</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td>風險值:</td>
+		<td><input type="text" id="cfinancial_info_insert_value" size="5"></td>
+	</tr>
+	</table>
+	
+	<br>
+	<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmInsertMessage()">
+</div>
+
+<!--
+	新增中國公司基本資料
+-->
+<div id="china_cbasic_info_insert" style="display:none;">
+新增中國公司基本資料 <br>
+<table>
+	<tr>
+		<td>公司代號:</td>
+		<td><input type="text" id="china_cbasic_info_insert_id_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司名稱:</td>
+		<td><input type="text" id="china_cbasic_info_insert_name_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司簡稱:</td>
+		<td><input type="text" id="china_cbasic_info_insert_nickname_input" size="5"></td>
+	</tr>
+	<tr>
+		<td>公司全名:</td>
+		<td><input type="text" id="china_cbasic_info_insert_fullname_input" size="5"></td>
+	</tr>
+</table>
+
+<br>
+<input type="button" name="button" id="button" value="確認新增" onclick="showConfirmInsertMessage()">
+</div>
+
+<!--
+	新增中國公司風險值資料
+-->
+<div id="china_cfinancial_info_insert" style="display:none;">
+	新增中國公司風險值資料 <br>
+	<table>
+	<tr>
+		<td>公司代號:</td>
+		<td><input type="text" id="china_cfinancial_info_insert_id" size="5"></td>
+	</tr>
+	<tr>
+		<td>年份:</td>
+		<td><input type="text" id="china_cfinancial_info_insert_year" size="5"></td>
+	</tr>
+	<tr>
+		<td>季別:</td>
+		<td><select id="china_cfinancial_info_insert_season">
+			<option value="Q1">Q1</option>
+			<option value="Q2">Q2</option>
+			<option value="Q3">Q3</option>
+			<option value="Q4">Q4</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td>風險值:</td>
+		<td><input type="text" id="china_cfinancial_info_insert_value" size="5"></td>
+	</tr>
+	</table>
+	
+	<br>
+	<input type="button" name="button" id="button" value="確認修改" onclick="showConfirmInsertMessage()">
+</div>
+
+<!--
+	新增危機發生日資料
+-->
+<div id="crisis_date_info_insert" style="display:none;">
+<span id="crisis_insert_form">
+	新增危機發生年/月 <br>
+	<table>
+		<tr>
+			<td>公司代號</td>
+			<td>
+			<input type="text" id="crisis_insert_cid_value_input" size="5">
+			</td>
+		</tr>
+		<tr>
+			<td>危機發生年份</td>
+			<td>
+			<input type="text" id="crisis_insert_date_value_input_year" size="5">
+			</td>
+		</tr>
+		<tr>
+			<td>月份</td>
+			<td>
+			<select id="crisis_insert_date_value_input_season">
+				<option value="01">01</option>
+		　		<option value="02">02</option>
+		　		<option value="03">03</option>
+				<option value="04">04</option>
+				<option value="05">05</option>
+				<option value="06">06</option>
+				<option value="07">07</option>
+				<option value="08">08</option>
+				<option value="09">09</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+			</select>
+			</td>
+		</tr>
+	</table>
+	<br>
+
+<input type="button" name="button" id="button" value="確認新增" onclick="showConfirmInsertMessage()">
+</span>
+
+</div>
+
+</div>
