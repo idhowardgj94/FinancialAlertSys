@@ -19,6 +19,7 @@
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/valueatrisk_page_action.js"></script>
 <script type="text/javascript" src="Grid.js"></script>
+<script type="text/javascript" src="js/foolprove.js"></script>
 		<!-- 會將grid中前三排的部分（g_title）固定起來 -->
 </head>
 <body onload="changeColor()">

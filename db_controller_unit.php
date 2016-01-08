@@ -921,6 +921,7 @@ class db_controller_unit {
 			
 			// season, season, season, ...
 			$tem_season = "";
+			//tem_season: seaon的資料排列
 			for($i = 0; $i < count ( $season_list ); $i ++) {
 				if ($tem_season !== "")
 					$tem_season .= ", ";

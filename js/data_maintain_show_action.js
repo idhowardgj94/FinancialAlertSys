@@ -1,3 +1,5 @@
+const MAXSTRINGLENGTH=20;
+const YEAR=4;
 // show no data
 function showNoDataReturn()
 {
@@ -54,7 +56,7 @@ function getColumnName(str)
 // 使用者按下輸入按鈕時觸發對應function修改表格資料
 function formSubmit()
 {
-	alert("in form submit");
+	//alert("in form submit");
 	//alert(modifyclass);
 	switch(modifyClass)
 	{
@@ -83,7 +85,7 @@ function formSubmit()
 // 透過php連接sql取得需要顯示的資料
 function get_needed_data(classes, condition)
 {
-	alert("in get_needed_data");
+	//alert("in get_needed_data");
 	// 組成丟進php取資料的字串
 	var parameter_str='data_class='+classes;
 	if(condition) {
@@ -99,11 +101,9 @@ function get_needed_data(classes, condition)
 		success: function(msg){
 			var returnsql_data = $.parseJSON(msg);
 			if(returnsql_data!=null){ // 若有資料則將資料設給return_data
-				alert("return data:"+returnsql_data);
 				return_data = returnsql_data;
 			}
 			else { // 無資料則提示沒有資料回傳
-				//alert("no data");
 				showNoDataReturn();
 			}
 		}
@@ -116,7 +116,19 @@ function change_cbasic_info()
 {
 	// 取得使用者輸入公司ID
 	var company_id = document.getElementById('cid_input_value').value;
-	
+	company_id=Trim(company_id);
+	if(!lengthcheck(company_id, MAXSTRINGLENGTH)){
+		alert("長度異常！");
+		document.getElementById('cid_input_value').value='';
+		return false;
+	}
+		
+	if(!isdigit(company_id)){
+		alert("輸入錯誤！請輸入公司ID！");
+		document.getElementById('cid_input_value').value='';
+		return false;
+	}
+		
 	var condition =[];
 	condition.push(company_id);
 	
@@ -139,6 +151,24 @@ function change_cfinancial_info()
 	var company_id = document.getElementById("cid_input_value").value;	
 	var year = document.getElementById("season_input_year").value;
 	
+	//以下為新增防呆功能
+	company_id=Trim(company_id);
+	year=Trim(year);
+	//alert(company_id);	
+	if(!lengthcheck(company_id, MAXSTRINGLENGTH)||!lengthcheck(year, YEAR)){
+		alert("長度異常！");
+		document.getElementById('cid_input_value').value='';
+		document.getElementById("season_input_year").value='';
+		return false;
+	}
+		
+	if(!isdigit(company_id)||!isdigit(year)){
+		alert("輸入錯誤！請輸入公司ID及西元年！");
+		document.getElementById('cid_input_value').value='';
+		document.getElementById("season_input_year").value='';
+		return false;
+	}
+	//-----------------------------------------------	
 	var e = document.getElementById("season_input_value");
 	var season = e.options[e.selectedIndex].value;
 	
@@ -237,6 +267,24 @@ function change_cfinancial_index()
 	// 取得使用者輸入公司ID season
 	var company_id = document.getElementById("cid_input_value").value;
 	var year = document.getElementById("season_input_year").value;
+	//以下為新增防呆功能
+	company_id=Trim(company_id);
+	year=Trim(year);
+	//alert(company_id);	
+	if(!lengthcheck(company_id, MAXSTRINGLENGTH)||!lengthcheck(year, YEAR)){
+		alert("長度異常！");
+		document.getElementById('cid_input_value').value='';
+		document.getElementById("season_input_year").value='';
+		return false;
+	}
+		
+	if(!isdigit(company_id)||!isdigit(year)){
+		alert("輸入錯誤！請輸入公司ID及西元年！");
+		document.getElementById('cid_input_value').value='';
+		document.getElementById("season_input_year").value='';
+		return false;
+	}
+	//-----------------------------------------------	
 	var e = document.getElementById("season_input_value");
 	var season = e.options[e.selectedIndex].value;
 	
@@ -275,12 +323,30 @@ function change_sector_group_info()
 	}
 	
 	if(classes) {
+		
+		
+		var year = document.getElementById("season_input_year").value;
+		//以下為新增防呆功能
+		year=Trim(year);
+		//alert(company_id);	
+		if(!lengthcheck(year, YEAR)){
+			alert("請輸入西元年！");
+			document.getElementById("season_input_year").value='';
+			document.getElementById(modifyClass).style.display = "none";
+			return false;
+		}
+			
+		if(!isdigit(year)){
+			alert("請輸入西元年！");
+			document.getElementById("season_input_year").value='';
+			document.getElementById(modifyClass).style.display = "none";
+			return false;
+		}
+		//-----------------------------------------------	
 		// 將使用者選擇的名稱與季別顯示在螢幕上
 		document.getElementById(modifyClass).style.display = "block";
 		var e = document.getElementById("selected_"+classes);
 		var sector_name = e.options[e.selectedIndex].value;
-		
-		var year = document.getElementById("season_input_year").value;
 		var k = document.getElementById("season_input_value");
 		var season = k.options[k.selectedIndex].value;
 		
@@ -383,10 +449,11 @@ function change_crisis_date(company_id)
 	SECTOR_INFO GROUP_INFO 產業 企業集團財務資料
 */
 function change_select_financial_info(selectFinancialInfo) {
+	//百大的、財務指標第二層使用
 	// 將選擇的需顯示資料名稱print在頁面上
+	//alert("in change_select_financial_info function");
 	document.getElementById(modifyClass+'_original').innerHTML = selectFinancialInfo;
 	document.getElementById(modifyClass+'_new').innerHTML = selectFinancialInfo;
-	
 	var condition1, classes, condition_time;
 	// 根據modifyClass讀取需要的資料
 	switch(modifyClass) {
@@ -407,10 +474,8 @@ function change_select_financial_info(selectFinancialInfo) {
 			classes = SECTOR_GROUP_INFO;
 			condition_time = document.getElementById(modifyClass+"_season").innerHTML;
 	}
-
 	// 將資料種類中文名稱轉換成col name
 	var col_name = getColumnName(selectFinancialInfo);
-	
 	var condition =[];
 	condition.push(condition1); // c_id or name
 	condition.push(condition_time); // season or year
@@ -418,6 +483,7 @@ function change_select_financial_info(selectFinancialInfo) {
 
 	// 用上述資料取得對應的財務資料
 	var financial_data_value = get_needed_data(classes, condition);
+	alert(financial_data_value);
 	if(financial_data_value) {
 		document.getElementById(modifyClass+"_value").innerHTML = checkNull(financial_data_value); // 若有值回傳則print在頁面上
 	}

@@ -18,6 +18,7 @@
 	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/valueatrisk_page_action.js"></script>
+<script type="text/javascript" src="js/foolprove.js"></script>
 </head>
 <body onload="changeColor()">
 	<!--  document.getElementById("menu_risk_at_value").style.background = "#333"; -->

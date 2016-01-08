@@ -12,9 +12,14 @@ function Trim(InputString)
 }
 function isdigit(InputString){
 	var pattern_isdigit =/^[0-9]+$/; //是否全部數字的正則式
-	return pattern_isdigit.test(searchString);
+	return pattern_isdigit.test(InputString);
 }
 function isChinese(InputString){
 	var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
-	return  pattern_isChinese.test(searchString);
+	return  pattern_isChinese.test(InputString);
+}
+function lengthcheck(InputString, restrict){
+	if(InputString.length>restrict)
+		return false;
+	return true;
 }

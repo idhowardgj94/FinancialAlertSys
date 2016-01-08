@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<dictionary>
+<word name="產業總風險值">total_value_at_risk</word>
+<word name="集團總風險值">total_value_at_risk</word>
+<word name="總資產">total_assets</word>
+<word name="資產總額(千元)">total_assets</word>
+<word name="資產負債比">debt_asset_ratio</word>
+<word name="產業營業收入(千元)">net_sales</word>
+<word name="集團營業收入(千元)">net_sales</word>
+<word name="營業收入淨額(千元)">net_sales</word>
+<word name="產業稅後獲利(千元)">net_income</word>
+<word name="集團稅後獲利(千元)">net_income</word>
+<word name="稅後淨利(千元)">net_income</word>
+<word name="產業每股盈餘(元)">eps</word>
+<word name="集團每股盈餘(元)">eps</word>
+<word name="每股盈餘(元)">eps</word>
+<word name="營業活動之淨現金流入(千元)">cashflow_operating</word>
+<word name="營業現金流量">cashflow_operating</word>
+<word name="投資活動之淨現金流入(千元)">cashflow_investment</word>
+<word name="理財現金流量">cashflow_investment</word>
+<word name="籌資活動之淨現金流入(千元)">cashflow_financing</word>
+<word name="融資現金流量">cashflow_financing</word>
+<word name="現金增資(千元)">proceed_fm_newIssue</word>
+<word name="現金增資">proceed_fm_newIssue</word>
+<word name="毛利率">gross_margin</word>
+<word name="營業利益率">operating_income</word>
+<word name="營益率">operating_income</word>
+<word name="稅前淨利率">pretax_income</word>
+<word name="每股營業額(元)">ps_sales</word>
+<word name="每股營業利益(元)">ps_operating_income</word>
+<word name="每股稅前淨利(元)">ps_pre_tax_income</word>
+<word name="股東權益報酬率">roe</word>
+<word name="ROE">roe</word>
+<word name="資產報酬率">roa</word>
+<word name="ROA">roa</word>
+<word name="流動比率">current</word>
+<word name="速動比率">acid_test</word>
+<word name="負債比率">liabilities</word>
+<word name="利息保障倍數">times_interest_earne</word>
+<word name="應收帳款週轉率(次)">aoverr_and_noverr_turnover</word>
+<word name="存貨週轉率(次)">inventory_turnover</word>
+<word name="長期資金適合率">liabilities_to_assets_ratio</word>
+<word name="負債對淨值比率">debt_over_equity_ratio</word>
+<word name="總資產週轉率(次)">total_asset_turnover</word>
+<word name="固定資產週轉率(次)">fixed_asset_turnover</word>
+<word name="每元資本營收槓桿">leverage</word>
+<word name="競爭力總分">scores</word>
+<word name="競爭力名次">rank</word>
+
+</dictionary>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<sector_group>
+<sector eng_abbreviation="TCS">電信系統</sector>
+<sector eng_abbreviation="DRAM">DRAM</sector>
+<sector eng_abbreviation="TFT-LCD">TFT-LCD</sector>
+<sector eng_abbreviation="Foundry">晶圓代工</sector>
+<sector eng_abbreviation="LED">LED</sector>
+<sector eng_abbreviation="SolarEnergy">太陽能</sector>
+<sector eng_abbreviation="Construction">建築業</sector>
+
+<group eng_abbreviation="fpg">台塑集團</group>
+<group eng_abbreviation="foxconn">鴻海集團</group>
+<group eng_abbreviation="uni-president">統一集團</group>
+<group eng_abbreviation="acer">宏碁集團</group>
+<group eng_abbreviation="csc">中鋼集團</group>
+<group eng_abbreviation="feg">遠東集團</group>
+<group eng_abbreviation="tatung">大同集團</group>
+<group eng_abbreviation="TSMC">台積電集團</group>
+<group eng_abbreviation="ruentex">潤泰集團</group>
+
+</sector_group>

@@ -1,41 +1,28 @@
 const COMPANY_DIV_HEIGHT = 31;
-
+const STRINGLENTH = 20;
 $(function(){
 	$("ul.navigation > li:has(ul) > a").append('<div class="arrow-bottom"></div>');
 	$("ul.navigation > li ul li:has(ul) > a").append('<div class="arrow-right"></div>');
 });
 
-// http://whereiswelly.tw/?p=407
-function Trim(InputString)
-{
-  //去除字串左右兩邊的空白
-  return InputString.replace(/^\s+|\s+$/g, "");
- 
-  //使用方式為replace(要被換掉的字串,要取代的字串)
-  //這裡面我們搭配使用了Regular Expression的方式 /搜尋的字串/g 來搜尋"要被換掉的字串"
-}
 
 function searchCompanyValueatRisk(e, status){
 	// 幫 a.abgne_gotoheader 加上 click 事件
 	//$('a.abgne_gotoheader').click(function(){
 		// offset 以px計 一間公司31px高
-		//alert("我有進來啦");
 		// 取消表單提交 ex: submit
 		e.preventDefault();
 		// do somthing with inputs
 		var searchString = document.getElementById('serchInput').value;
 		
-		var pattern_isdigit =/^[0-9]+$/; //是否全部數字的正則式
-		var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
 		searchString = Trim(searchString);
 		//檢查長度
-		
-		if(searchString.length>20){
+		if(lengthcheck(searchString, STRINGLENTH)){
 			alert("您輸入的字串長度異常，請重新輸入！");
 			document.getElementById('serchInput').value='';
 			return false;
 		}
-		else if(pattern_isdigit.test(searchString)==false && pattern_isChinese.test(searchString)==false){
+		else if(isdigit(searchString)==false && isChinese(searchString)==false){
 			alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
 			document.getElementById('serchInput').value='';
 			return false;

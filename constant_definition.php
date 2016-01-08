@@ -25,6 +25,7 @@ define("TOP100_COMPANYLIST", "top100_companylist");
 define("CRISIS_COMPANYLIST", "crisis_companylist");
 
 
+
 /*
 	insert result message
 	no_company_data : 該公司代號的公司不存在

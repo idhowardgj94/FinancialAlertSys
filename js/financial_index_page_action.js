@@ -1,20 +1,20 @@
 /**
- * 
+ * 此javascript必須與foolprove一同被載入
  */
 const FINANCIAL_INDEX_LINK = "cfinancial_index";
-
+const STRINGLENTH = 20;
 function changeColor() {
 	document.getElementById("menu_financialIndex").style.background = "#333";
 }
 //http://whereiswelly.tw/?p=407
-function Trim(InputString)
+/*function Trim(InputString)
 {
   //去除字串左右兩邊的空白
   return InputString.replace(/^\s+|\s+$/g, "");
  
   //使用方式為replace(要被換掉的字串,要取代的字串)
   //這裡面我們搭配使用了Regular Expression的方式 /搜尋的字串/g 來搜尋"要被換掉的字串"
-}
+}*/
 //search 輸入字串的公司是否存有資料後 跳轉頁面
 function jumpPage(cid) {
 	$.ajax({
@@ -43,9 +43,9 @@ function searchCompanyFiancialIndex(e){
 		status++;
 	}
 	alert(cid);
-	var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
-	var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
-	if(cid.length>20){
+	//var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
+	//var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
+	if(cid.length>STRINGLENTH){
 		alert("您輸入的字串長度異常，請重新輸入！");
 		if(status==0)
 			document.getElementById('serchInput').value='';
@@ -53,7 +53,7 @@ function searchCompanyFiancialIndex(e){
 			document.getElementById('searchInputAdv').value='';
 		return false;
 	}
-	else if(pattern_isdigit.test(cid)==false && pattern_isChinese.test(cid)==false){
+	else if(isdigit(cid)==false && isChinese(cid)==false){
 		alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
 		if(status==0)
 			document.getElementById('serchInput').value='';

@@ -32,14 +32,14 @@ $(document).ready(function(){
 			document.getElementById("maintainform_modify").style.display = "block";//in data_maintain_page.php
 			document.getElementById("maintainform_insert").style.display = "none";// in data_maintain_page.php
 			document.getElementById("maintain_insert").style.display = "none";
-			//document.getElementById(selected_value).style.display = "block";//where?
+			document.getElementById(selected_value).style.display = "block";//where?
 		} // 新增
 		else {
 			selectedModifyAction = INSERT;
 			document.getElementById("maintainform_modify").style.display = "none";
 			document.getElementById("maintainform_insert").style.display = "block";
 			document.getElementById("maintain_modify").style.display = "none";
-			//document.getElementById(selected_value).style.display = "block";
+			document.getElementById(selected_value).style.display = "block";
 		}
 		
 	});
