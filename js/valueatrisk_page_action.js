@@ -14,9 +14,15 @@ function searchCompanyValueatRisk(e, status){
 		e.preventDefault();
 		// do somthing with inputs
 		var searchString = document.getElementById('serchInput').value;
+<<<<<<< HEAD
 		
+=======
+		var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
+		var pattern_isChinese = /^[/u4e00-/u9fa5]{0,}$/;//只能是漢字
+>>>>>>> refs/remotes/origin/master
 		searchString = Trim(searchString);
 		//檢查長度
+<<<<<<< HEAD
 		if(lengthcheck(searchString, STRINGLENTH)){
 			alert("您輸入的字串長度異常，請重新輸入！");
 			document.getElementById('serchInput').value='';
@@ -25,6 +31,16 @@ function searchCompanyValueatRisk(e, status){
 		else if(isdigit(searchString)==false && isChinese(searchString)==false){
 			alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
 			document.getElementById('serchInput').value='';
+=======
+		if(searchString.length>20){
+			alert("您輸入的字串長度異長，請重新輸入！");
+			document.getElementById('searchInput').value='';
+			return false;
+		}
+		else if(pattern_isdigit.test(searchString)==false && pattern_isChinese.test(searchString)==false){
+			alert("您輸入的搜尋異常！本搜尋功能只提供ID或公司名稱搜尋！");
+			document.getElementById('searchInput').value='';
+>>>>>>> refs/remotes/origin/master
 			return false;
 		}
 		searchCompany(searchString, status);
