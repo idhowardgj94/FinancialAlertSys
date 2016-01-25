@@ -912,7 +912,7 @@ class db_controller_unit {
 			for($i = 1; $i < mysqli_num_rows ( $season_all ); $i ++) {
 				$season_all_row = mysqli_fetch_row ( $season_all );
 				$year = str_split ( $season_all_row [0], 4 );
-				
+				//strpos：找到substring第一次出現的起始位置
 				if (strpos ( $season_list [$season_num - 1], $year [0] ) === false) {
 					$season_list [$season_num] = $season_all_row [0];
 					$season_num ++;
@@ -921,7 +921,7 @@ class db_controller_unit {
 			
 			// season, season, season, ...
 			$tem_season = "";
-			//tem_season: seaon的資料排列
+			//tem_season: seaon的資料排列（把season_list中的季別使用逗點串在一起
 			for($i = 0; $i < count ( $season_list ); $i ++) {
 				if ($tem_season !== "")
 					$tem_season .= ", ";
@@ -945,7 +945,7 @@ class db_controller_unit {
 				
 				if (! empty ( $datatem_row )) {
 					for($j = 0; $j < count ( $datatem_row ); $j ++) {
-						
+						//3到21項取到小數後兩位
 						if ($datatem_row [$j] != null) {
 							if ($j >= FIRST_FINANCIAL_INDEX and $j <= LAST_FINANCIAL_INDEX) // 財務指標取到小數後兩位
 								$tem_financial_index_data [$row_num] [$col_num] = sprintf ( "%1\$.2f", $datatem_row [$j] );
@@ -963,7 +963,7 @@ class db_controller_unit {
 			}
 		}
 		
-		// 計算營業加理財現金流量
+		// 計算營業加理財現金流量（index: 26)
 		$col_num = count ( $tem_financial_index_data [0] );
 		for($i = 0; $i < count ( $tem_financial_index_data ); $i ++) {
 			if ($tem_financial_index_data [$i] [$col_num - 3] !== '-' and $tem_financial_index_data [$i] [$col_num - 4] !== '-')
@@ -977,13 +977,14 @@ class db_controller_unit {
 		// 儲存公司代號跟名稱
 		$financial_index_data [$row_num] [0] = $tem_financial_index_data [0] [1] . " " . $tem_financial_index_data [0] [2];
 		
-		// 儲存季別資料
+		// 儲存季別資料（把season抓出來放在第0列…（直轉橫）
 		for($i = 0; $i < count ( $tem_financial_index_data ); $i ++)
 			$financial_index_data [$row_num] [$i + 1] = $tem_financial_index_data [$i] [0];
 		$row_num ++;
 		
 		// 儲存對應季別的財務指標資料
 		// $financial_title = [['獲利能力',9], ['償債能力',4], ['經營能力',4], ['資本結構',2], ['現金流量',5]];
+		//title name
 		$financial_title = $this->getFinancialTitleName ( FINANCIAL_TITLE );
 		$datatitle = $this->getFinancialTitleName ( FINANCIAL_DATA_TITLE );
 		
