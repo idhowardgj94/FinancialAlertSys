@@ -25,7 +25,6 @@ $(document).ready(function(){
 	//maintain_select_action：第一個panel（選擇新增／修改、要修改的資料）
 	$('#maintain_selected_action').change(function(){
 		selected_value = $("input[name='maintain_selected']:checked").val();
-		
 		// 修改
 		if( selected_value == 'maintain_modify' ) {
 			selectedModifyAction = UPDATE;
