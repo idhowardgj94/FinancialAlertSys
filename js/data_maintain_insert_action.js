@@ -23,9 +23,16 @@ function insert_financial_info(classes)
 	// 取得所有input輸入丟進insertdata陣列中
 	$( "#"+class_id+" :input" ).not( "input[type=button]" ).each(function(){
 		var input = $(this); // This is the jquery object of the input, do what you will
-		if( input.val()!='' && input.val()!='#' ) {
-			user_input = input.val();
-			insertdata.push( user_input );
+		if( input.val()!='' && input.val()!='#') {
+			//alert(input.val());
+			if(!lengthcheck(input.val(), MAXSTRINGLENGTH)){
+				alert("長度異常！");
+				input_all = 0;
+			}
+			else{
+				user_input = input.val();
+				insertdata.push( user_input );
+			}
 		} else { // 若其中有無輸入的input格將flag改成0
 			input_all = 0;
 		}

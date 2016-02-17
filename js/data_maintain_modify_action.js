@@ -80,22 +80,22 @@ function modify_cbasic_info() {
 					var elementmname = $("#" + modifyClass + " :input").not(
 							"input[type=button]")[index].id;
 					alert(elementmname);
-					// alert(CBASIC_INFO_NAME_INPUT);
-					// alert(CBASIC_INFO_NICKNAME_INPUT);
+					 alert(CBASIC_INFO_NAME_INPUT);
+					 alert(CBASIC_INFO_NICKNAME_INPUT);
 					var input = $(this); // This is the jquery object of the
 											// input, do what you will
 					var modify_state=true;
 					if (input.val() != '' && input.val() != '#') {
 						switch (elementmname) {
 						case CBASIC_INFO_NAME_INPUT:
-							if (!isChinese(input)) {
+							if (!isChinese(input)||!lengthcheck(input.val(), MAXSTRINGLENGTH)) {
 								alert("公司名稱輸入非法，將不會進行更新");
 								modify_state=false;
 							}
 							// alert("is it ok");
 							break;
 						case CBASIC_INFO_NICKNAME_INPUT:
-							if (!isChinese(input)) {
+							if (!isChinese(input)||!lengthcheck(input.val(), MAXSTRINGLENGTH)) {
 								alert("公司暱稱輸入非法，將不會進行更新");
 								modify_state=false;
 							}
@@ -144,7 +144,7 @@ function modify_cfinancial_info() {
 					var input = $(this); // This is the jquery object of the
 											// input, do what you will
 					if (input.val() != '' && input.val() != '#') {
-						if(isdigit(input.val()))
+						if(isdigit(input.val())&&lengthcheck(input.val(), MAXSTRINGLENGTH))
 							modify_data(table_class, modifyDataClass[index], input
 								.val(), company_id, season);
 						else
@@ -190,7 +190,7 @@ function modify_single_cfinancial_info() {
 	if (value != '') {
 		var value_input = document.getElementById(modifyClass + "_value_input").value;
 		alert(value_input);
-		if (value_input != ''&& isdigit(value_input))
+		if (value_input != ''&& isdigit(value_input)&&lengthcheck(value_input, MAXSTRINGLENGTH))
 			modify_data(table_class, update_col_name, value_input, condition1,
 					condition_time);
 		else
@@ -209,7 +209,7 @@ function modify_crisis_date() {
 	var update_year_value = document
 			.getElementById("crisis_date_value_input_year").value;
 	if (year_value != '' && update_year_value != '') {
-		if(isdigit(update_year_value)&&update_year_value==4){
+		if(isdigit(update_year_value)&&lengthcheck(update_year_value, YEAR)){
 		var update_season_value = document
 				.getElementById("crisis_date_value_input_season").value;
 		update_value = update_year_value + "." + update_season_value; // 1999.11
