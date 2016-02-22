@@ -11,13 +11,13 @@ function count(t)
 
 <?php
 // 因為有中文資料，所以要有這行
-header("Content-Type:text/html; charset=utf-8");
+header ( "Content-Type:text/html; charset=utf-8" );
 
 // 定義常數變數
-define("FIRSTCOLUMN", 0);
-define("SECONDCOLUMN", 1);
-define("THIRDCOLUMN", 2);
-define("FOURTHCOLUMN", 3);
+define ( "FIRSTCOLUMN", 0 );
+define ( "SECONDCOLUMN", 1 );
+define ( "THIRDCOLUMN", 2 );
+define ( "FOURTHCOLUMN", 3 );
 
 // csv需將season轉格式!!!!!!!!!!!!!!!!!!
 // csv檔 season 格式 = 201412 201406
@@ -26,159 +26,154 @@ define("FOURTHCOLUMN", 3);
 include 'data_maintain_action.php';
 include_once "Classes/PHPExcel.php";
 
-$fileClassification = $_POST['selected_uploaddata'];
+$fileClassification = $_POST ['selected_uploaddata'];
 
-$upload_file=$_FILES['upload_file']['tmp_name'];
-$upload_file_name=$_FILES['upload_file']['name'];
-$upload_file_size=$_FILES["upload_file"]["size"];
+$upload_file = $_FILES ['upload_file'] ['tmp_name'];
+$upload_file_name = $_FILES ['upload_file'] ['name'];
+$upload_file_size = $_FILES ["upload_file"] ["size"];
 
-if($upload_file){
-$tem_upload_file_name = explode(".", $upload_file_name);
-$upload_file_name_extention = $tem_upload_file_name[count($tem_upload_file_name)-1];
-if($upload_file_name_extention!='csv' AND $upload_file_name_extention!='xls' AND $upload_file_name_extention!='xlsx') {
-printError("檔案類型不符合規定");
-}
-
-$file_size_max = 10000*10000;// 1M限制檔上傳最大容量(bytes)
-
-
-// 檢查檔大小
-if ($upload_file_size > $file_size_max) {
-printError("對不起，你的檔容量大於規定");
-}
-
-
-// 檢查file2是否正確上傳
-if($fileClassification==='cfinancial_index') {
-	$upload_file2=$_FILES['upload_file_more']['tmp_name'];
-	$upload_file2_name=$_FILES['upload_file']['name'];
-	$upload_file2_size=$_FILES["upload_file"]["size"];
-
-	if($upload_file2) {
-		$tem_upload_file_name = explode(".", $upload_file2_name);
-		$upload_file_name_extention = $tem_upload_file_name[count($tem_upload_file_name)-1];
+if ($upload_file) {
+	$tem_upload_file_name = explode ( ".", $upload_file_name );
+	$upload_file_name_extention = $tem_upload_file_name [count ( $tem_upload_file_name ) - 1];
+	// 取得副檔名（count回傳陣列元素個數）
+	if ($upload_file_name_extention != 'csv' and $upload_file_name_extention != 'xls' and $upload_file_name_extention != 'xlsx') {
+		printError ( "檔案類型不符合規定" );
+	}
+	
+	$file_size_max = 10000 * 10000; // 1M限制檔上傳最大容量(bytes)
+	                              
+	// 檢查檔大小
+	if ($upload_file_size > $file_size_max) {
+		printError ( "對不起，你的檔容量大於規定" );
+	}
+	
+	// 檢查file2是否正確上傳
+	if ($fileClassification === 'cfinancial_index') {
+		$upload_file2 = $_FILES ['upload_file_more'] ['tmp_name'];
+		$upload_file2_name = $_FILES ['upload_file'] ['name'];
+		$upload_file2_size = $_FILES ["upload_file"] ["size"];
 		
-		if($upload_file_name_extention!='csv' AND $upload_file_name_extention!='xls' AND $upload_file_name_extention!='xlsx') {
-			printError("檔案類型不符合規定");
+		if ($upload_file2) {
+			$tem_upload_file_name = explode ( ".", $upload_file2_name );
+			$upload_file_name_extention = $tem_upload_file_name [count ( $tem_upload_file_name ) - 1];
+			
+			if ($upload_file_name_extention != 'csv' and $upload_file_name_extention != 'xls' and $upload_file_name_extention != 'xlsx') {
+				printError ( "檔案類型不符合規定" );
+			}
+			
+			if ($upload_file2_size > $file_size_max) {
+				printError ( "對不起，你的檔容量大於規定" );
+			}
 		}
-
-		
-		if ($upload_file2_size > $file_size_max) {
-			printError("對不起，你的檔容量大於規定");
+	}
+	
+	if (isset ( $_FILES ['upload_file'] ['error'] )) {
+		if ($_FILES ['upload_file'] ['error'] === 0) {
+			
+			/* $dbc_object = new db_controller_unit; */
+			
+			// 上傳季別
+			$upload_season = $_POST ['upload_year'] . $_POST ['upload_season'];
+			
+			echo '選擇上傳了 ' . $fileClassification . ' 類型的檔案<br><br>';
+			
+			switch ($fileClassification) {
+				case 'cvalue_at_risk_tse_otc' : // 公司風險值(上市/上櫃)
+				                               // uploadValueAtRisk(); sheet(0) 上市 sheet(1) 上櫃
+					uploadValueAtRisk ( TAIWAN, tse, $upload_file );
+					uploadValueAtRisk ( TAIWAN, otc, $upload_file );
+					break;
+				case 'cvalue_at_risk_es_public' : // 公司風險值(興櫃/公開發行)
+				                                 // uploadValueAtRisk(); sheet(0) 興櫃 sheet(1) 公開發行
+					uploadValueAtRisk ( TAIWAN, es, $upload_file );
+					uploadValueAtRisk ( TAIWAN, gopublic, $upload_file );
+					break;
+				case 'cfinancial_index' : // 公司財務指標
+					uploadFinancialIndex ( $upload_file, $upload_file2 );
+					break;
+				case 'cstock' : // 公司股價
+				               // uploadStock($upload_file);
+					uploadStockorCashflow ( TAIWAN, STOCK, $upload_file );
+					break;
+				case 'ccashflow' : // 公司現金流量
+				                  // uploadCashflow(TAIWAN, $upload_file);
+					uploadStockorCashflow ( TAIWAN, CASHFLOW, $upload_file );
+					break;
+				case 'sector_financial_info' : // 產業風險資料
+					uploadSectorGroupFinancialInfo ( SECTOR, $upload_file );
+					break;
+				case 'group_financial_info' : // 企業集團風險資料
+					uploadSectorGroupFinancialInfo ( GROUP, $upload_file );
+					break;
+				case 'top_100_financial_info' : // 上市櫃百大競爭力資料
+					uploadTop100FinancialInfo ( $upload_file );
+					break;
+				case 'china_cvalue_at_risk' : // 中國公司風險值
+					uploadValueAtRisk ( CHINA, "T", $upload_file );
+					break;
+				case 'china_ccashflow' : // 中國公司現金流量
+				                        // uploadCashflow(CHINA, $upload_file);
+					uploadStockorCashflow ( CHINA, CASHFLOW, $upload_file );
+					break;
+			}
 		}
 	}
 }
 
-if(isset($_FILES['upload_file']['error'])){
-if($_FILES['upload_file']['error']===0){
-
-/* $dbc_object = new db_controller_unit; */
-
-// 上傳季別
-$upload_season = $_POST['upload_year'] . $_POST['upload_season'];
-
-echo '選擇上傳了 '. $fileClassification . ' 類型的檔案<br><br>';
-
-switch($fileClassification) {
-	case 'cvalue_at_risk_tse_otc': // 公司風險值(上市/上櫃)
-		// uploadValueAtRisk(); sheet(0) 上市 sheet(1) 上櫃
-		uploadValueAtRisk(TAIWAN, tse, $upload_file);
-		uploadValueAtRisk(TAIWAN, otc, $upload_file);
-		break;
-	case 'cvalue_at_risk_es_public': // 公司風險值(興櫃/公開發行)
-		// uploadValueAtRisk(); sheet(0) 興櫃 sheet(1) 公開發行
-		uploadValueAtRisk(TAIWAN, es, $upload_file);
-		uploadValueAtRisk(TAIWAN, gopublic, $upload_file);
-		break;
-	case 'cfinancial_index': // 公司財務指標
-		uploadFinancialIndex($upload_file, $upload_file2);
-		break;
-	case 'cstock': // 公司股價
-		//uploadStock($upload_file);
-		uploadStockorCashflow(TAIWAN, STOCK, $upload_file);
-		break;
-	case 'ccashflow': // 公司現金流量
-		//uploadCashflow(TAIWAN, $upload_file);
-		uploadStockorCashflow(TAIWAN, CASHFLOW, $upload_file);
-		break;
-	case 'sector_financial_info': // 產業風險資料
-		uploadSectorGroupFinancialInfo(SECTOR, $upload_file);
-		break;
-	case 'group_financial_info': // 企業集團風險資料
-		uploadSectorGroupFinancialInfo(GROUP, $upload_file);
-		break;
-	case 'top_100_financial_info': // 上市櫃百大競爭力資料
-		uploadTop100FinancialInfo($upload_file);
-		break;
-	case 'china_cvalue_at_risk': // 中國公司風險值
-		uploadValueAtRisk(CHINA, "T", $upload_file);
-		break;
-	case 'china_ccashflow': // 中國公司現金流量
-		//uploadCashflow(CHINA, $upload_file);
-		uploadStockorCashflow(CHINA, CASHFLOW, $upload_file);
-		break;
-}
-
-}
-}
-
-
-}
-
-
-Echo   "<p>你上傳了文件:";
-echo  $_FILES['upload_file']['name'];
+Echo "<p>你上傳了文件:";
+echo $_FILES ['upload_file'] ['name'];
 echo "<br>";
-//用戶端機器文件的原名稱。
+// 用戶端機器文件的原名稱。
 
-Echo   "文件的 MIME 類型為:";
-echo $_FILES['upload_file']['type'];
-//檔的 MIME 類型，需要流覽器提供該資訊的支援，例如“image/gif”。
+Echo "文件的 MIME 類型為:";
+echo $_FILES ['upload_file'] ['type'];
+// 檔的 MIME 類型，需要流覽器提供該資訊的支援，例如“image/gif”。
 echo "<br>";
 
-Echo   "上傳文件大小:";
-echo $_FILES['upload_file']['size'];
-//已上傳檔的大小，單位為位元組。
+Echo "上傳文件大小:";
+echo $_FILES ['upload_file'] ['size'];
+// 已上傳檔的大小，單位為位元組。
 echo "<br>";
 
-//Echo   "檔上傳後被臨時儲存為:";
-//echo $_FILES['upload_file']['tmp_name'];
-//檔被上傳後在服務端儲存的暫存檔案名。
-//echo "<br>";
+// Echo "檔上傳後被臨時儲存為:";
+// echo $_FILES['upload_file']['tmp_name'];
+// 檔被上傳後在服務端儲存的暫存檔案名。
+// echo "<br>";
 
 /*
-$Erroe=$_FILES['upload_file']['error'];
-switch($Erroe){
-        case 0:
-            Echo   "上傳成功";
-			Echo   "<Script Language='JavaScript'>count(3000);</Script>";
-			break;
-        case 1:
-            Echo   "上傳的檔案超過了 php.ini 中 upload_max_filesize 選項限制的值.";
-			Echo   "<Script Language='JavaScript'>count(5000);</Script>";
-			break;
-        case 2:
-            Echo   "上傳檔案的大小超過了 HTML 表單中 MAX_FILE_SIZE 選項指定的值。";
-			Echo   "<Script Language='JavaScript'>count(5000);</Script>";
-			break;
-        case 3:
-            Echo   "檔案只有部分被上傳";
-			Echo   "<Script Language='JavaScript'>count(5000);</Script>";
-			break;
-        case 4:
-            Echo   "沒有檔案被上傳";
-			Echo   "<Script Language='JavaScript'>count(5000);</Script>";
-			break;
-}*/
+ * $Erroe=$_FILES['upload_file']['error'];
+ * switch($Erroe){
+ * case 0:
+ * Echo "上傳成功";
+ * Echo "<Script Language='JavaScript'>count(3000);</Script>";
+ * break;
+ * case 1:
+ * Echo "上傳的檔案超過了 php.ini 中 upload_max_filesize 選項限制的值.";
+ * Echo "<Script Language='JavaScript'>count(5000);</Script>";
+ * break;
+ * case 2:
+ * Echo "上傳檔案的大小超過了 HTML 表單中 MAX_FILE_SIZE 選項指定的值。";
+ * Echo "<Script Language='JavaScript'>count(5000);</Script>";
+ * break;
+ * case 3:
+ * Echo "檔案只有部分被上傳";
+ * Echo "<Script Language='JavaScript'>count(5000);</Script>";
+ * break;
+ * case 4:
+ * Echo "沒有檔案被上傳";
+ * Echo "<Script Language='JavaScript'>count(5000);</Script>";
+ * break;
+ * }
+ */
 
 // 輸出error字串然後離開php腳本
 function printError($str) {
-	exit($str);
+	exit ( $str );
 }
 
 // 檢查season與輸入的字串是否一致
 function checkUploadSeason($season) {
-	if($season===$GLOBALS [ 'upload_season' ])
+	if ($season === $GLOBALS ['upload_season'])
 		return 1;
 	else
 		return 0;
@@ -189,16 +184,16 @@ function loadExcelFile($file, $sheet) {
 	// 讀xls檔案
 	
 	// 取得資料檔的型式
-	$fileType = PHPExcel_IOFactory::identify($file);
-
+	$fileType = PHPExcel_IOFactory::identify ( $file );
+	
 	// 產生 Reader 物件
-	$objReader = PHPExcel_IOFactory::createReader($fileType);
-
+	$objReader = PHPExcel_IOFactory::createReader ( $fileType );
+	
 	// 產生 PHPExcel 物件來幫忙我們處理 Excel 檔案
-	$objPHPExcel = $objReader->load($file);
-
+	$objPHPExcel = $objReader->load ( $file );
+	
 	// 將活頁簿裏的第一張工作表設為要操作的工作表
-	$objWorksheet = $objPHPExcel->getSheet($sheet);
+	$objWorksheet = $objPHPExcel->getSheet ( $sheet );
 	
 	return $objWorksheet;
 }
@@ -206,36 +201,35 @@ function loadExcelFile($file, $sheet) {
 // 取得xls檔案的sheet名
 function getSheetName($file) {
 	// 讀取 sheet 名稱
-	$sheetnames = $objReader->listWorksheetNames($file);
+	$sheetnames = $objReader->listWorksheetNames ( $file );
 	return $sheetnames;
 }
 
 // 讀取csv檔案
 function loadCsvFile($file) {
 	// 讀取csv檔
-	//$CSVfile_size = filesize($file);
-	$fp = fopen($file, "r");
-	//$ROW = fgetcsv($fp, $CSVfile_size);
+	// $CSVfile_size = filesize($file);
+	$fp = fopen ( $file, "r" );
+	// $ROW = fgetcsv($fp, $CSVfile_size);
 	/*
-	while ( $ROW = fgetcsv($fp, $CSVfile_size) ) {
-		echo $ROW[0];
-		echo '<br>';
-	}*/
+	 * while ( $ROW = fgetcsv($fp, $CSVfile_size) ) {
+	 * echo $ROW[0];
+	 * echo '<br>';
+	 * }
+	 */
 	
 	return $fp;
 }
-
 
 // 上傳風險值檔案
 function uploadValueAtRisk($c, $status, $file) {
 	// c : taiwan or china
 	// file : 上傳的檔案
 	// status : 公司狀態
-
-	if($status===tse OR $status===es OR $status==="T")
-		$fp = loadExcelFile($file, 0);
+	if ($status === tse or $status === es or $status === "T")
+		$fp = loadExcelFile ( $file, 0 );
 	else
-		$fp = loadExcelFile($file, 1);
+		$fp = loadExcelFile ( $file, 1 );
 	
 	// line 1 : tile列 公司ID 公司名稱 季別
 	// line 2 start : data列 公司ID 公司名稱 該季風險值
@@ -464,7 +458,7 @@ function updateStockDate($date) {
 	if(!empty($tem_stockdate)) {
 		$tem_stockdate_row=mysqli_fetch_row($tem_stockdate);
 		if(!empty($tem_stockdate_row)) {
-			$confition = '`season`="'. $season .'"';
+			$condition = '`season`="'. $season .'"';
 			$GLOBALS [ 'dbc_object' ]->updateData('stock_date', 'stock_date', $date, $condition);
 		}
 		else {

@@ -88,7 +88,7 @@
 		
 	</head>
 	<body onload="getLatestSeason();">
-	
+
 	<?php
 	include 'checkAdminAccount.php';
 	
