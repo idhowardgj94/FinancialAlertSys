@@ -1,5 +1,4 @@
-const MAXSTRINGLENGTH=20;
-const YEAR=4;
+
 // show no data
 function showNoDataReturn()
 {

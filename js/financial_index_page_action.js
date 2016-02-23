@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /**
  * 此javascript必須與foolprove一同被載入
  */
@@ -95,7 +94,7 @@ function buildCompanyList(index) {
 	});
 
 }
-=======
+
 const FINANCIAL_INDEX_LINK = "cfinancial_index";
 
 // http://whereiswelly.tw/?p=407
@@ -169,4 +168,3 @@ function buildCompanyList(index) {
 	});
 
 }
->>>>>>> refs/remotes/origin/master
