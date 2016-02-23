@@ -12,6 +12,8 @@ const SECTOR_GROUP_INFO = 'sector_group_info';//where
 
 const UPDATE = 'update';
 const INSERT = 'insert';
+const MAXSTRINGLENGTH=20;
+const YEAR=4;
 
 var modifyClass = CBASIC_INFO;
 var insertClass = CBASIC_INFO;
