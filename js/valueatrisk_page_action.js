@@ -15,8 +15,7 @@ function searchCompanyValueatRisk(e, status){
 		// do somthing with inputs
 		var searchString = document.getElementById('serchInput').value;
 
-		var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
-		var pattern_isChinese = /^[/u4e00-/u9fa5]{0,}$/;//只能是漢字
+
 		searchString = Trim(searchString);
 		//檢查長度
 		if(lengthcheck(searchString, STRINGLENTH)){
