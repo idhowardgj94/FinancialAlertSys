@@ -1,4 +1,5 @@
 <!--
+
 上櫃資料頁面
 -->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -14,8 +15,7 @@
 <link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700"
 	rel="stylesheet" type="text/css">
 <link href="table.css" rel="stylesheet" type="text/css">
-<script
-	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+
 <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="js/valueatrisk_page_action.js"></script>
 <script type="text/javascript" src="js/foolprove.js"></script>
@@ -31,7 +31,7 @@
 			
 			<form>
 				<span style="margin-top: 5px; margin-right: 5px; float: right;"> <input
-					style="border-radius: 5px;" size="5" id="serchInput"></input> <a
+					style="border-radius: 5px;" size="5" id="serchInput"> <a
 					href="#" class="abgne_gotoheader"><input type="submit"
 						onclick="searchCompanyValueatRisk(event, '上櫃');" size="5"
 						value="搜尋"></a>
