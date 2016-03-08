@@ -5,6 +5,9 @@ session_start ();
 ?>
 <html>
 <head>
+<link href="Grid.css" rel="stylesheet" type="text/css">
+		<link href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+		<link href="table.css" rel="stylesheet" type="text/css">
 <meta http-equiv="content-type" content="text/html" charset="utf-8">
 <!-- 讓瀏覽器知道編碼使用utf-8 -->
 <title>財務演算預警系統</title>
@@ -19,18 +22,7 @@ session_start ();
 			});
 		//此表示方式為當DOM被載入後，執行此function。
 	</script>
-<style type="text/css">
-BODY {
-	background: linear-gradient(top, #888, #eee);
-	background: -moz-linear-gradient(top, #888, #eee);
-	background: -webkit-linear-gradient(top, #888, #eee);
-}
 
-#nav {
-	height: 37px;
-	width: 100%;
-}
-</style>
 </head>
 <body>
 	<?php

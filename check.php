@@ -42,7 +42,7 @@ if(!empty($result) AND $user_account=mysqli_fetch_row($result)){
 	$_SESSION['username'] = $username;
 	//input username to session to identify user
 	
-	echo '發入成功';
+	echo '登入成功';
 	echo '<meta http-equiv=REFRESH CONTENT=1;url=index.php>';
 	//echo '<meta http-equiv=REFRESH CONTENT=1;url=index.php>';
 	//return to index( index will show butten)
