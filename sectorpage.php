@@ -26,7 +26,7 @@
 		</div>
 		
 		<?php
-			define("SECTOR", "sector");
+			define("SECTOR", "sector");//也許可以刪掉
 
 			$index = $_GET['name'];
 			include './sector_group_financial_info_page.php';
