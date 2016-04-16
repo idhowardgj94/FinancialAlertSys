@@ -1,4 +1,4 @@
-<?php
+	<?php
 define ( "FINANCIAL_TITLE", "financial_title" );
 define ( "FINANCIAL_DATA_TITLE", "financial_data_title" );
 define ( "TITLE_NAME_INDEX", 0 );
