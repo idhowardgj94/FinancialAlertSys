@@ -49,18 +49,18 @@ function toUpdateString(str) {
 function modify_cbasic_info() {
 	var company_id = document.getElementById(modifiedClass + "_id").innerHTML;
 	if (company_id != '') {
-		// taiwan or china company for different modifyDataClass and table_class
-		var modifyDataClass, table_class;
+		// taiwan or china company for different modifyDataClass and tableName
+		var modifyDataClass, tableName;
 		switch (modifiedClass) {
 		case CBASIC_INFO:
 			modifyDataClass = [ "company_name", "company_nickname", "status",
 					"sector", "group" ];
-			table_class = CBASIC_INFO;
+			tableName = CBASIC_INFO;
 			break;
 		case CHINA_CBASIC_INFO:
 			modifyDataClass = [ "company_name", "company_nickname",
 					"company_fullname", "status" ];
-			table_class = CHINA_CBASIC_INFO;
+			tableName = CHINA_CBASIC_INFO;
 			break;
 		}
 
@@ -102,7 +102,7 @@ function modify_cbasic_info() {
 							break;
 						}
 						if(modify_state)
-							modify_data(table_class, modifyDataClass[index], input
+							modify_data(tableName, modifyDataClass[index], input
 								.val(), company_id);
 					}
 					index++;
@@ -119,18 +119,18 @@ function modify_cfinancial_info() {
 	var season = document.getElementById(modifiedClass + "_season").innerHTML;
 
 	if (company_id != '' && season != '') {
-		// taiwan or china company for different modifyDataClass and table_class
-		var modifyDataClass, table_class;
+		// taiwan or china company for different modifyDataClass and tableName
+		var modifyDataClass, tableName;
 		switch (modifiedClass) {
 		case CFINANCIAL_INFO:
 			modifyDataClass = [ "value_at_risk", "stock", "cashflow_operating",
 					"cashflow_investment", "proceed_fm_newIssue" ];
-			table_class = CFINANCIAL_INFO;
+			tableName = CFINANCIAL_INFO;
 			break;
 		case CHINA_CFINANCIAL_INFO:
 			modifyDataClass = [ "value_at_risk", "cashflow_operating",
 					"cashflow_investment", "proceed_fm_newIssue" ];
-			table_class = CHINA_CFINANCIAL_INFO;
+			tableName = CHINA_CFINANCIAL_INFO;
 			break;
 		}
 
@@ -145,7 +145,7 @@ function modify_cfinancial_info() {
 											// input, do what you will
 					if (input.val() != '' && input.val() != '#') {
 						if(isdigit(input.val())&&lengthcheck(input.val(), MAXSTRINGLENGTH))
-							modify_data(table_class, modifyDataClass[index], input
+							modify_data(tableName, modifyDataClass[index], input
 								.val(), company_id, season);
 						else
 							alert("輸入非法，將不會進行更新");
@@ -160,22 +160,22 @@ function modify_cfinancial_info() {
 // 修改單一格財務資料 sector or group or financial_index or top100
 function modify_single_cfinancial_info() {
 	// modify condition1 and condition2
-	var condition1, table_class, condition_time;
+	var condition1, tableName, condition_time;
 	switch (modifiedClass) {
 	case CFINANCIAL_INDEX:
 		condition1 = document.getElementById(modifiedClass + "_id").innerHTML;
-		table_class = CFINANCIAL_INDEX;
+		tableName = CFINANCIAL_INDEX;
 		condition_time = document.getElementById(modifiedClass + "_season").innerHTML;
 		break;
 	case TOP100_DATA:
 		var top100_clist = document.getElementById("top100_company_list");
 		condition1 = top100_clist.options[top100_clist.selectedIndex].value;
-		table_class = TOP100_DATA;
+		tableName = TOP100_DATA;
 		condition_time = document.getElementById("selected_top100_year").value;
 		break;
 	default:
 		condition1 = document.getElementById(modifiedClass + "_name").innerHTML;
-		table_class = SECTOR_GROUP_INFO;
+	tableName = SECTOR_GROUP_INFO;
 		condition_time = document.getElementById(modifiedClass + "_season").innerHTML;
 	}
 
@@ -191,7 +191,7 @@ function modify_single_cfinancial_info() {
 		var value_input = document.getElementById(modifiedClass + "_value_input").value;
 		alert(value_input);
 		if (value_input != ''&& isdigit(value_input)&&lengthcheck(value_input, MAXSTRINGLENGTH))
-			modify_data(table_class, update_col_name, value_input, condition1,
+			modify_data(tableName, update_col_name, value_input, condition1,
 					condition_time);
 		else
 			alert("輸入非法！將不會進行更新");
@@ -224,17 +224,17 @@ function modify_crisis_date() {
 }
 
 /*
- * 修改資料 table name, col name, value, condition table_class : 欲修改的資料分類
+ * 修改資料 table name, col name, value, condition tableName : 欲修改的資料分類
  * update_class : 欲修改的資料schema的col_name update_value : user input value
  * condition1 : 修改條件 company_id | name condition2 : 修改條件 season | year
  */
-function modify_data(table_class, update_class, update_value, condition1,
+function modify_data(tableName, update_class, update_value, condition1,
 		condition2) {
-	if (table_class == CBASIC_INFO || table_class == CHINA_CBASIC_INFO
-			|| table_class == CRISIS_DATE)
+	if (tableName == CBASIC_INFO || tableName == CHINA_CBASIC_INFO
+			|| tableName == CRISIS_DATE)
 		update_value = toUpdateString(update_value); // "string"
 
-	var parameter_str = 'table_class=' + table_class + '&update_class='
+	var parameter_str = 'table_class=' + tableName + '&update_class='
 			+ update_class + '&value=' + update_value;
 	parameter_str += '&condition[]=' + condition1; // cid or name
 	if (arguments.length == 5)

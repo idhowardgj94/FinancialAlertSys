@@ -47,13 +47,13 @@ function insert_financial_info(classes)
 
 /*
 	新增資料
-	table_class, value[]
-	table_class : 欲新增的資料分類
+	tableName, value[]
+	tableName : 欲新增的資料分類
 	value[] : user input value
 			  insert data 前 k 個資料值
 */
-function insert_data(table_class, value) {
-	var parameter_str = 'table_class=' + table_class + '&value[]=' + value[0];
+function insert_data(tableName, value) {
+	var parameter_str = 'table_class=' + tableName + '&value[]=' + value[0];
 	for(var i=1; i<value.length; i++)
 		parameter_str += '&value[]=' + value[i];
 
