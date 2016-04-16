@@ -82,14 +82,14 @@ function formSubmit()
 }
 
 // 透過php連接sql取得需要顯示的資料
-function get_needed_data(classes, condition)
+function get_needed_data(classes, selectCondition)
 {
 	//alert("in get_needed_data");
 	// 組成丟進php取資料的字串
 	var parameter_str='data_class='+classes;
-	if(condition) {
-		for(var i=0; i<condition.length; i++)
-			parameter_str+='&condition[]='+condition[i];
+	if(selectCondition) {
+		for(var i=0; i<selectCondition.length; i++)
+			parameter_str+='&condition[]='+selectCondition[i];
 	}
 
 	var return_data;
@@ -128,11 +128,11 @@ function change_cbasic_info()
 		return false;
 	}
 		
-	var condition =[];
-	condition.push(company_id);
+	var selectCondition =[];
+	selectCondition.push(company_id);
 	
 	// get 公司基本資料
-	var company_basic_data = get_needed_data(modifiedClass, condition);
+	var company_basic_data = get_needed_data(modifiedClass, selectCondition);
 	if(company_basic_data) { // 若有資料傳回則顯示在螢幕上
 		document.getElementById(modifiedClass).style.display = "block";
 		document.getElementById(modifiedClass+"_id").innerHTML = company_id;
@@ -173,9 +173,9 @@ function change_cfinancial_info()
 	
 	var company_season = year + season;
 	
-	var condition =[];
-	condition.push(company_id);
-	condition.push(company_season);
+	var selectCondition =[];
+	selectCondition.push(company_id);
+	selectCondition.push(company_season);
 	
 	// 判斷是否為中國公司
 	var classes;
@@ -189,10 +189,10 @@ function change_cfinancial_info()
 	}
 	
 	// get 公司基本資料
-	var company_basic_data = get_needed_data(classes, condition);
+	var company_basic_data = get_needed_data(classes, selectCondition);
 	
 	// get 公司財務資料
-	var company_financial_data = get_needed_data(modifiedClass, condition);
+	var company_financial_data = get_needed_data(modifiedClass, selectCondition);
 	if(company_basic_data && company_financial_data) { // 若有資料傳回則顯示在螢幕上
 		document.getElementById(modifiedClass).style.display = "block";
 		/*
@@ -287,12 +287,12 @@ function change_cfinancial_index()
 	var e = document.getElementById("season_input_value");
 	var season = e.options[e.selectedIndex].value;
 	
-	var condition =[];
-	condition.push(company_id);
-	condition.push(season);
+	var selectCondition =[];
+	selectCondition.push(company_id);
+	selectCondition.push(season);
 	
 	// get 公司基本資料
-	var company_basic_data = get_needed_data(CBASIC_INFO, condition);
+	var company_basic_data = get_needed_data(CBASIC_INFO, selectCondition);
 	if(company_basic_data) { // 若有資料傳回則顯示在螢幕上
 		document.getElementById(modifiedClass).style.display = "block";
 	
@@ -363,11 +363,11 @@ function change_top100_data()
 	var year = e.options[e.selectedIndex].value;
 	document.getElementById("top100_year").innerHTML = year;
 	
-	var condition =[];
-	condition.push(year);
+	var selectCondition =[];
+	selectCondition.push(year);
 	
 	// 取得該年份的前百大公司名單
-	var company_list = get_needed_data('top100_companylist', condition);
+	var company_list = get_needed_data('top100_companylist', selectCondition);
 	if(company_list) { // 產生公司名單的下拉式選單
 		document.getElementById("top100_data").style.display = "block";
 		
@@ -422,11 +422,11 @@ function addSelectCrisisCompany()
 // 修改危機發生日頁面資訊
 function change_crisis_date(company_id)
 {
-	var condition =[];
-	condition.push(company_id);
+	var selectCondition =[];
+	selectCondition.push(company_id);
 	
 	// get 該公司ID的危機發生日
-	var crisis_date = get_needed_data(CRISIS_DATE, condition);
+	var crisis_date = get_needed_data(CRISIS_DATE, selectCondition);
 	if(crisis_date) {
 		const YEAR_INDEX = 0;
 		const SEASON_INDEX = 1;
@@ -475,13 +475,13 @@ function change_select_financial_info(selectFinancialInfo) {
 	}
 	// 將資料種類中文名稱轉換成col name
 	var col_name = getColumnName(selectFinancialInfo);
-	var condition =[];
-	condition.push(condition1); // c_id or name
-	condition.push(condition_time); // season or year
-	condition.push(col_name);
+	var selectCondition =[];
+	selectCondition.push(condition1); // c_id or name
+	selectCondition.push(condition_time); // season or year
+	selectCondition.push(col_name);
 
 	// 用上述資料取得對應的財務資料
-	var financial_data_value = get_needed_data(classes, condition);
+	var financial_data_value = get_needed_data(classes, selectCondition);
 	alert(financial_data_value);
 	if(financial_data_value) {
 		document.getElementById(modifiedClass+"_value").innerHTML = checkNull(financial_data_value); // 若有值回傳則print在頁面上
