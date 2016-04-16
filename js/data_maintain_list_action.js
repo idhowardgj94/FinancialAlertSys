@@ -15,7 +15,7 @@ const INSERT = 'insert';
 const MAXSTRINGLENGTH=20;
 const YEAR=4;
 
-var modifyClass = CBASIC_INFO;
+var modifiedClass = CBASIC_INFO;
 var insertClass = CBASIC_INFO;
 var selectedModifyAction = UPDATE;
 
@@ -47,7 +47,7 @@ $(document).ready(function(){
 });
 
 // 關掉上一個顯示選單
-function displayLastBlock(e)
+function disableLastBlock(e)
 {
 	// 若使用者在update 修改模式下
 	if(selectedModifyAction==UPDATE) {
@@ -102,46 +102,46 @@ function listchange(e)
 		{
 			case CBASIC_INFO:
 			case CHINA_CBASIC_INFO:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				document.getElementById("cid_input").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			case CFINANCIAL_INFO:
 			case CHINA_CFINANCIAL_INFO:
 			case CFINANCIAL_INDEX:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				document.getElementById("cid_input").style.display = "block";
 				document.getElementById("season_input").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			case CRISIS_DATE:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				addSelectCrisisCompany();
 				document.getElementById("input_data").style.display = "none";
 				document.getElementById("crisis_date_info").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			case SECTOR_INFO:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				document.getElementById("sector_input").style.display = "block";
 				document.getElementById("season_input").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			case GROUP_INFO:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				document.getElementById("group_input").style.display = "block";
 				document.getElementById("season_input").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			case TOP100_DATA:
-				displayLastBlock(modifyClass);
+				disableLastBlock(modifiedClass);
 				document.getElementById("top100_season_input").style.display = "block";
-				modifyClass = e;
+				modifiedClass = e;
 				break;
 			default:
 		}
 	} else {
-		displayLastBlock(insertClass);
+		disableLastBlock(insertClass);
 		if(e==CRISIS_DATE)
 			document.getElementById("crisis_date_info_insert").style.display = "block";
 		else

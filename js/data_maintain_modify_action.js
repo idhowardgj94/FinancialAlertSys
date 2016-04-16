@@ -7,7 +7,7 @@ function showNoDataInput() {
 function showConfirmModifyMessage() {
 	// 若確定則呼叫修改資料function
 	if (confirm("確定修改資料？")) {
-		modify_financial_data(modifyClass);
+		modify_financial_data(modifiedClass);
 	}
 }
 
@@ -47,11 +47,11 @@ function toUpdateString(str) {
 
 // 檢查使用者是否修改公司基本資料
 function modify_cbasic_info() {
-	var company_id = document.getElementById(modifyClass + "_id").innerHTML;
+	var company_id = document.getElementById(modifiedClass + "_id").innerHTML;
 	if (company_id != '') {
 		// taiwan or china company for different modifyDataClass and table_class
 		var modifyDataClass, table_class;
-		switch (modifyClass) {
+		switch (modifiedClass) {
 		case CBASIC_INFO:
 			modifyDataClass = [ "company_name", "company_nickname", "status",
 					"sector", "group" ];
@@ -75,9 +75,9 @@ function modify_cbasic_info() {
 		var index = 0;
 		const CBASIC_INFO_NAME_INPUT = "cbasic_info_name_input";
 		const CBASIC_INFO_NICKNAME_INPUT = "cbasic_info_nickname_input";
-		$("#" + modifyClass + " :input").not("input[type=button]").each(
+		$("#" + modifiedClass + " :input").not("input[type=button]").each(
 				function() {
-					var elementmname = $("#" + modifyClass + " :input").not(
+					var elementmname = $("#" + modifiedClass + " :input").not(
 							"input[type=button]")[index].id;
 					alert(elementmname);
 					 alert(CBASIC_INFO_NAME_INPUT);
@@ -115,13 +115,13 @@ function modify_cbasic_info() {
 
 // 檢查使用者是否修改公司財務資料
 function modify_cfinancial_info() {
-	var company_id = document.getElementById(modifyClass + "_id").innerHTML;
-	var season = document.getElementById(modifyClass + "_season").innerHTML;
+	var company_id = document.getElementById(modifiedClass + "_id").innerHTML;
+	var season = document.getElementById(modifiedClass + "_season").innerHTML;
 
 	if (company_id != '' && season != '') {
 		// taiwan or china company for different modifyDataClass and table_class
 		var modifyDataClass, table_class;
-		switch (modifyClass) {
+		switch (modifiedClass) {
 		case CFINANCIAL_INFO:
 			modifyDataClass = [ "value_at_risk", "stock", "cashflow_operating",
 					"cashflow_investment", "proceed_fm_newIssue" ];
@@ -139,7 +139,7 @@ function modify_cfinancial_info() {
 		// get all input but not button
 		// if user has input value
 		// modify this data
-		$("#" + modifyClass + " :input").not("input[type=button]").each(
+		$("#" + modifiedClass + " :input").not("input[type=button]").each(
 				function() {
 					var input = $(this); // This is the jquery object of the
 											// input, do what you will
@@ -161,11 +161,11 @@ function modify_cfinancial_info() {
 function modify_single_cfinancial_info() {
 	// modify condition1 and condition2
 	var condition1, table_class, condition_time;
-	switch (modifyClass) {
+	switch (modifiedClass) {
 	case CFINANCIAL_INDEX:
-		condition1 = document.getElementById(modifyClass + "_id").innerHTML;
+		condition1 = document.getElementById(modifiedClass + "_id").innerHTML;
 		table_class = CFINANCIAL_INDEX;
-		condition_time = document.getElementById(modifyClass + "_season").innerHTML;
+		condition_time = document.getElementById(modifiedClass + "_season").innerHTML;
 		break;
 	case TOP100_DATA:
 		var top100_clist = document.getElementById("top100_company_list");
@@ -174,21 +174,21 @@ function modify_single_cfinancial_info() {
 		condition_time = document.getElementById("selected_top100_year").value;
 		break;
 	default:
-		condition1 = document.getElementById(modifyClass + "_name").innerHTML;
+		condition1 = document.getElementById(modifiedClass + "_name").innerHTML;
 		table_class = SECTOR_GROUP_INFO;
-		condition_time = document.getElementById(modifyClass + "_season").innerHTML;
+		condition_time = document.getElementById(modifiedClass + "_season").innerHTML;
 	}
 
 	// get update_class
-	var update_class_name = document.getElementById("selected_" + modifyClass);
+	var update_class_name = document.getElementById("selected_" + modifiedClass);
 	var update_class = update_class_name.options[update_class_name.selectedIndex].value;
 
 	// 將 update_class 轉成對應的 col_name
 	var update_col_name = getColumnName(update_class);
 
-	var value = document.getElementById(modifyClass + "_value").innerHTML;
+	var value = document.getElementById(modifiedClass + "_value").innerHTML;
 	if (value != '') {
-		var value_input = document.getElementById(modifyClass + "_value_input").value;
+		var value_input = document.getElementById(modifiedClass + "_value_input").value;
 		alert(value_input);
 		if (value_input != ''&& isdigit(value_input)&&lengthcheck(value_input, MAXSTRINGLENGTH))
 			modify_data(table_class, update_col_name, value_input, condition1,

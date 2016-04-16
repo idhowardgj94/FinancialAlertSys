@@ -56,8 +56,8 @@ function getColumnName(str)
 function formSubmit()
 {
 	//alert("in form submit");
-	//alert(modifyclass);
-	switch(modifyClass)
+	//alert(modifiedClass);
+	switch(modifiedClass)
 	{
 		case CBASIC_INFO:
 		case CHINA_CBASIC_INFO:
@@ -132,11 +132,11 @@ function change_cbasic_info()
 	condition.push(company_id);
 	
 	// get 公司基本資料
-	var company_basic_data = get_needed_data(modifyClass, condition);
+	var company_basic_data = get_needed_data(modifiedClass, condition);
 	if(company_basic_data) { // 若有資料傳回則顯示在螢幕上
-		document.getElementById(modifyClass).style.display = "block";
-		document.getElementById(modifyClass+"_id").innerHTML = company_id;
-		var displayBlock = document.getElementById(modifyClass).getElementsByTagName("p");
+		document.getElementById(modifiedClass).style.display = "block";
+		document.getElementById(modifiedClass+"_id").innerHTML = company_id;
+		var displayBlock = document.getElementById(modifiedClass).getElementsByTagName("p");
 		for(var i=0; i<displayBlock.length; i++)
 			displayBlock[i].innerHTML = checkNull(company_basic_data[i+1]);
 	}
@@ -179,7 +179,7 @@ function change_cfinancial_info()
 	
 	// 判斷是否為中國公司
 	var classes;
-	switch(modifyClass) {
+	switch(modifiedClass) {
 		case CFINANCIAL_INFO:
 			classes = CBASIC_INFO;
 			break;
@@ -192,9 +192,9 @@ function change_cfinancial_info()
 	var company_basic_data = get_needed_data(classes, condition);
 	
 	// get 公司財務資料
-	var company_financial_data = get_needed_data(modifyClass, condition);
+	var company_financial_data = get_needed_data(modifiedClass, condition);
 	if(company_basic_data && company_financial_data) { // 若有資料傳回則顯示在螢幕上
-		document.getElementById(modifyClass).style.display = "block";
+		document.getElementById(modifiedClass).style.display = "block";
 		/*
 			taiwan
 				company_basic_data : comapny_id company_name comapny_nickname status sector group
@@ -203,8 +203,8 @@ function change_cfinancial_info()
 				company_basic_data : comapny_id company_name comapny_nickname comapny_fullname status
 				company_financial_data : comapny_id season value_at_risk cashflow_operating cashflow_investment proceed_fm_newIssue
 		*/
-		document.getElementById(modifyClass+"_id").innerHTML = company_id;
-		document.getElementById(modifyClass+"_season").innerHTML = company_season;
+		document.getElementById(modifiedClass+"_id").innerHTML = company_id;
+		document.getElementById(modifiedClass+"_season").innerHTML = company_season;
 		
 		var needed_data =[];
 		
@@ -224,7 +224,7 @@ function change_cfinancial_info()
 		const CHINA_PROCEED_FM_NEWISSUE_INDEX = 5;
 		
 		// 設定需要顯示的資料index 基本資料
-		switch(modifyClass) {
+		switch(modifiedClass) {
 		case CFINANCIAL_INFO:
 			var needed_data_index = [COMPANY_NICKNAME_INDEX, STATUS_INDEX, SECTOR_INDEX, GROUP_INDEX];
 			break;
@@ -239,7 +239,7 @@ function change_cfinancial_info()
 		}
 		
 		// 設定需要顯示的資料index 財務資料
-		switch(modifyClass) {
+		switch(modifiedClass) {
 		case CFINANCIAL_INFO:
 			needed_data_index = [VALUE_AT_RISK_INDEX, STOCK_INDEX, CASHFLOW_OPERATING_INDEX, CASHFLOW_INVESTMENT_INDEX, PROCEED_FM_NEWISSUE_INDEX];
 			break;
@@ -254,7 +254,7 @@ function change_cfinancial_info()
 		}
 		
 		// 將needed_data顯示在螢幕上
-		var displayBlock = document.getElementById(modifyClass).getElementsByTagName("p");
+		var displayBlock = document.getElementById(modifiedClass).getElementsByTagName("p");
 		for(var i=0; i<displayBlock.length; i++)
 			displayBlock[i].innerHTML = checkNull(needed_data[i]);
 	}
@@ -294,10 +294,10 @@ function change_cfinancial_index()
 	// get 公司基本資料
 	var company_basic_data = get_needed_data(CBASIC_INFO, condition);
 	if(company_basic_data) { // 若有資料傳回則顯示在螢幕上
-		document.getElementById(modifyClass).style.display = "block";
+		document.getElementById(modifiedClass).style.display = "block";
 	
-		document.getElementById(modifyClass+"_id").innerHTML = company_id;
-		document.getElementById(modifyClass+"_season").innerHTML = year + season;
+		document.getElementById(modifiedClass+"_id").innerHTML = company_id;
+		document.getElementById(modifiedClass+"_season").innerHTML = year + season;
 		
 		const COMAPNY_NICKNAME_INDEX = 2;
 		const STATUS_INDEX = 3;
@@ -312,7 +312,7 @@ function change_sector_group_info()
 {
 	// 判斷是產業 or 企業集團
 	var classes;
-	switch(modifyClass) {
+	switch(modifiedClass) {
 		case SECTOR_INFO:
 			classes = 'sector';
 			break;
@@ -331,26 +331,26 @@ function change_sector_group_info()
 		if(!lengthcheck(year, YEAR)){
 			alert("請輸入西元年！");
 			document.getElementById("season_input_year").value='';
-			document.getElementById(modifyClass).style.display = "none";
+			document.getElementById(modifiedClass).style.display = "none";
 			return false;
 		}
 			
 		if(!isdigit(year)){
 			alert("請輸入西元年！");
 			document.getElementById("season_input_year").value='';
-			document.getElementById(modifyClass).style.display = "none";
+			document.getElementById(modifiedClass).style.display = "none";
 			return false;
 		}
 		//-----------------------------------------------	
 		// 將使用者選擇的名稱與季別顯示在螢幕上
-		document.getElementById(modifyClass).style.display = "block";
+		document.getElementById(modifiedClass).style.display = "block";
 		var e = document.getElementById("selected_"+classes);
 		var sector_name = e.options[e.selectedIndex].value;
 		var k = document.getElementById("season_input_value");
 		var season = k.options[k.selectedIndex].value;
 		
-		document.getElementById(modifyClass+"_name").innerHTML = sector_name;
-		document.getElementById(modifyClass+"_season").innerHTML = year + season;
+		document.getElementById(modifiedClass+"_name").innerHTML = sector_name;
+		document.getElementById(modifiedClass+"_season").innerHTML = year + season;
 	}
 }
 
@@ -451,15 +451,15 @@ function change_select_financial_info(selectFinancialInfo) {
 	//百大的、財務指標第二層使用
 	// 將選擇的需顯示資料名稱print在頁面上
 	//alert("in change_select_financial_info function");
-	document.getElementById(modifyClass+'_original').innerHTML = selectFinancialInfo;
-	document.getElementById(modifyClass+'_new').innerHTML = selectFinancialInfo;
+	document.getElementById(modifiedClass+'_original').innerHTML = selectFinancialInfo;
+	document.getElementById(modifiedClass+'_new').innerHTML = selectFinancialInfo;
 	var condition1, classes, condition_time;
-	// 根據modifyClass讀取需要的資料
-	switch(modifyClass) {
+	// 根據modifiedClass讀取需要的資料
+	switch(modifiedClass) {
 		case CFINANCIAL_INDEX: // 財務指標
-			condition1 = document.getElementById(modifyClass+"_id").innerHTML;
+			condition1 = document.getElementById(modifiedClass+"_id").innerHTML;
 			classes = CFINANCIAL_INDEX;
-			condition_time = document.getElementById(modifyClass+"_season").innerHTML;
+			condition_time = document.getElementById(modifiedClass+"_season").innerHTML;
 			break;
 		case TOP100_DATA: // 前百大
 			// 取得使用者選擇的公司ID
@@ -469,9 +469,9 @@ function change_select_financial_info(selectFinancialInfo) {
 			condition_time = document.getElementById("selected_top100_year").value;
 			break;
 		default: // 產業 企業集團
-			condition1 = document.getElementById(modifyClass+"_name").innerHTML;
+			condition1 = document.getElementById(modifiedClass+"_name").innerHTML;
 			classes = SECTOR_GROUP_INFO;
-			condition_time = document.getElementById(modifyClass+"_season").innerHTML;
+			condition_time = document.getElementById(modifiedClass+"_season").innerHTML;
 	}
 	// 將資料種類中文名稱轉換成col name
 	var col_name = getColumnName(selectFinancialInfo);
@@ -484,19 +484,19 @@ function change_select_financial_info(selectFinancialInfo) {
 	var financial_data_value = get_needed_data(classes, condition);
 	alert(financial_data_value);
 	if(financial_data_value) {
-		document.getElementById(modifyClass+"_value").innerHTML = checkNull(financial_data_value); // 若有值回傳則print在頁面上
+		document.getElementById(modifiedClass+"_value").innerHTML = checkNull(financial_data_value); // 若有值回傳則print在頁面上
 	}
 }
 
 // 清空使用者上次的輸入顯示在頁面上的資訊
 function clean_info() {
 	// 清空div內的span 及 p
-	$( "#"+modifyClass ).find( "span" ).empty();
-	$( "#"+modifyClass ).find( "p" ).empty();
+	$( "#"+modifiedClass ).find( "span" ).empty();
+	$( "#"+modifiedClass ).find( "p" ).empty();
 	
-	// 若 modifyClass 的div內有下拉式選單 將selectedIndex設為0
-	if(modifyClass==CFINANCIAL_INDEX || modifyClass==SECTOR_INFO || modifyClass==GROUP_INFO || modifyClass==TOP100_DATA)
-		document.getElementById("selected_"+modifyClass).selectedIndex = "0";
+	// 若 modifiedClass 的div內有下拉式選單 將selectedIndex設為0
+	if(modifiedClass==CFINANCIAL_INDEX || modifiedClass==SECTOR_INFO || modifiedClass==GROUP_INFO || modifiedClass==TOP100_DATA)
+		document.getElementById("selected_"+modifiedClass).selectedIndex = "0";
 }
 
 
