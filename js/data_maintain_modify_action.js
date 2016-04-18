@@ -49,16 +49,16 @@ function toUpdateString(str) {
 function modify_cbasic_info() {
 	var company_id = document.getElementById(modifiedClass + "_id").innerHTML;
 	if (company_id != '') {
-		// taiwan or china company for different modifyDataClass and tableName
-		var modifyDataClass, tableName;
+		// taiwan or china company for different setOfField and tableName
+		var setOfField, tableName;
 		switch (modifiedClass) {
 		case CBASIC_INFO:
-			modifyDataClass = [ "company_name", "company_nickname", "status",
+			setOfField = [ "company_name", "company_nickname", "status",
 					"sector", "group" ];
 			tableName = CBASIC_INFO;
 			break;
 		case CHINA_CBASIC_INFO:
-			modifyDataClass = [ "company_name", "company_nickname",
+			 setOfField= [ "company_name", "company_nickname",
 					"company_fullname", "status" ];
 			tableName = CHINA_CBASIC_INFO;
 			break;
@@ -102,7 +102,7 @@ function modify_cbasic_info() {
 							break;
 						}
 						if(modify_state)
-							modify_data(tableName, modifyDataClass[index], input
+							modify_data(tableName, setOfField[index], input
 								.val(), company_id);
 					}
 					index++;
@@ -119,16 +119,16 @@ function modify_cfinancial_info() {
 	var season = document.getElementById(modifiedClass + "_season").innerHTML;
 
 	if (company_id != '' && season != '') {
-		// taiwan or china company for different modifyDataClass and tableName
-		var modifyDataClass, tableName;
+		// taiwan or china company for different setOfField and tableName
+		var setOfField, tableName;
 		switch (modifiedClass) {
 		case CFINANCIAL_INFO:
-			modifyDataClass = [ "value_at_risk", "stock", "cashflow_operating",
+			setOfField = [ "value_at_risk", "stock", "cashflow_operating",
 					"cashflow_investment", "proceed_fm_newIssue" ];
 			tableName = CFINANCIAL_INFO;
 			break;
 		case CHINA_CFINANCIAL_INFO:
-			modifyDataClass = [ "value_at_risk", "cashflow_operating",
+			setOfField = [ "value_at_risk", "cashflow_operating",
 					"cashflow_investment", "proceed_fm_newIssue" ];
 			tableName = CHINA_CFINANCIAL_INFO;
 			break;
@@ -145,7 +145,7 @@ function modify_cfinancial_info() {
 											// input, do what you will
 					if (input.val() != '' && input.val() != '#') {
 						if(isdigit(input.val())&&lengthcheck(input.val(), MAXSTRINGLENGTH))
-							modify_data(tableName, modifyDataClass[index], input
+							modify_data(tableName, setOfField[index], input
 								.val(), company_id, season);
 						else
 							alert("輸入非法，將不會進行更新");
