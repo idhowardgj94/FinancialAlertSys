@@ -11,14 +11,14 @@ define("COMPANY_ID_INDEX", 0);
 // step 2 : 資料庫沒有該id的公司->可新增->組成新增字串
 // step 3 : call db_controller_unit insertData()
 function insertComapnyBasicData() {
-	$insert_value = $_GET['value'];
+	$insert_value = $_GET['selectedInsertItem'];
 	$company_id = $insert_value[COMPANY_ID_INDEX];
 	
 	// 檢查id是否存在於資料庫, 不存在則繼續新增資料
-	if( !checkCompany( $GLOBALS [ 'insert_data_class' ], $company_id) ) {
+	if( !checkCompany( $GLOBALS [ 'tableName' ], $company_id) ) {
 		
 		// 組成新增字串
-		switch( $GLOBALS [ 'insert_data_class' ] ) {
+		switch( $GLOBALS [ 'tableName' ] ) {
 			case CBASIC_INFO:
 				$table_name = "company_basic_information";
 				$insert_value_str = "(`company_id`, `company_name`, `company_nickname`, `status`, `sector`, `group`) VALUES ";
@@ -40,7 +40,7 @@ function insertComapnyBasicData() {
 				$insert_value_tem .= toInsertString($insert_value[$i]);
 			}
 			
-			if( $GLOBALS [ 'insert_data_class' ] === "china_cbasic_info" )
+			if( $GLOBALS [ 'tableName' ] === "china_cbasic_info" )
 				$insert_value_tem .= ", 'T'";
 
 			$insert_value_str .= $insert_value_tem . ")";
@@ -71,18 +71,18 @@ function insertComapnyFinancialData() {
 	define("SEASON_INDEX", 2);
 	define("VALUE_AT_RISK_INDEX", 3);
 
-	$insert_value = $_GET['value'];
+	$insert_value = $_GET['selectedInsertItem'];
 	$company_id = $insert_value[COMPANY_ID_INDEX];
 	$season = $insert_value[YEAR_INDEX] . $insert_value[SEASON_INDEX];
 	
 	// 檢查id是否存在於資料庫, 若不存在則跳出
-	if( checkCompany( $GLOBALS [ 'insert_data_class' ], $company_id) ) {
+	if( checkCompany( $GLOBALS [ 'tableName' ], $company_id) ) {
 		// 檢查idxsason財務資料是否存在於資料庫, 若存在則跳出
-		if( !checkFinancialInfo( $GLOBALS [ 'insert_data_class' ], $company_id, $season ) ) {
+		if( !checkFinancialInfo( $GLOBALS [ 'tableName' ], $company_id, $season ) ) {
 			$value_at_risk = $insert_value[VALUE_AT_RISK_INDEX];
 			
 			// 組成新增字串
-			switch( $GLOBALS [ 'insert_data_class' ] ) {
+			switch( $GLOBALS [ 'tableName' ] ) {
 				case CFINANCIAL_INFO:
 					$table_name = "company_financial_information";
 					$insert_value_str = '(`company_id`, `season`, `value_at_risk`, `stock`, `cashflow_operating`, `cashflow_investment`, `proceed_fm_newIssue`) VALUES ("'. $company_id .'","'. $season .'", '. $value_at_risk .', null, null, null, null)';
@@ -117,13 +117,13 @@ function insertComapnyCrisisDate() {
 	define("YEAR_INDEX", 1);
 	define("MONTH_INDEX", 2);
 	
-	$insert_value = $_GET['value'];
+	$insert_value = $_GET['selectedInsertItem'];
 	$company_id = $insert_value[COMPANY_ID_INDEX];
 	
 	// 檢查id是否有公司基本資料存在於資料庫, 若不存在則跳出
 	if( checkCompany( TAIWAN, $company_id) ) {
 		// 檢查該id是否有危機發生日資料存在於資料庫, 若存在則跳出
-		if( !checkCompany( $GLOBALS [ 'insert_data_class' ], $company_id) ) {
+		if( !checkCompany( $GLOBALS [ 'tableName' ], $company_id) ) {
 			$date_value = $insert_value[YEAR_INDEX] . "." . $insert_value[MONTH_INDEX];
 			// 2014.11
 
@@ -187,10 +187,10 @@ function showInsertMessage($index) {
 include 'data_maintain_action.php';
 
 // insert 種類
-$insert_data_class = $_GET['table_class'];
+$tableName = $_GET['tableName'];
 
 // 判斷insert_data_class呼叫對應的insert function
-switch($insert_data_class) {
+switch($tableName) {
 	case CBASIC_INFO:
 	case CHINA_CBASIC_INFO:
 		insertComapnyBasicData();

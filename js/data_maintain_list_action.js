@@ -16,7 +16,7 @@ const MAXSTRINGLENGTH=20;
 const YEAR=4;
 
 var modifiedClass = CBASIC_INFO;
-var insertClass = CBASIC_INFO;
+var insertionType = CBASIC_INFO;
 var selectedModifyAction = UPDATE;
 
 /*
@@ -26,21 +26,21 @@ var selectedModifyAction = UPDATE;
 $(document).ready(function(){
 	//maintain_select_action：第一個panel（選擇新增／修改、要修改的資料）
 	$('#maintain_selected_action').change(function(){
-		selected_value = $("input[name='maintain_selected']:checked").val();
+		maintainanceType = $("input[name='maintain_selected']:checked").val();
 		// 修改
-		if( selected_value == 'maintain_modify' ) {
+		if( maintainanceType == 'maintain_modify' ) {
 			selectedModifyAction = UPDATE;
 			document.getElementById("maintainform_modify").style.display = "block";//in data_maintain_page.php
 			document.getElementById("maintainform_insert").style.display = "none";// in data_maintain_page.php
 			document.getElementById("maintain_insert").style.display = "none";
-			document.getElementById(selected_value).style.display = "block";//where?
+			document.getElementById(maintainanceType).style.display = "block";//where?
 		} // 新增
 		else {
 			selectedModifyAction = INSERT;
 			document.getElementById("maintainform_modify").style.display = "none";
 			document.getElementById("maintainform_insert").style.display = "block";
 			document.getElementById("maintain_modify").style.display = "none";
-			document.getElementById(selected_value).style.display = "block";
+			document.getElementById(maintainanceType).style.display = "block";
 		}
 		
 	});
@@ -141,11 +141,11 @@ function listchange(e)
 			default:
 		}
 	} else {
-		disableLastBlock(insertClass);
+		disableLastBlock(insertionType);
 		if(e==CRISIS_DATE)
 			document.getElementById("crisis_date_info_insert").style.display = "block";
 		else
 			document.getElementById(e+"_insert").style.display = "block";
-		insertClass = e;
+		insertionType = e;
 	}
 }

@@ -4,43 +4,41 @@ function showConfirmInsertMessage()
 	// 若確定則呼叫新增資料function
 	if(confirm("確定新增資料？"))
 	{
-		insert_financial_info(insertClass);
+		insert_financial_info(insertionType);
 	}
 }
 
 // 新增單筆財務資料
-function insert_financial_info(classes)
+function insert_financial_info(insertionType)
 {
-	var insertdata = [];
-	var input_all = 1;
-	
-	if(classes==CRISIS_DATE)
-		class_id = "crisis_date_info_insert";
+	var insertionList = [];
+	var isInsertion = 1;
+	var tableName;
+	if(insertionType==CRISIS_DATE)
+		tableName = "crisis_date_info_insert";
 	else
-		class_id = classes+"_insert";
+		tableName = classes+"_insert";
 
-	var user_input;
+	
 	// 取得所有input輸入丟進insertdata陣列中
-	$( "#"+class_id+" :input" ).not( "input[type=button]" ).each(function(){
+	$( "#"+tableName+" :input" ).not( "input[type=button]" ).each(function(){
 		var input = $(this); // This is the jquery object of the input, do what you will
 		if( input.val()!='' && input.val()!='#') {
 			//alert(input.val());
 			if(!lengthcheck(input.val(), MAXSTRINGLENGTH)){
 				alert("長度異常！");
-				input_all = 0;
+				isInsertion = 0;
 			}
-			else{
-				user_input = input.val();
-				insertdata.push( user_input );
-			}
+			else
+				insertionList.push( input.val());
 		} else { // 若其中有無輸入的input格將flag改成0
-			input_all = 0;
+			isInsertion = 0;
 		}
 	});
 	
 	// 需全部input格都有輸入值才會執行insert function
 	if( input_all )
-		insert_data(classes, insertdata);
+		insertDatatoDB(insertionType, insertionList);
 	else
 		showNoDataInput();
 }
@@ -51,11 +49,13 @@ function insert_financial_info(classes)
 	tableName : 欲新增的資料分類
 	value[] : user input value
 			  insert data 前 k 個資料值
+			  table_class
+			  
 */
-function insert_data(tableName, value) {
-	var parameter_str = 'table_class=' + tableName + '&value[]=' + value[0];
-	for(var i=1; i<value.length; i++)
-		parameter_str += '&value[]=' + value[i];
+function insertDatatoDB(tableName, selectedInsertItem) {
+	var parameter_str = 'tableName=' + tableName + '&selectedInsertItem[]=' + selectedInsertItem[0];
+	for(var i=1; i<selectedInsertItem.length; i++)
+		parameter_str += '&selectedInsertItem[]=' + selectedInsertItem[i];
 
 	$.ajax({
 		url: './insert_datamaintain.php?'+parameter_str,
