@@ -107,7 +107,7 @@ function insertComapnyFinancialData() {
 
 // 上傳危機發生日資料
 // value[] : user input
-// value[0] = company id
+// value[0] = company id	
 
 // step 1 : 檢查id是否有公司基本資料存在於資料庫, 若不存在則跳出
 // step 2 : 檢查該id是否有危機發生日資料存在於資料庫, 若存在則跳出

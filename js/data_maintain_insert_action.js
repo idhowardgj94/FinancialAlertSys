@@ -4,12 +4,12 @@ function showConfirmInsertMessage()
 	// 若確定則呼叫新增資料function
 	if(confirm("確定新增資料？"))
 	{
-		insert_financial_info(insertionType);
+		insertFinancialInfo(insertionType);
 	}
 }
 
 // 新增單筆財務資料
-function insert_financial_info(insertionType)
+function insertFinancialInfo(insertionType)
 {
 	var insertionList = [];
 	var isInsertion = 1;
@@ -17,7 +17,7 @@ function insert_financial_info(insertionType)
 	if(insertionType==CRISIS_DATE)
 		tableName = "crisis_date_info_insert";
 	else
-		tableName = classes+"_insert";
+		tableName = insertionType+"_insert";
 
 	
 	// 取得所有input輸入丟進insertdata陣列中
@@ -37,7 +37,7 @@ function insert_financial_info(insertionType)
 	});
 	
 	// 需全部input格都有輸入值才會執行insert function
-	if( input_all )
+	if( isInsertion )
 		insertDatatoDB(insertionType, insertionList);
 	else
 		showNoDataInput();
