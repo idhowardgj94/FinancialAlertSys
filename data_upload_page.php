@@ -13,7 +13,7 @@
 		<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 		<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-		<script type="text/javascript", src="js/datamaintainUploadAction.js"></script>
+		<script type="text/javascript", src="js/dataMaintainUploadAction.js"></script>
 		<style type="text/css">
 		#uploadform {
 			display:block;
