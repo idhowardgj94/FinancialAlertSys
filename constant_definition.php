@@ -16,7 +16,7 @@ define("CBASIC_INFO", "cbasic_info");
 define("CFINANCIAL_INFO", "cfinancial_info");
 define("CHINA_CBASIC_INFO", "china_cbasic_info");
 define("CHINA_CFINANCIAL_INFO", "china_cfinancial_info");
-define("CRISIS_DATE", "crisis_date");
+define("CRISIS_DATE", "crisis_date_info");
 define("CFINANCIAL_INDEX", "cfinancial_index");
 define("TOP100_DATA", "top100_data");
 define("SECTOR_GROUP_INFO", "sector_group_info");

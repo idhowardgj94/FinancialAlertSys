@@ -6,7 +6,7 @@ const GROUP_INFO = 'group_info';
 const TOP100_DATA = 'top100_data';
 const CHINA_CBASIC_INFO = 'china_cbasic_info';
 const CHINA_CFINANCIAL_INFO = 'china_cfinancial_info';
-const CRISIS_DATE = 'crisis_date';//where?
+const CRISIS_DATE = 'crisis_date_info';//where?
 
 const SECTOR_GROUP_INFO = 'sector_group_info';//where
 
@@ -86,9 +86,6 @@ function disableLastBlock(e)
 			default:
 		}
 	} else {
-		if(e==CRISIS_DATE)
-			document.getElementById("crisis_date_info_insert").style.display = "none";
-		else
 			document.getElementById(e+"_insert").style.display = "none";
 	}//重覆block會有問題？
 }
@@ -142,9 +139,6 @@ function listchange(e)
 		}
 	} else {
 		disableLastBlock(insertionType);
-		if(e==CRISIS_DATE)
-			document.getElementById("crisis_date_info_insert").style.display = "block";
-		else
 			document.getElementById(e+"_insert").style.display = "block";
 		insertionType = e;
 	}

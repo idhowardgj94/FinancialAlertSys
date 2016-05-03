@@ -12,7 +12,6 @@ function count(t)
 <?php
 // 因為有中文資料，所以要有這行
 header ( "Content-Type:text/html; charset=utf-8" );
-
 // 定義常數變數
 define ( "FIRSTCOLUMN", 0 );
 define ( "SECONDCOLUMN", 1 );
@@ -24,10 +23,11 @@ define ( "FOURTHCOLUMN", 3 );
 // excel檔 season 格式 = 2014Q4 2014Q3
 
 include 'data_maintain_action.php';
+include 'constant_definition.php';
 include_once "Classes/PHPExcel.php";
-
+//使用者選擇上傳的文件分類
 $fileClassification = $_POST ['selected_uploaddata'];
-
+//上傳的檔案
 $upload_file = $_FILES ['upload_file'] ['tmp_name'];
 $upload_file_name = $_FILES ['upload_file'] ['name'];
 $upload_file_size = $_FILES ["upload_file"] ["size"];
@@ -181,6 +181,7 @@ function checkUploadSeason($season) {
 
 // 讀取xls檔案
 function loadExcelFile($file, $sheet) {
+	//maybe should use static variable?
 	// 讀xls檔案
 	
 	// 取得資料檔的型式
@@ -244,6 +245,7 @@ function uploadValueAtRisk($c, $status, $file) {
 	
 	if($fp) {
 		// 取得季別
+		//設計是先column在row，跟一般習慣相反…
 		$season = $fp->getCellByColumnAndRow(THIRDCOLUMN, 1)->getValue();
 		
 		// 檢查季別是否與使用者輸入的季別相同
@@ -327,7 +329,12 @@ function uploadValueAtRisk($c, $status, $file) {
 }
 
 
-// 取得該status下的公司清單
+/**
+ * 取得該status下的公司清單
+ * $c:台灣或中國（資料表不同）
+ * $status：上市、上櫃、興櫃…
+ * return：公司的清單排序（company id）
+ */
 function getCompanyList($c, $status) {
 	$company_num = 0;
 	
