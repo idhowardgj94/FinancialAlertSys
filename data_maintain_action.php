@@ -1,5 +1,4 @@
 <?php
-include 'constant_definition.php';
 include 'db_controller_unit.php';
 
 $dbc_object = new db_controller_unit;

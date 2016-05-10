@@ -1,4 +1,4 @@
-	<?php
+<?php
 define ( "FINANCIAL_TITLE", "financial_title" );
 define ( "FINANCIAL_DATA_TITLE", "financial_data_title" );
 define ( "TITLE_NAME_INDEX", 0 );
@@ -9,9 +9,9 @@ class db_controller_unit {
 	function connect_DB() {
 		// 設定連接DB名稱
 		$dbn = new mysqli ( 'localhost', // 主機位置
-'root', // 帳號
-'1234', // 密碼
-'financial_schema' ); // 資料庫名稱
+			'root', // 帳號
+			'1234', // 密碼
+			'financial_schema' ); // 資料庫名稱
 		                      
 		// 設定編碼
 		$dbn->set_charset ( 'utf8' );
@@ -29,7 +29,10 @@ class db_controller_unit {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
 		echo $sql;
 	}
-	
+	//取得資料(未完成）
+	function GetDatawithCondition($tablename, $AttributeArray, $condition){
+		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' .$tablename . '`WHERE ' . $condition;
+	}
 	/**
 	 * 檢查該id的公司 在財務指標頁面下 是否存在
 	 */
@@ -912,7 +915,7 @@ class db_controller_unit {
 			for($i = 1; $i < mysqli_num_rows ( $season_all ); $i ++) {
 				$season_all_row = mysqli_fetch_row ( $season_all );
 				$year = str_split ( $season_all_row [0], 4 );
-				//strpos：找到substring第一次出現的起始位置
+				// strpos：找到substring第一次出現的起始位置
 				if (strpos ( $season_list [$season_num - 1], $year [0] ) === false) {
 					$season_list [$season_num] = $season_all_row [0];
 					$season_num ++;
@@ -921,7 +924,7 @@ class db_controller_unit {
 			
 			// season, season, season, ...
 			$tem_season = "";
-			//tem_season: seaon的資料排列（把season_list中的季別使用逗點串在一起
+			// tem_season: seaon的資料排列（把season_list中的季別使用逗點串在一起
 			for($i = 0; $i < count ( $season_list ); $i ++) {
 				if ($tem_season !== "")
 					$tem_season .= ", ";
@@ -945,7 +948,7 @@ class db_controller_unit {
 				
 				if (! empty ( $datatem_row )) {
 					for($j = 0; $j < count ( $datatem_row ); $j ++) {
-						//3到21項取到小數後兩位
+						// 3到21項取到小數後兩位
 						if ($datatem_row [$j] != null) {
 							if ($j >= FIRST_FINANCIAL_INDEX and $j <= LAST_FINANCIAL_INDEX) // 財務指標取到小數後兩位
 								$tem_financial_index_data [$row_num] [$col_num] = sprintf ( "%1\$.2f", $datatem_row [$j] );
@@ -984,7 +987,7 @@ class db_controller_unit {
 		
 		// 儲存對應季別的財務指標資料
 		// $financial_title = [['獲利能力',9], ['償債能力',4], ['經營能力',4], ['資本結構',2], ['現金流量',5]];
-		//title name
+		// title name
 		$financial_title = $this->getFinancialTitleName ( FINANCIAL_TITLE );
 		$datatitle = $this->getFinancialTitleName ( FINANCIAL_DATA_TITLE );
 		
