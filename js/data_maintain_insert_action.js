@@ -14,9 +14,7 @@ function insertFinancialInfo(insertionType)
 	var insertionList = [];
 	var isInsertion = 1;
 	var tableName;
-	if(insertionType==CRISIS_DATE)
-		tableName = "crisis_date_info_insert";
-	else
+
 		tableName = insertionType+"_insert";
 
 	

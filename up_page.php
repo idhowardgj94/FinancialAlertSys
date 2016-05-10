@@ -269,6 +269,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			$highestRow = $fp->getHighestRow();
 			
 			// 照row的順序讀取每一家公司資料
+			//row start from 1, and column start from 0?
 			for($row = 2; $row <= $highestRow; $row++) {
 				if( $fp->getCellByColumnAndRow(FIRSTCOLUMN, $row)->getValue() === '' )
 					break;
@@ -377,7 +378,7 @@ function uploadStockorCashflow($c, $class, $file) {
 		else if($c===CHINA)
 			$tablename = 'china_company_financial_information';
 		
-		$ROW = fgetcsv($fp); // title列
+		$ROW = fgetcsv($fp); // title列（跳過）
 		
 		// 計算現金流量的index
 		if($class===CASHFLOW)
@@ -497,7 +498,7 @@ function uploadSectorGroupFinancialInfo( $class, $file) {
 	// step 6 : checkSectorGroupCompanyList( class, name, company_list)
 	// if (0,a) = '#' loop 以上動作step1~6 : until (0,a) = '' or 無下一列資料
 	
-	$data_num = 10;
+	$data_num = 10;// 預設檔案排序為資料庫中schema排序 財務資料數為10種
 	$isFirst = 0;
 	
 	if($fp) {
