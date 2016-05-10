@@ -388,7 +388,7 @@ function uploadStockorCashflow($c, $class, $file) {
 		
 		// 計算現金流量的index
 		if($class===CASHFLOW)
-			$cashflow_colname_index = countCashflowIndex($ROW);
+			$cashflowColNameIndexArray = getCashflowIndexArray($ROW);
 		
 		while ( $ROW = fgetcsv($fp) ) {
 			$cid = trim($ROW[FIRSTCOLUMN]);
@@ -406,12 +406,13 @@ function uploadStockorCashflow($c, $class, $file) {
 						if($class===STOCK) { // 修改資料庫中該筆idxseason資料的股價欄位
 							$stock = checkNull($ROW[FOURTHCOLUMN]);
 							$GLOBALS [ 'dbc_object' ]->updateData($tablename, STOCK, $stock, $condition);
-						} else { // 修改資料庫中該筆idxseason資料的現金流量欄位
-							for($i=0; $i<count($cashflow_colname_index); $i++) {
-								$cashflow = checkNull($ROW[$cashflow_colname_index[1][$i]]);
-								$GLOBALS [ 'dbc_object' ]->updateData($tablename, $cashflow_colname_index[0][$i], $cashflow, $condition);
+						} else if($class=CASHFLOW) { // 修改資料庫中該筆idxseason資料的現金流量欄位
+							for($i=0; $i<count($cashflowColNameIndexArray); $i++) {
+								$cashflow = checkNull($ROW[$cashflowColNameIndexArray[1][$i]]);
+								$GLOBALS [ 'dbc_object' ]->updateData($tablename, $cashflowColNameIndexArray[0][$i], $cashflow, $condition);
 							}
-						}
+						}else
+							printError('處理資料出現問題！');
 					}
 				} else
 					printError('檔案內的季別與輸入的上傳季別不一致 取消上傳動作');
@@ -428,31 +429,31 @@ function uploadStockorCashflow($c, $class, $file) {
 // 投資 : 1
 // 現金增資 : 2
 // return cashflow_index
-function countCashflowIndex($title_row) {
+function getCashflowIndexArray($titleRow) {
 	// cashflow的指標名稱
-	$cashflow_colname = array('cashflow_operating', 'cashflow_investment', 'proceed_fm_newIssue');
+	$cashflowColname = array('cashflow_operating', 'cashflow_investment', 'proceed_fm_newIssue');
 	
 	// 預設的index
-	$cashflow_index = array( FOURTHCOLUMN, FOURTHCOLUMN+1, FOURTHCOLUMN+2);
+	$cashflowIndex = array( FOURTHCOLUMN, FOURTHCOLUMN+1, FOURTHCOLUMN+2);
 	
 	// 判斷 title_row 裡title對應的index並存在cashflow_index
-	for($i=0; $i<count($title_row); $i++) {
-		if( trim($title_row[$i]) === '來自營運之現金流量' )
-			$cashflow_index[0] = $i;
+	for($i=0; $i<count($titleRow); $i++) {
+		if( trim($titleRow[$i]) === '來自營運之現金流量' )
+			$cashflowIndex[0] = $i;
 		
-		if( trim($title_row[$i]) === '投資活動之現金流量' )
-			$cashflow_index[1] = $i;
+		if( trim($titleRow[$i]) === '投資活動之現金流量' )
+			$cashflowIndex[1] = $i;
 		
-		if( trim($title_row[$i]) === '現金增 〈減〉 資' )
-			$cashflow_index[2] = $i;
+		if( trim($titleRow[$i]) === '現金增 〈減〉 資' )
+			$cashflowIndex[2] = $i;
 	}
 	
-	$cashflow_colname_index = array( 
-		$cashflow_colname, $cashflow_index
+	$cashflowColNameIndexArray = array( 
+		$cashflowColname, $cashflowIndex
 	);
 	
 	// 回傳colname對應的index陣列
-	return $cashflow_colname_index;
+	return $cashflowColNameIndexArray;
 }
 
 // 檢查股價日期是否存在
@@ -610,7 +611,7 @@ function uploadTop100FinancialInfo($file) {
 			// until rank = 100 or 沒下一列資料
 			
 			$fileName = 'top100 variable.xlsx';
-			$top_100_variable = loadExcelFile($fileName, 0);
+			$top100Variable = loadExcelFile($fileName, 0);
 			
 			if( !checkTop100Data($season) ) {
 				for($row = 3; $row <= $highestRow; $row++) {
@@ -623,10 +624,10 @@ function uploadTop100FinancialInfo($file) {
 					// 讀取top100 variable檔案中儲存的indx
 					// 依序取出對應的資料存到top_100_data陣列中
 					$col = 1;
-					while( $top_100_variable->getCellByColumnAndRow($col, 1)->getValue() != '' ) {
-						if( $top_100_variable->getCellByColumnAndRow($col, 3)->getValue() != '' ) {
-							$index = $top_100_variable->getCellByColumnAndRow($col, 3)->getValue()-1;
-							$top_100_data[$index] = $fp->getCellByColumnAndRow($col, $row)->getValue();
+					while( $top100Variable->getCellByColumnAndRow($col, 1)->getValue() != '' ) {
+						if( $top100Variable->getCellByColumnAndRow($col, 3)->getValue() != '' ) {
+							$index = $top100Variable->getCellByColumnAndRow($col, 3)->getValue()-1;
+							$top100Data[$index] = $fp->getCellByColumnAndRow($col, $row)->getValue();
 						}
 						$col++;
 					}
@@ -635,8 +636,8 @@ function uploadTop100FinancialInfo($file) {
 					// 將top_100_data陣列中排序的資料組成上傳字串
 					$insertvalue = '(`company_id`, `season`, `scores`, `rank`, `total_assets`, `net_sales`, `net_income`, `leverage`, `market_value`) 
 						VALUES ("'. $cid .'","'. $season .'"';
-					for($i=0; $i<count($top_100_data); $i++) {
-						$insertvalue .= ', '. checkNull($top_100_data[$i]);
+					for($i=0; $i<count($top100Data); $i++) {
+						$insertvalue .= ', '. checkNull($top100Data[$i]);
 					}
 					$insertvalue .= ', null)';
 					
@@ -649,7 +650,7 @@ function uploadTop100FinancialInfo($file) {
 }
 
 // 上傳財務指標資料
-function uploadFinancialIndex($file, $file_more) {
+function uploadFinancialIndex($file, $fileMore) {
 	// financial_index_all
 	
 	// line 1 : title列 公司代號 公司名稱 季別 ry
@@ -658,29 +659,29 @@ function uploadFinancialIndex($file, $file_more) {
 	// 讀取兩個檔案
 	// 看哪個col數較多 設為file1 另一個為file2
 	
-	$tem_file = loadCsvFile($file);
-	$tem_file2 = loadCsvFile($file_more);
+	$tempFile = loadCsvFile($file);
+	$tempFile2 = loadCsvFile($fileMore);
 	
-	if($tem_file && $tem_file2) {
-		$tem_file_row = fgetcsv($tem_file);
-		$tem_file2_row = fgetcsv($tem_file2);
+	if($tempFile && $tempFile2) {
+		$tempFileRowArray = fgetcsv($tempFile);
+		$tempFile2RowArray = fgetcsv($tempFile2);
 		
-		if( count($tem_file_row)>count($tem_file2_row) ) {
-			$file1 = $tem_file;
-			$file2 = $tem_file2;
+		if( count($tempFileRowArray)>count($tempFile2RowArray) ) {
+			$file1 = $tempFile;
+			$file2 = $tempFile2;
 		} else {
-			$file1 = $tem_file2;
-			$file2 = $tem_file;
+			$file1 = $tempFile2;
+			$file2 = $tempFile;
 		}
 		
-		$file_row = fgetcsv($file1);
-		$file2_row = fgetcsv($file2);
+		$fileRow = fgetcsv($file1);
+		$file2Row = fgetcsv($file2);
 
 		// 計算所需col index  data[i]的i x file col數
 		// (1, 13) (3, 12) (4, 10) ... (8, 3)
 		
-		$col_index = countFinancialIndex($file_row, 1);
-		$col_index_more = countFinancialIndex($file2_row, 2);
+		$colIndexArray = countFinancialIndex($fileRow, 1);
+		$colIndexMoreArray = countFinancialIndex($file2Row, 2);
 		
 		// for each row
 		//    儲存file1資料至data[]
@@ -693,57 +694,57 @@ function uploadFinancialIndex($file, $file_more) {
 		
 		// loop until file1 無資料
 	
-		$data_num = 0;
+		$dataNum = 0;
 		$mysql_command = '';
 		
-		while ( $file1_row = fgetcsv($file1) ) {
-			for($i=0; $i<count($col_index); $i++)
-				$financialIndexData[$data_num][ $col_index[$i][0] ] = $file1_row[ $col_index[$i][1] ];
+		while ( $file1Row = fgetcsv($file1) ) {
+			for($i=0; $i<count($colIndexArray); $i++)
+				$financialIndexData[$dataNum][ $colIndexArray[$i][0] ] = $file1Row[ $colIndexArray[$i][1] ];
 			
-			$season = convertDate2Season($financialIndexData[$data_num][0]);
+			$season = convertDate2Season($financialIndexData[$dataNum][1]);
 			// 檢查季別是否與使用者輸入的季別相同
 			// 若相同則繼續上傳動作
 			if(checkUploadSeason($season)) {
-				while ( $file2_row = fgetcsv($file2) ) {
-					if( trim($file2_row[0]) >= trim($financialIndexData[$data_num][0]) )
+				while ( $file2Row = fgetcsv($file2) ) {
+					if( trim($file2Row[0]) >= trim($financialIndexData[$dataNum][0]) )
 						break;
 				}
 				
-				if( trim($file2_row[0]) === trim($financialIndexData[$data_num][0]) ) {
-					for($i=0; $i<count($col_index_more); $i++)
-						$financialIndexData[$data_num][ $col_index_more[$i][0] ] = $file2_row[ $col_index_more[$i][1] ];
+				if( trim($file2Row[0]) === trim($financialIndexData[$dataNum][0]) ) {
+					for($i=0; $i<count($colIndexMoreArray); $i++)
+						$financialIndexData[$dataNum][ $colIndexMoreArray[$i][0] ] = $file2Row[ $colIndexMoreArray[$i][1] ];
 				} else {
-					for($i=0; $i<count($col_index_more); $i++)
-						$financialIndexData[$data_num][ $col_index_more[$i][0] ] = 'null';
+					for($i=0; $i<count($colIndexMoreArray); $i++)
+						$financialIndexData[$dataNum][ $colIndexMoreArray[$i][0] ] = 'null';
 				}
 				
 				$sql='';
-				for( $i=0; $i<count($financialIndexData[$data_num]); $i++ ) {
+				for( $i=0; $i<count($financialIndexData[$dataNum]); $i++ ) {
 					if( $sql!='' )
 						$sql .= ', ';
 					
 					if( $i===1 ) // season轉換格式
-						$sql .= convertDate2Season($financialIndexData[$data_num][$i]);
+						$sql .= convertDate2Season($financialIndexData[$dataNum][$i]);
 					else
-						$sql .= checkNull($financialIndexData[$data_num][$i]);
+						$sql .= checkNull($financialIndexData[$dataNum][$i]);
 				}
 				
 				
-				if($mysql_command!='')
-					$mysql_command .= ', ';
+				if($mysqlCommand!='')
+					$mysqlCommand .= ', ';
 				
-				$mysql_command .= '( ' . $sql . ')';
+				$mysqlCommand .= '( ' . $sql . ')';
 				
-				$data_num++;
+				$dataNum++;
 			} else
 				printError('檔案內的季別與輸入的上傳季別不一致 取消上傳動作');
 		
 		}
 		
-		$insertvalue = '(`company_id`, `season`, `gross_margin`, `operating_income`, `pretax_income`, `ps_sales`, `ps_operating_income`, `ps_pre_tax_income`, `roe`, `roa`, `eps`, `current`, `acid_test`, `liabilities`, `times_interest_earne`, `aoverr_and_noverr_turnover`, `inventory_turnover`, `fixed_asset_turnover`, `total_asset_turnover`, `debt_over_equity_ratio`, `liabilities_to_assets_ratio`, `cashflow_operating`, `cashflow_investment`, `cashflow_financing`, `proceed_fm_newIssue`, `total_equity`, `lt_liabilities`, `total_fixed_assets`, `lt_investment`, `interest_exp`, `total_liabilities`, `net_sales`, `pre_tax_income`, `change_in_cashflow`) VALUES
-			' . $mysql_command . '<br>';
+		$insertValue = '(`company_id`, `season`, `gross_margin`, `operating_income`, `pretax_income`, `ps_sales`, `ps_operating_income`, `ps_pre_tax_income`, `roe`, `roa`, `eps`, `current`, `acid_test`, `liabilities`, `times_interest_earne`, `aoverr_and_noverr_turnover`, `inventory_turnover`, `fixed_asset_turnover`, `total_asset_turnover`, `debt_over_equity_ratio`, `liabilities_to_assets_ratio`, `cashflow_operating`, `cashflow_investment`, `cashflow_financing`, `proceed_fm_newIssue`, `total_equity`, `lt_liabilities`, `total_fixed_assets`, `lt_investment`, `interest_exp`, `total_liabilities`, `net_sales`, `pre_tax_income`, `change_in_cashflow`) VALUES
+			' . $mysqlCommand . '<br>';
 			
-		$GLOBALS [ 'dbc_object' ]->insertData('financial_index_all', $insertvalue);
+		$GLOBALS [ 'dbc_object' ]->insertData('financial_index_all', $insertValue);
 	}
 }
 
@@ -784,32 +785,32 @@ function checkTop100Data($season) {
 
 // 計算財務指標上傳檔案的index
 // 根據financial_index variable financial_index_more variable
-function countFinancialIndex($file_row, $file_num) {
+function countFinancialIndex($fileRow, $fileNum) {
 	
-	if( $file_num === 1 )
+	if( $fileNum === 1 )
 		$fileName = 'financial_index variable.xlsx';
 	else
 		$fileName = 'financial_index_more variable.xlsx';
 
-	$index_file = loadExcelFile($fileName, 0);
+	$indexFile = loadExcelFile($fileName, 0);
 	
-	$highestColumm = $index_file->getHighestColumn();
+	$highestColumm = $indexFile->getHighestColumn();
 	$highestColumm = PHPExcel_Cell::columnIndexFromString($highestColumm);
 
 	
 	$index = 0;
-	for($i=0; $i<count($file_row); $i++) {
+	for($i=0; $i<count($fileRow); $i++) {
 		for($j=0; $j<$highestColumm; $j++) {
-			if( $file_row[$i] === $index_file->getCellByColumnAndRow($j, 2)->getValue() ) {
-				$col_index[$index][0] = $index_file->getCellByColumnAndRow($j, 3)->getValue();
-				$col_index[$index][1] = $i;
+			if( $fileRow[$i] === $indexFile->getCellByColumnAndRow($j, 2)->getValue() ) {
+				$colIndex[$index][0] = $indexFile->getCellByColumnAndRow($j, 3)->getValue();
+				$colIndex[$index][1] = $i;
 				$index++;
 				break;
 			}
 		}
 	}
 
-	return $col_index;
+	return $colIndex;
 }
 
 // 將 date 轉成 季別格式
