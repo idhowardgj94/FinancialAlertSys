@@ -11,27 +11,52 @@ class db_controller_unit {
 		$dbn = new mysqli ( 'localhost', // 主機位置
 			'root', // 帳號
 			'1234', // 密碼
-			'financial_schema' ); // 資料庫名稱
+			'financial_schema_test' ); // 資料庫名稱
 		                      
 		// 設定編碼
 		$dbn->set_charset ( 'utf8' );
 		return $dbn;
 	}
-	
+	function colseDB($conn){
+		mysql_close($conn);
+	}
 	// 上傳 insert 資料
 	function insertData($tablename, $value) {
+		$dbn = $this->connect_DB();
 		$sql = 'INSERT INTO `' . $tablename . '` ' . $value . '';
 		echo $sql;
+		$retval = mysql_query( $sql, $conn );
+		if(! $retval ) {
+			die('Could not enter data: ' . mysql_error());
+		}
+		 
+		echo "Entered data successfully\n";
+		$this->colseDB($dbn);
 	}
 	
 	// 修改 update 資料
 	function updateData($tablename, $colname, $value, $condition) {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
 		echo $sql;
+		$dbn = $this->connect_DB();
+		$retval = mysql_query( $sql, $conn );
+		if(! $retval ) {
+			die('Could not enter data: ' . mysql_error());
+		}
+			
+		echo "Entered data successfully\n";
+		$this->colseDB($dbn);
 	}
 	//取得資料(未完成）
 	function GetDatawithCondition($tablename, $AttributeArray, $condition){
+		
 		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' .$tablename . '`WHERE ' . $condition;
+		$dbn = $this->connect_DB();
+		$result = mysql_query($sqlQuery);
+		if (!$result) {
+			die('Invalid query: ' . mysql_error());
+		}
+		return $result;
 	}
 	/**
 	 * 檢查該id的公司 在財務指標頁面下 是否存在

@@ -681,8 +681,8 @@ function uploadFinancialIndex($file, $fileMore) {
 		// 計算所需col index  data[i]的i x file col數
 		// (1, 13) (3, 12) (4, 10) ... (8, 3)
 		
-		$colIndexArray = countFinancialIndex($fileRow, 1);
-		$colIndexMoreArray = countFinancialIndex($file2Row, 2);
+		$colIndexArray = getFinancialIndexArray($fileRow, 1);
+		$colIndexMoreArray = getFinancialIndexArray($file2Row, 2);
 		
 		// for each row
 		//    儲存file1資料至data[]
@@ -786,7 +786,7 @@ function checkTop100Data($season) {
 
 // 計算財務指標上傳檔案的index
 // 根據financial_index variable financial_index_more variable
-function countFinancialIndex($fileRow, $fileNum) {
+function getFinancialIndexArray($fileRow, $fileNum) {
 	
 	if( $fileNum === 1 )
 		$fileName = 'financial_index variable.xlsx';
