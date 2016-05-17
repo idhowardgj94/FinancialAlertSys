@@ -39,4 +39,10 @@ define("EXISTED_COMPANY_BASIC_DATA", "existed_company_basic_data");
 define("EXISTED_VALUE_AT_RISK_DATA", "existed_value_at_risk_data");
 define("EXISTED_CRISIS_DATE", "existed_crisis_date");
 define("INSERT_SUCCESS", "insert_success");
+
+/**以下為資料表名稱**/
+
+define("COMPANYFINANCIALINFORMATION", "company_financial_information");
+define("COMPANYBASICINFORMATION", "company_basic_information");
+define("CHINACOMPANYFINANCIALINFORMATION", "china_company_financial_information")
 ?>

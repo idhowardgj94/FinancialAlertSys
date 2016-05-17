@@ -1,5 +1,7 @@
 <?php
+//一定要先執行data_maintain_action.php
 // 定義常數變數
+include_once 'constant_definition.php';
 define("COMPANY_ID_INDEX", 0);
 
 // 上傳公司基本資料

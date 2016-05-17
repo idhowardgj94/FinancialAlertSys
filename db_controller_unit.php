@@ -11,23 +11,25 @@ class db_controller_unit {
 		$dbn = new mysqli ( 'localhost', // 主機位置
 			'root', // 帳號
 			'1234', // 密碼
-			'financial_schema_test' ); // 資料庫名稱
+			'financial_schema' ); // 資料庫名稱
 		                      
 		// 設定編碼
 		$dbn->set_charset ( 'utf8' );
 		return $dbn;
 	}
 	function colseDB($conn){
-		mysql_close($conn);
+		mysqli_close($conn);
 	}
 	// 上傳 insert 資料
 	function insertData($tablename, $value) {
 		$dbn = $this->connect_DB();
 		$sql = 'INSERT INTO `' . $tablename . '` ' . $value . '';
 		echo $sql;
-		$retval = mysql_query( $sql, $conn );
+		$retval = $dbn->query($sql);
 		if(! $retval ) {
-			die('Could not enter data: ' . mysql_error());
+			die('Could not enter data: ' .  $dbn->error);
+			echo "資料表名稱：$tablename\n 輸入資料：$value";
+			echo "insert data";
 		}
 		 
 		echo "Entered data successfully\n";
@@ -39,9 +41,11 @@ class db_controller_unit {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
 		echo $sql;
 		$dbn = $this->connect_DB();
-		$retval = mysql_query( $sql, $conn );
+		$retval = $dbn->query($sql);
 		if(! $retval ) {
-			die('Could not enter data: ' . mysql_error());
+			die('Could not enter data: ' . $dbn->error);
+			die("資料表名稱：$tablename\n 改動屬性：$colname");
+			die( "updateData");
 		}
 			
 		echo "Entered data successfully\n";
@@ -52,7 +56,7 @@ class db_controller_unit {
 		
 		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' .$tablename . '`WHERE ' . $condition;
 		$dbn = $this->connect_DB();
-		$result = mysql_query($sqlQuery);
+		$result = $retval = $dbn->query($sql);
 		if (!$result) {
 			die('Invalid query: ' . mysql_error());
 		}

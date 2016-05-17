@@ -23,7 +23,7 @@
 	<?php
 	if( isset($_SESSION['username']) )
 	{?>
-	<div="container">
+	<div id="container">
 		<div id="nav">
 			<?php include './menu_list.php' ?>
 		</div>
@@ -40,8 +40,7 @@
 		}
 
 		?>
-
-		<script type="text/javascript">
+	<script type="text/javascript">
 		
 		(function(window, document, undefined) {
 				"use strict";

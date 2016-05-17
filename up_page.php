@@ -10,6 +10,7 @@ function count(t)
 </script>
 
 <?php
+include_once 'constant_definition.php';
 // 因為有中文資料，所以要有這行
 header ( "Content-Type:text/html; charset=utf-8" );
 // 定義常數變數
@@ -22,8 +23,7 @@ define ( "FOURTHCOLUMN", 3 );
 // csv檔 season 格式 = 201412 201406
 // excel檔 season 格式 = 2014Q4 2014Q3
 
-include 'data_maintain_action.php';
-include 'constant_definition.php';
+include_once 'data_maintain_action.php';
 include_once "Classes/PHPExcel.php";
 //使用者選擇上傳的文件分類
 $fileClassification = $_POST ['selected_uploaddata'];
@@ -257,9 +257,9 @@ function uploadValueAtRisk($c, $status, $file) {
 			$company_index = 0;
 			
 			if($c===TAIWAN)
-				$table_name = 'company_financial_information';
+				$table_name = COMPANYFINANCIALINFORMATION;
 			else
-				$table_name = 'china_company_financial_information';
+				$table_name = CHINACOMPANYFINANCIALINFORMATION;
 
 			// 若status不等於上市, 將原本該status下的公司狀態改為null
 			if($status!=tse) {
@@ -273,6 +273,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			// 照row的順序讀取每一家公司資料
 			//row start from 1, and column start from 0?
 			for($row = 2; $row <= $highestRow; $row++) {
+				echo $row;
 				if( $fp->getCellByColumnAndRow(FIRSTCOLUMN, $row)->getValue() === '' )
 					break;
 
@@ -305,7 +306,7 @@ function uploadValueAtRisk($c, $status, $file) {
 					// 將該公司狀態改為status
 					$status_value = '"'. $status .'"';
 					$condition = '`company_id`="'. $cid .'"';
-					$GLOBALS [ 'dbc_object' ]->updateData($table_name, 'status', $status_value, $condition);
+					$GLOBALS [ 'dbc_object' ]->updateData(COMPANYBASICINFORMATION, 'status', $status_value, $condition);
 
 					
 					// search 公司id是否存在於old_company_list並刪除該element
@@ -313,7 +314,7 @@ function uploadValueAtRisk($c, $status, $file) {
 					if($index !== FALSE)
 						unset( $old_company_list[$index]);
 				} else {
-					echo '公司ID'. $cid .'不存在於資料庫中';
+					echo '公司ID'. $cid .'不存在於資料庫中<br>';
 				}
 			}
 			

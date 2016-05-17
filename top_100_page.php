@@ -24,7 +24,7 @@ class top_100_page {
 		$k=0;
 		foreach ($nodes as $node) {
 			if( strpos($node->nodeValue, "(") !== false ) { // 有單位的title name 加入換行
-				$index = strpos($node->nodeValue, "(");
+				$index = strpos($node->nodeValue, "(");//找到單位的第一個字元（(）出現的index
 				$tem_title_name = substr($node->nodeValue,0,$index).'<br>'.substr($node->nodeValue,$index);
 				$title_name_list[$k] = $tem_title_name;
 			} else if ( strlen($node->nodeValue) >= LONG_STRING ) { // 過長的title name 加入換行
@@ -50,9 +50,11 @@ class top_100_page {
 			echo '<div id="demoDiv"><div id="demoGrid"><table id="demoTable"><colgroup><col id="demoTableCol1"></colgroup><thead><tr>';
 			
 			$title_name = $this->getTop100TitleName();
+			//到XML讀檔，將title讀出
 			
 			for($i=0; $i<count($title_name); $i++) {
 				echo "<th><span id=demoHdr". $i .">". $title_name[$i] ."</span></th>";
+				//th 表格title，字體為粗體
 			}
 			
 			echo '</tr></thead><tbody>';
