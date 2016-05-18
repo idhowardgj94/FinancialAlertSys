@@ -10,6 +10,7 @@ function count(t)
 </script>
 
 <?php
+set_time_limit(0);
 include_once 'constant_definition.php';
 // 因為有中文資料，所以要有這行
 header ( "Content-Type:text/html; charset=utf-8" );
@@ -81,7 +82,7 @@ if ($upload_file) {
 				case 'cvalue_at_risk_tse_otc' : // 公司風險值(上市/上櫃)
 				                               // uploadValueAtRisk(); sheet(0) 上市 sheet(1) 上櫃
 					uploadValueAtRisk ( TAIWAN, tse, $upload_file );
-					uploadValueAtRisk ( TAIWAN, otc, $upload_file );
+					//uploadValueAtRisk ( TAIWAN, otc, $upload_file );
 					break;
 				case 'cvalue_at_risk_es_public' : // 公司風險值(興櫃/公開發行)
 				                                 // uploadValueAtRisk(); sheet(0) 興櫃 sheet(1) 公開發行
@@ -264,7 +265,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			// 若status不等於上市, 將原本該status下的公司狀態改為null
 			if($status!=tse) {
 				$condition = '`status`="'. $status .'"';
-				$GLOBALS [ 'dbc_object' ]->updateData($table_name, 'status', 'null', $condition);
+				$GLOBALS [ 'dbc_object' ]->updateData(COMPANYBASICINFORMATION, 'status', 'null', $condition);
 			}
 			
 			// 取得資料列數
@@ -273,7 +274,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			// 照row的順序讀取每一家公司資料
 			//row start from 1, and column start from 0?
 			for($row = 2; $row <= $highestRow; $row++) {
-				echo $row;
+				//echo $row;
 				if( $fp->getCellByColumnAndRow(FIRSTCOLUMN, $row)->getValue() === '' )
 					break;
 

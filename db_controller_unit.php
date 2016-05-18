@@ -11,7 +11,7 @@ class db_controller_unit {
 		$dbn = new mysqli ( 'localhost', // 主機位置
 			'root', // 帳號
 			'1234', // 密碼
-			'financial_schema' ); // 資料庫名稱
+			'financial_schema_test' ); // 資料庫名稱
 		                      
 		// 設定編碼
 		$dbn->set_charset ( 'utf8' );
@@ -24,31 +24,31 @@ class db_controller_unit {
 	function insertData($tablename, $value) {
 		$dbn = $this->connect_DB();
 		$sql = 'INSERT INTO `' . $tablename . '` ' . $value . '';
-		echo $sql;
+		//echo $sql;
 		$retval = $dbn->query($sql);
 		if(! $retval ) {
-			die('Could not enter data: ' .  $dbn->error);
+			die('Could not insert data: ' .  $dbn->error);
 			echo "資料表名稱：$tablename\n 輸入資料：$value";
 			echo "insert data";
 		}
 		 
-		echo "Entered data successfully\n";
+		//echo "Entered data successfully\n";
 		$this->colseDB($dbn);
 	}
 	
 	// 修改 update 資料
 	function updateData($tablename, $colname, $value, $condition) {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
-		echo $sql;
+		//echo $sql;
 		$dbn = $this->connect_DB();
 		$retval = $dbn->query($sql);
 		if(! $retval ) {
-			die('Could not enter data: ' . $dbn->error);
+			die('Could not update data: ' . $dbn->error);
 			die("資料表名稱：$tablename\n 改動屬性：$colname");
 			die( "updateData");
 		}
 			
-		echo "Entered data successfully\n";
+		//echo "Entered data successfully\n";
 		$this->colseDB($dbn);
 	}
 	//取得資料(未完成）

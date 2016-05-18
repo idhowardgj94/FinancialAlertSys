@@ -49,6 +49,6 @@ if(!empty($result) AND $user_account=mysqli_fetch_row($result)){
 }
 else{
 	echo '登入失敗';
-	echo '<meta http-equiv=REFRESH CONTENT=1; url = login.php>';
+	echo '<meta http-equiv=REFRESH CONTENT=1; url=login.php>';
 }
 ?>
