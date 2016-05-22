@@ -50,7 +50,7 @@ function insertComapnyBasicData() {
 			// 新增單筆公司基本資料
 			$GLOBALS [ 'dbc_object' ]->insertData($table_name, $insert_value_str);
 			
-			// showInsertMessage(INSERT_SUCCESS);
+			showInsertMessage(INSERT_SUCCESS);
 		}
 
 	} else {
@@ -98,7 +98,7 @@ function insertComapnyFinancialData() {
 			// 新增單筆公司財務資料
 			$GLOBALS [ 'dbc_object' ]->insertData($table_name, $insert_value_str);
 		
-			// showInsertMessage(INSERT_SUCCESS);
+			showInsertMessage(INSERT_SUCCESS);
 		} else {
 			showInsertMessage(EXISTED_VALUE_AT_RISK_DATA); // 該筆財務資料已存在於資料庫中
 		}
@@ -135,7 +135,7 @@ function insertComapnyCrisisDate() {
 			
 			// 新增單筆公司危機發生日資料
 			$GLOBALS [ 'dbc_object' ]->insertData($table_name, $insert_value_str);
-			// showInsertMessage(INSERT_SUCCESS);
+			showInsertMessage(INSERT_SUCCESS);
 		} else {
 			showInsertMessage(EXISTED_CRISIS_DATE); // 該公司的危機發生日資料已存在於資料庫中
 		}
