@@ -99,6 +99,7 @@ function get_needed_data(classes, selectCondition)
 		async: false,
 		success: function(msg){
 			var returnsql_data = $.parseJSON(msg);
+			//var returnsql_data = msg;
 			if(returnsql_data!=null){ // 若有資料則將資料設給return_data
 				return_data = returnsql_data;
 			}

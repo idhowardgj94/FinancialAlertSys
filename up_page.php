@@ -82,7 +82,7 @@ if ($upload_file) {
 				case 'cvalue_at_risk_tse_otc' : // 公司風險值(上市/上櫃)
 				                               // uploadValueAtRisk(); sheet(0) 上市 sheet(1) 上櫃
 					uploadValueAtRisk ( TAIWAN, tse, $upload_file );
-					//uploadValueAtRisk ( TAIWAN, otc, $upload_file );
+					uploadValueAtRisk ( TAIWAN, otc, $upload_file );
 					break;
 				case 'cvalue_at_risk_es_public' : // 公司風險值(興櫃/公開發行)
 				                                 // uploadValueAtRisk(); sheet(0) 興櫃 sheet(1) 公開發行
@@ -290,6 +290,7 @@ function uploadValueAtRisk($c, $status, $file) {
 					// 檢查該id x season資料是否存在
 					if( checkFinancialInfo($c, $cid, $season) ) {
 						echo '公司代號' . $cid . ' 季別' . $season . '風險值資料已存在<br>';
+						//之後要記得加上upload！
 					}
 					else {
 						if($c===TAIWAN) {

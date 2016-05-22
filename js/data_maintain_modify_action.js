@@ -79,9 +79,9 @@ function modify_cbasic_info() {
 				function() {
 					var elementmname = $("#" + modifiedClass + " :input").not(
 							"input[type=button]")[index].id;
-					alert(elementmname);
-					 alert(CBASIC_INFO_NAME_INPUT);
-					 alert(CBASIC_INFO_NICKNAME_INPUT);
+					//alert(elementmname);
+					 //alert(CBASIC_INFO_NAME_INPUT);
+					 //alert(CBASIC_INFO_NICKNAME_INPUT);
 					var input = $(this); // This is the jquery object of the
 											// input, do what you will
 					var modify_state=true;
@@ -189,7 +189,7 @@ function modify_single_cfinancial_info() {
 	var value = document.getElementById(modifiedClass + "_value").innerHTML;
 	if (value != '') {
 		var value_input = document.getElementById(modifiedClass + "_value_input").value;
-		alert(value_input);
+		//alert(value_input);
 		if (value_input != ''&& isdigit(value_input)&&lengthcheck(value_input, MAXSTRINGLENGTH))
 			modify_data(tableName, update_col_name, value_input, condition1,
 					condition_time);

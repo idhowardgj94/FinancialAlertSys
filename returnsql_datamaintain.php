@@ -208,6 +208,7 @@ function getCrisisDateValue() {
 }
 
 include 'data_maintain_action.php';
+include_once 'constant_definition.php';
 $dbn = $dbc_object->connect_DB();
 $return_data_class = $_GET['data_class'];
 // 根據return_data_class呼叫對應取資料function
@@ -242,5 +243,5 @@ switch($return_data_class) {
 }
 	
 mysqli_close($dbn);
-echo null;
+//echo null;
 ?>

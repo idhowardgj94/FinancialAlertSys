@@ -39,7 +39,8 @@ function modifyConditionData($modify_class) {
 	
 	// 修改資料
 	if($table_name)
-		$GLOBALS [ 'dbc_object' ]->updateData($table_name, $update_class, $update_value, $condition_str);
+		$rv=$GLOBALS [ 'dbc_object' ]->updateData($table_name, $update_class, $update_value, $condition_str);
+	return $rv;
 }
 
 function getTableName($modify_class) {
@@ -92,8 +93,8 @@ function isTop100Info($update_class) {
 
 
 include 'data_maintain_action.php';
-
+include_once 'constant_definition.php';
 $class = $_GET['table_class'];
-modifyConditionData($class);
-
+$msg=modifyConditionData($class);
+echo $msg;	
 ?>

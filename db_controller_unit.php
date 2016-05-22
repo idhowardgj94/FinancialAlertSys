@@ -43,13 +43,14 @@ class db_controller_unit {
 		$dbn = $this->connect_DB();
 		$retval = $dbn->query($sql);
 		if(! $retval ) {
-			die('Could not update data: ' . $dbn->error);
-			die("資料表名稱：$tablename\n 改動屬性：$colname");
-			die( "updateData");
+			return 'Could not update data: ' . $dbn->error;
+			//die("資料表名稱：$tablename\n 改動屬性：$colname");
+			//die( "updateData");
 		}
 			
 		//echo "Entered data successfully\n";
 		$this->colseDB($dbn);
+		return "update sucess!";
 	}
 	//取得資料(未完成）
 	function GetDatawithCondition($tablename, $AttributeArray, $condition){
