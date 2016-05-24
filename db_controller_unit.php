@@ -586,9 +586,10 @@ class db_controller_unit {
 				if (! empty ( $data_row )) {
 					if ($i === 0) {
 						$financialInfoData [$row_num] [$col_num] = $data_row [0] . " " . $data_row [1];
+						//公司名稱 與 公司暱稱 使用空格分開
 						
 						$col_num = 1;
-						$company_now = $data_row [0];
+						$company_now = $data_row [0];//公司id
 					} else {
 						if ($company_now !== $data_row [0]) {
 							for($i = $array_index; $i < count ( $season_list ); $i ++) {
@@ -692,7 +693,7 @@ class db_controller_unit {
 		for($k = 2; $k < count ( $sector_group_info [0] ); $k ++) {
 			
 			$col_num = 0;
-			$financialInfoData [$row_num] [$col_num] = $datatitle [$k - 2];
+			$financialInfoData [$row_num] [$col_num] = $datatitle [$k - 2];//標題名稱
 			$col_num = $col_num + 1;
 			
 			for($l = 0; $l < count ( $sector_group_info ); $l ++) {
