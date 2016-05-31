@@ -531,7 +531,7 @@ class db_controller_unit {
 		
 		// 取出該 產業 企業集團 有資料的季別列表
 		$season_all = $dbn->query ( 'SELECT `season`
-		FROM `sector_group_financial_information`
+		FROM `	`
 		WHERE `name` = "' . $pageID . '"
 		ORDER BY `season` DESC' );
 		
@@ -634,7 +634,7 @@ class db_controller_unit {
 			for($i = $array_index; $i < count ( $season_list ); $i ++) {
 				$financialInfoData [$row_num] [$col_num] = "-";
 				$col_num = $col_num + 1;
-			}
+			}//剩下的全部補空資料
 		} else {
 			echo "沒有資料";
 		}
@@ -691,7 +691,8 @@ class db_controller_unit {
 		define ( "DECIMAL_DOT2", 7 );
 		
 		for($k = 2; $k < count ( $sector_group_info [0] ); $k ++) {
-			
+			//K是$sector_group_info的第二維度（行）
+			//L是第一維度（列）
 			$col_num = 0;
 			$financialInfoData [$row_num] [$col_num] = $datatitle [$k - 2];//標題名稱
 			$col_num = $col_num + 1;
@@ -708,7 +709,7 @@ class db_controller_unit {
 					$financialInfoData [$row_num] [$col_num] = $sector_group_info [$l] [$k];
 				
 				$col_num = $col_num + 1;
-			}
+			}//這邊是在做資料轉置
 			$row_num = $row_num + 1;
 		}
 		
@@ -716,7 +717,7 @@ class db_controller_unit {
 		
 		for($m = 0; $m < count ( $sector_group_info ); $m ++) {
 			$financialInfoData [$row_num] [$m + 1] = $sector_group_info [$m] [count ( $sector_group_info [0] ) - 3] + $sector_group_info [$m] [count ( $sector_group_info [0] ) - 4];
-		}
+		}//最後總合的資料
 		
 		mysqli_close ( $dbn );
 		return $financialInfoData;
