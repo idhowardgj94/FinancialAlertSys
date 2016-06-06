@@ -1,6 +1,6 @@
 <?php
 include 'db_controller_unit.php';
-class value_at_risk_page {
+class valueatRiskPage {
 	var $companyList;
 	var $id;
 	// 判斷風險值是否為高 中風險
@@ -10,13 +10,13 @@ class value_at_risk_page {
 	 * 回傳值：-1表示無風險值，表示高風險值，1表示中風險值，0表示正常*
 	 */
 	function checkValueatRisk($valueatRisk) {
-		$high_risk = 30.00;
-		$medium_risk = 40.00;
+		$highRisk = 30.00;
+		$mediumRisk = 40.00;
 		if ($valueatRisk === '-')
 			return - 1; // no risk value
-		if ($valueatRisk <= $high_risk)
+		if ($valueatRisk <= $highRisk)
 			return 2;
-		else if ($valueatRisk <= $medium_risk)
+		else if ($valueatRisk <= $mediumRisk)
 			return 1;
 		return 0;
 	}
@@ -90,107 +90,107 @@ class value_at_risk_page {
 	
 	/*
 	 * 整理風險值資料
-	 * datalist : 待整理的資料
+	 * dataList : 待整理的資料
 	 * pagrID : 頁面分類
-	 * new_datalist : return array
+	 * newDataList : return array
 	 */
-	function sortData($datalist, $pageID) {
+	function sortData($dataList, $pageID) {
 		
 		// 不須整理直接回傳
 		if ($pageID === '興櫃' or $pageID === '公開發行' or $pageID === '中國')
-			return $datalist;
+			return $dataList;
 		else if ($pageID === '下市櫃') { // 下市櫃頁面加上危機發生年月
 			$obj1 = new db_controller_unit ();
 			$dbn = $obj1->connect_DB ();
 			
-			for($i = 0; $i < count ( $datalist ); $i ++) {
+			for($i = 0; $i < count ( $dataList ); $i ++) {
 				
-				$new_index = 0;
-				for($j = 0; $j < count ( $datalist [0] ); $j ++) {
+				$newIndex = 0;
+				for($j = 0; $j < count ( $dataList [0] ); $j ++) {
 					if ($i === 0) {
 						if ($j === 1) {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_datalist [$i] [$new_index + 1] = "危機發生年/月";
-							$new_index = $new_index + 2;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newDataList [$i] [$newIndex + 1] = "危機發生年/月";
+							$newIndex = $newIndex + 2;
 						} else {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_index = $new_index + 1;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newIndex = $newIndex + 1;
 						}
 					} else {
 						if ($j === 1) {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
 							
-							$crisis_date = $dbn->query ( 'SELECT * FROM `company_financial_crisis` WHERE `company_id` = "' . $datalist [$i] [0] . '"' );
-							if (! empty ( $crisis_date )) {
-								$crisis_date_row = mysqli_fetch_row ( $crisis_date );
-								if (! empty ( $crisis_date_row ))
-									$new_datalist [$i] [$new_index + 1] = $crisis_date_row [1];
+							$crisisDdate = $dbn->query ( 'SELECT * FROM `company_financial_crisis` WHERE `company_id` = "' . $dataList [$i] [0] . '"' );
+							if (! empty ( $crisisDate )) {
+								$crisisDateRow = mysqli_fetch_row ( $crisisDate );
+								if (! empty ( $crisisDateRow ))
+									$newDataList [$i] [$newIndex + 1] = $crisisDateRow [1];
 								else
-									$new_datalist [$i] [$new_index + 1] = "NULL";
+									$newDataList [$i] [$newIndex + 1] = "NULL";
 							} else {
-								$new_datalist [$i] [$new_index + 1] = "NULL";
+								$newDataList [$i] [$newIndex + 1] = "NULL";
 							}
-							$new_index = $new_index + 2;
+							$newIndex = $newIndex + 2;
 						} else {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_index = $new_index + 1;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newIndex = $newIndex + 1;
 						}
 					}
 				}
 			}
 			
-			return $new_datalist;
+			return $newDataList;
 		} else { // 上市上櫃頁面加上三年預警率
-			for($i = 0; $i < count ( $datalist ); $i ++) {
+			for($i = 0; $i < count ( $dataList ); $i ++) {
 				
-				$new_index = 0;
-				for($j = 0; $j < count ( $datalist [0] ); $j ++) {
+				$newIndex = 0;
+				for($j = 0; $j < count ( $dataList [0] ); $j ++) {
 					if ($i === 0) {
 						if ($j === 1) {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_datalist [$i] [$new_index + 1] = "三年預警率";
-							$new_index = $new_index + 2;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newDataList [$i] [$newIndex + 1] = "三年預警率";
+							$newIndex = $newIndex + 2;
 						} else {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_index = $new_index + 1;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newIndex = $newIndex + 1;
 						}
 					} else {
 						if ($j === 1) {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
 							
-							$highrisk = 0;
-							$value_at_risk_num = 0;
+							$highRisk = 0;
+							$valueatRiskNum = 0;
 							for($k = 1; $k < 13; $k ++) {
-								// $tem = explode( "%", $datalist[$i][$j+$k] );
+								// $tem = explode( "%", $dataList[$i][$j+$k] );
 								
 								/*
-								 * if ( $datalist[$i][$j+$k] != "-" )
-								 * $value_at_risk_num++;
+								 * if ( $dataList[$i][$j+$k] != "-" )
+								 * $valueatRiskNum++;
 								 */
-								if (strcasecmp ( $datalist [$i] [$j + $k], "-" ))
-									$value_at_risk_num ++;
+								if (strcasecmp ( $dataList [$i] [$j + $k], "-" ))
+									$valueatRiskNum++;
 									// if ( $tem[0] > 50.00 )
 									// $highrisk++;
-								if ($this->checkValueatRisk ( $datalist [$i] [$j + $k] ) === 2)
-									$highrisk ++;
+								if ($this->checkValueatRisk ( $dataList [$i] [$j + $k] ) === 2)
+									$highRisk ++;
 							}
-							if ($value_at_risk_num)
-								$warining_rate = ($highrisk / $value_at_risk_num) * 100;
+							if ($valueatRiskNum)
+								$wariningRate = ($highRisk / $valueatRiskNum) * 100;
 							else
-								$warining_rate = 0;
+								$wariningRate = 0;
 							
-							$new_datalist [$i] [$new_index + 1] = sprintf ( "%.0f", $warining_rate ) . "% (" . $highrisk . '/' . $value_at_risk_num . ')';
+							$newDataList [$i] [$newIndex + 1] = sprintf ( "%.0f", $wariningRate ) . "% (" . $highRisk . '/' . $valueatRiskNum . ')';
 							
-							$new_index = $new_index + 2;
+							$newIndex = $newIndex + 2;
 						} else {
-							$new_datalist [$i] [$new_index] = $datalist [$i] [$j];
-							$new_index = $new_index + 1;
+							$newDataList [$i] [$newIndex] = $dataList [$i] [$j];
+							$newIndex = $newIndex + 1;
 						}
 					}
 				}
 			}
 			
-			return $new_datalist;
+			return $newDataList;
 		}
 	}
 }

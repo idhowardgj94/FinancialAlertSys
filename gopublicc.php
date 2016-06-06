@@ -40,8 +40,8 @@
 		
 		<?php
 		
-		include 'value_at_risk_page.php';
-		$object = new value_at_risk_page;
+		include 'valueatRiskPage.php';
+		$object = new valueatRiskPage;
 		$object->id = "publicoffer";
 		$object->printValueatRisktable("taiwan", "公開發行");
 		

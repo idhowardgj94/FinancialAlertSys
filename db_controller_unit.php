@@ -524,60 +524,60 @@ class db_controller_unit {
 	 * company_id company_name value_at_risk
 	 * sector_group_data
 	 */
-	function getSectorGroupFinancialInfo($class, $pageID) {
+	function getSectorGroupFinancialInfoList($class, $pageID) {
 		
 		// 連接資料庫
 		$dbn = $this->connect_DB ();
 		
 		// 取出該 產業 企業集團 有資料的季別列表
-		$season_all = $dbn->query ( 'SELECT `season`
-		FROM `	`
+		$seasonAll = $dbn->query ( 'SELECT `season`
+		FROM `sector_group_financial_information`
 		WHERE `name` = "' . $pageID . '"
 		ORDER BY `season` DESC' );
 		
-		$season_num = 0;
-		$tem_season = "";
+		$seasonNum = 0;
+		$temSeason = "";
 		
-		if (! empty ( $season_all )) {
-			for($i = 0; $i < mysqli_num_rows ( $season_all ); $i ++) {
-				$season_all_row = mysqli_fetch_row ( $season_all );
+		if (! empty ( $seasonAll )) {
+			for($i = 0; $i < mysqli_num_rows ( $seasonAll ); $i ++) {
+				$season_all_row = mysqli_fetch_row ( $seasonAll );
 				if (! empty ( $season_all_row )) {
-					if ($tem_season !== "")
-						$tem_season .= ", ";
-					$season_list [$season_num] = $season_all_row [0];
-					$season_num = $season_num + 1;
-					$tem_season .= " '" . $season_all_row [0] . "'";
+					if ($temSeason !== "")
+						$temSeason .= ", ";
+					$seasonList [$seasonNum] = $season_all_row [0];
+					$seasonNum = $seasonNum + 1;
+					$temSeason .= " '" . $season_all_row [0] . "'";
 				}
 			}
 		}
 		
 		// 取得對應 產業 企業集團 的公司 tem_season季別 的風險值資料
-		$tem_season = " (" . $tem_season . ")";
+		$temSeason = " (" . $temSeason . ")";
 		
-		$company_datatem = $dbn->query ( 'SELECT `company_basic_information`.`company_id`, `company_basic_information`.`company_nickname`, `company_financial_information`.`season`, `company_financial_information`.`value_at_risk`
+		$companyDatatem = $dbn->query ( 'SELECT `company_basic_information`.`company_id`, `company_basic_information`.`company_nickname`, `company_financial_information`.`season`, `company_financial_information`.`value_at_risk`
 							FROM `company_basic_information`, `company_financial_information`
-							WHERE `company_basic_information`.`company_id` = `company_financial_information`.`company_id` AND `company_basic_information`.`' . $class . '` = "' . $pageID . '" AND `company_financial_information`.`season` IN ' . $tem_season . '
+							WHERE `company_basic_information`.`company_id` = `company_financial_information`.`company_id` AND `company_basic_information`.`' . $class . '` = "' . $pageID . '" AND `company_financial_information`.`season` IN ' . $temSeason . '
 							ORDER BY `company_basic_information`.`company_id` ASC, `company_financial_information`.`season` DESC' );
 		
 		// 取得對應 產業 企業集團 的財務資料
-		$sector_group_datatem = $dbn->query ( 'SELECT *
+		$sectorGroupDatatem = $dbn->query ( 'SELECT *
 							FROM `sector_group_financial_information`
 							WHERE `name` = "' . $pageID . '"
 							ORDER BY `season` DESC' );
 		
 		// 儲存季別資料
-		$financialInfoData [0] [0] = $pageID;
+		$financialInfoDataArray [0] [0] = $pageID;
 		
-		for($i = 0; $i < count ( $season_list ); $i ++) {
-			$financialInfoData [0] [1 + $i] = $season_list [$i];
+		for($i = 0; $i < count ( $seasonList ); $i ++) {
+			$financialInfoDataArray [0] [1 + $i] = $seasonList [$i];
 		}
 		
 		$array_index = 0;
 		
-		$row_num = 1;
-		$col_num = 0;
+		$rowNum = 1;
+		$colNum = 0;
 		
-		$datatem = $company_datatem;
+		$datatem = $companyDatatem;
 		
 		// 儲存該 產業 企業集團 下的公司資料
 		if (! empty ( $datatem )) {
@@ -585,45 +585,45 @@ class db_controller_unit {
 				$data_row = mysqli_fetch_row ( $datatem );
 				if (! empty ( $data_row )) {
 					if ($i === 0) {
-						$financialInfoData [$row_num] [$col_num] = $data_row [0] . " " . $data_row [1];
+						$financialInfoDataArray [$rowNum] [$colNum] = $data_row [0] . " " . $data_row [1];
 						//公司名稱 與 公司暱稱 使用空格分開
 						
-						$col_num = 1;
+						$colNum = 1;
 						$company_now = $data_row [0];//公司id
 					} else {
 						if ($company_now !== $data_row [0]) {
-							for($i = $array_index; $i < count ( $season_list ); $i ++) {
-								$financialInfoData [$row_num] [$col_num] = "-";
-								$col_num = $col_num + 1;
+							for($i = $array_index; $i < count ( $seasonList ); $i ++) {
+								$financialInfoDataArray [$rowNum] [$colNum] = "-";
+								$colNum = $colNum + 1;
 							}
 							
-							$row_num = $row_num + 1;
-							$col_num = 0;
+							$rowNum = $rowNum + 1;
+							$colNum = 0;
 							
-							$financialInfoData [$row_num] [$col_num] = $data_row [0] . " " . $data_row [1];
+							$financialInfoDataArray [$rowNum] [$colNum] = $data_row [0] . " " . $data_row [1];
 							
-							$col_num = 1;
+							$colNum = 1;
 							$company_now = $data_row [0];
 							$array_index = 0;
 						}
 					}
 					
 					do {
-						if ($data_row [2] === $season_list [$array_index] and $data_row [3] !== null) {
-							$financialInfoData [$row_num] [$col_num] = $this->convertValueatRisk ( $data_row [3] );
-							$col_num = $col_num + 1;
+						if ($data_row [2] === $seasonList [$array_index] and $data_row [3] !== null) {
+							$financialInfoDataArray [$rowNum] [$colNum] = $this->convertValueatRisk ( $data_row [3] );
+							$colNum = $colNum + 1;
 							
 							$array_index = $array_index + 1;
 							break;
-						} else if ($data_row [2] === $season_list [$array_index] and $data_row [3] === null) {
-							$financialInfoData [$row_num] [$col_num] = "-";
-							$col_num = $col_num + 1;
+						} else if ($data_row [2] === $seasonList [$array_index] and $data_row [3] === null) {
+							$financialInfoDataArray [$rowNum] [$colNum] = "-";
+							$colNum = $colNum + 1;
 							
 							$array_index = $array_index + 1;
 							break;
 						} else {
-							$financialInfoData [$row_num] [$col_num] = "-";
-							$col_num = $col_num + 1;
+							$financialInfoDataArray [$rowNum] [$colNum] = "-";
+							$colNum = $colNum + 1;
 							
 							$array_index = $array_index + 1;
 						}
@@ -631,15 +631,15 @@ class db_controller_unit {
 				}
 			}
 			
-			for($i = $array_index; $i < count ( $season_list ); $i ++) {
-				$financialInfoData [$row_num] [$col_num] = "-";
-				$col_num = $col_num + 1;
+			for($i = $array_index; $i < count ( $seasonList ); $i ++) {
+				$financialInfoDataArray [$rowNum] [$colNum] = "-";
+				$colNum = $colNum + 1;
 			}//剩下的全部補空資料
 		} else {
 			echo "沒有資料";
 		}
 		
-		$datatem = $sector_group_datatem;
+		$datatem = $sectorGroupDatatem;
 		
 		// 該 產業 企業集團 的資料
 		if (! empty ( $datatem )) {
@@ -647,7 +647,7 @@ class db_controller_unit {
 				$data_row = mysqli_fetch_row ( $datatem );
 				if (! empty ( $data_row )) {
 					for($j = 0; $j < count ( $data_row ); $j ++) {
-						$sector_group_info [$i] [$j] = $data_row [$j];
+						$sectorGroupInfoArray [$i] [$j] = $data_row [$j];
 					}
 				}
 			}
@@ -655,7 +655,7 @@ class db_controller_unit {
 		
 		// 根據class選擇固定的title名
 		if ($class == 'sector') {
-			$datatitle = [ 
+			$dataTitte = [ 
 					'產業總風險值',
 					'總資產',
 					'資產負債比',
@@ -669,7 +669,7 @@ class db_controller_unit {
 					'營業內創現金流量(千元)' 
 			];
 		} else {
-			$datatitle = [ 
+			$dataTitte = [ 
 					'集團總風險值',
 					'總資產',
 					'資產負債比',
@@ -684,43 +684,43 @@ class db_controller_unit {
 			];
 		}
 		
-		$row_num = count ( $financialInfoData );
+		$rowNum = count ( $financialInfoDataArray );
 		
 		define ( "VALUEATRISK_INDEX", 2 );
 		define ( "PERCENT_INDEX", 4 );
 		define ( "DECIMAL_DOT2", 7 );
 		
-		for($k = 2; $k < count ( $sector_group_info [0] ); $k ++) {
+		for($k = 2; $k < count ( $sectorGroupInfoArray [0] ); $k ++) {
 			//K是$sector_group_info的第二維度（行）
 			//L是第一維度（列）
-			$col_num = 0;
-			$financialInfoData [$row_num] [$col_num] = $datatitle [$k - 2];//標題名稱
-			$col_num = $col_num + 1;
+			$colNum = 0;
+			$financialInfoDataArray [$rowNum] [$colNum] = $dataTitte[$k - 2];//標題名稱
+			$colNum = $colNum + 1;
 			
-			for($l = 0; $l < count ( $sector_group_info ); $l ++) {
+			for($l = 0; $l < count ( $sectorGroupInfoArray ); $l ++) {
 				
 				if ($k === VALUEATRISK_INDEX)
-					$financialInfoData [$row_num] [$col_num] = $this->convertValueatRisk ( $sector_group_info [$l] [$k] );
+					$financialInfoDataArray [$rowNum] [$colNum] = $this->convertValueatRisk ( $sectorGroupInfoArray [$l] [$k] );
 				else if ($k === PERCENT_INDEX)
-					$financialInfoData [$row_num] [$col_num] = sprintf ( "%1\$.2f", $sector_group_info [$l] [$k] * 100 ) . "%";
+					$financialInfoDataArray [$rowNum] [$colNum] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] * 100 ) . "%";
 				else if ($k === DECIMAL_DOT2)
-					$financialInfoData [$row_num] [$col_num] = sprintf ( "%1\$.2f", $sector_group_info [$l] [$k] );
+					$financialInfoDataArray [$rowNum] [$colNum] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] );
 				else
-					$financialInfoData [$row_num] [$col_num] = $sector_group_info [$l] [$k];
+					$financialInfoDataArray [$rowNum] [$colNum] = $sectorGroupInfoArray [$l] [$k];
 				
-				$col_num = $col_num + 1;
+				$colNum = $colNum + 1;
 			}//這邊是在做資料轉置
-			$row_num = $row_num + 1;
+			$rowNum = $rowNum + 1;
 		}
 		
-		$financialInfoData [$row_num] [0] = $datatitle [count ( $datatitle ) - 1];
+		$financialInfoDataArray [$rowNum] [0] = $dataTitte[count($dataTitte)-1];
 		
-		for($m = 0; $m < count ( $sector_group_info ); $m ++) {
-			$financialInfoData [$row_num] [$m + 1] = $sector_group_info [$m] [count ( $sector_group_info [0] ) - 3] + $sector_group_info [$m] [count ( $sector_group_info [0] ) - 4];
+		for($m = 0; $m < count ( $sectorGroupInfoArray ); $m ++) {
+			$financialInfoDataArray [$rowNum] [$m + 1] = $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 3] + $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 4];
 		}//最後總合的資料
 		
 		mysqli_close ( $dbn );
-		return $financialInfoData;
+		return $financialInfoDataArray;
 	}
 	/*
 	 * 取得總風險值趨勢圖資料
@@ -833,7 +833,7 @@ class db_controller_unit {
 	 * top100_financial_info : return array
 	 * comapny_id comapny_name top_100_info
 	 */
-	function getTop100FinancialInfo($year) {
+	function getTop100FinancialInfoArray($year) {
 		// 連接資料庫
 		$dbn = $this->connect_DB ();
 		
@@ -927,7 +927,7 @@ class db_controller_unit {
 	/*
 	 * 取得財務指標資料
 	 */
-	function getComapnyFinancialIndex($cid) {
+	function getComapnyFinancialIndexArray($cid) {
 		define ( "FIRST_FINANCIAL_INDEX", 3 );
 		define ( "LAST_FINANCIAL_INDEX", 21 );
 		

@@ -42,8 +42,8 @@
 		</div>
 		<?php
 		
-		include 'value_at_risk_page.php';
-		$object = new value_at_risk_page ();
+		include 'valueatRiskPage.php';
+		$object = new valueatRiskPage ();
 		$object->id = "otm";
 		$object->printValueatRisktable ( "taiwan", "上市" );
 		

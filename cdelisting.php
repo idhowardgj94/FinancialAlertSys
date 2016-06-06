@@ -40,8 +40,8 @@
 		
 		<?php
 		
-		include 'value_at_risk_page.php';
-		$object = new value_at_risk_page;
+		include 'valueatRiskPage.php';
+		$object = new valueatRiskPage;
 		$object->id = "delisting";
 		$object->printValueatRisktable("taiwan", "下市櫃");
 		

@@ -31,7 +31,7 @@ BODY {
 	
 	<?php
 	if (isset ( $_SESSION ['username'] )) {
-		$company_id = $_GET ['id'];
+		$companyId = $_GET ['id'];
 		$classification = $_GET ['class'];
 		
 		// 取所有資料
@@ -39,9 +39,9 @@ BODY {
 		$obj1 = new db_controller_unit ();
 		$dbn = $obj1->connect_DB ();
 		
-		if (isset ( $company_id )) {
-			$datatem = $dbn->query ( 'SELECT * FROM `company_basic_information` WHERE `company_id` = "' . $company_id . '" ' );
-			$data_row = mysqli_fetch_row ( $datatem );
+		if (isset ( $companyId )) {
+			$datatem = $dbn->query ( 'SELECT * FROM `company_basic_information` WHERE `companyId` = "' . $companyId . '" ' );
+			$dataRow = mysqli_fetch_row ( $datatem );
 		}
 		?>
 		<script type="text/javascript">	
@@ -56,20 +56,20 @@ BODY {
 			// 依公司代號及名稱取得資料並開始繪圖
 			function loadPage() {
 				const TAIWAN = 'taiwan';
-				var company_id = <?php echo $company_id; ?>;
-				var company_name = "<?php echo $data_row[2]; ?>";
+				var companyId = <?php echo $companyId; ?>;
+				var companyName = "<?php echo $dataRow[2]; ?>";
 				var classification = "<?php echo $classification; ?>";
 				
 				<?php
 		$dbn = null;
 		?>
 				
-				drawCompanyData(company_id, company_name, TAIWAN); 
+				drawCompanyData(companyId, companyName, TAIWAN); 
 				
 				if(classification != "publicoffer") {
-					drawStockData(company_id, company_name);
+					drawStockData(companyId, companyName);
 				} else {
-					drawCashflowData(company_id, company_name, TAIWAN);
+					drawCashflowData(companyId, companyName, TAIWAN);
 				}
 				
 			}

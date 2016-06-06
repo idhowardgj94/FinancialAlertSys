@@ -30,12 +30,12 @@
 		
 		<?php
 
-		include './top_100_page.php';
+		include './top100Page.php';
 		
 		if ( isset($_GET['y']) ) {
 			$year = $_GET['y'];
 		
-			$obj = new top_100_page;
+			$obj = new top100Page;
 			$obj->printValueatRisktable($year);
 		}
 

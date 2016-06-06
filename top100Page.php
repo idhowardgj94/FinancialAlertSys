@@ -1,7 +1,7 @@
 <?php
 include 'db_controller_unit.php';
 
-class top_100_page {
+class top100Page {
 
 	function thousandsplit($f)
 	{
@@ -25,52 +25,52 @@ class top_100_page {
 		foreach ($nodes as $node) {
 			if( strpos($node->nodeValue, "(") !== false ) { // 有單位的title name 加入換行
 				$index = strpos($node->nodeValue, "(");//找到單位的第一個字元（(）出現的index
-				$tem_title_name = substr($node->nodeValue,0,$index).'<br>'.substr($node->nodeValue,$index);
-				$title_name_list[$k] = $tem_title_name;
+				$temTitleName = substr($node->nodeValue,0,$index).'<br>'.substr($node->nodeValue,$index);
+				$titleNameList[$k] = $temTitleName;
 			} else if ( strlen($node->nodeValue) >= LONG_STRING ) { // 過長的title name 加入換行
 				$index = strlen($node->nodeValue) / 2;
-				$tem_title_name = substr($node->nodeValue,0,$index).'<br>'.substr($node->nodeValue,$index);
-				$title_name_list[$k] = $tem_title_name;
+				$temTitleName = substr($node->nodeValue,0,$index).'<br>'.substr($node->nodeValue,$index);
+				$titleNameList[$k] = $temTitleName;
 			}
 			else {
-				$title_name_list[$k] = $node->nodeValue;
+				$titleNameList[$k] = $node->nodeValue;
 			}
 			$k++;
 		}
 		
-		return $title_name_list;
+		return $titleNameList;
 	}
 
 	function printValueatRisktable($year) {
 		$obj1 = new db_controller_unit;
 		
-		$top100_financial_info = $obj1->getTop100FinancialInfo($year);
+		$top100FinancialInfoArray = $obj1->getTop100FinancialInfoArray($year);
 		
-		if(!empty($top100_financial_info)) {
+		if(!empty($top100FinancialInfoArray)) {
 			echo '<div id="demoDiv"><div id="demoGrid"><table id="demoTable"><colgroup><col id="demoTableCol1"></colgroup><thead><tr>';
 			
-			$title_name = $this->getTop100TitleName();
+			$titleName = $this->getTop100TitleName();
 			//到XML讀檔，將title讀出
 			
-			for($i=0; $i<count($title_name); $i++) {
-				echo "<th><span id=demoHdr". $i .">". $title_name[$i] ."</span></th>";
+			for($i=0; $i<count($titleName); $i++) {
+				echo "<th><span id=demoHdr". $i .">". $titleName[$i] ."</span></th>";
 				//th 表格title，字體為粗體
 			}
 			
 			echo '</tr></thead><tbody>';
 			
-			for ( $i=0; $i<count($top100_financial_info); $i++ ) {
+			for ( $i=0; $i<count($top100FinancialInfoArray); $i++ ) {
 				echo '<tr>';
-				for ( $j=0; $j<count($top100_financial_info[0]); $j++ ) {	
+				for ( $j=0; $j<count($top100FinancialInfoArray[0]); $j++ ) {	
 					if ( $j<2 ) {
-						echo '<td class="g_title">'.$top100_financial_info[$i][$j].'</td>';
+						echo '<td class="g_title">'.$top100FinancialInfoArray[$i][$j].'</td>';
 					}
 					else {
-						if( preg_match( '/%/', $top100_financial_info[$i][$j] ) ) {
-							echo '<td>'.$top100_financial_info[$i][$j].'</td>';
+						if( preg_match( '/%/', $top100FinancialInfoArray[$i][$j] ) ) {
+							echo '<td>'.$top100FinancialInfoArray[$i][$j].'</td>';
 						}
 						else {
-							echo '<td>'. $this->thousandsplit($top100_financial_info[$i][$j]) .'</td>';
+							echo '<td>'. $this->thousandsplit($top100FinancialInfoArray[$i][$j]) .'</td>';
 						}
 					}
 				}

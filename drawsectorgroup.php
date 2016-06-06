@@ -43,9 +43,9 @@
 			
 			// 依公司代號及名稱取得資料並開始繪圖
 			function loadPage() {
-				var chart_id = "<?php echo $_GET['id']; ?>";
-				drawTotalVaRTrendChart(chart_id);
-				drawSectorGroupCashflowData(chart_id);
+				var chartId = "<?php echo $_GET['id']; ?>";
+				drawTotalVaRTrendChart(chartId);
+				drawSectorGroupCashflowData(chartId);
 			}
 		</script>
 		

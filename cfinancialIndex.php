@@ -48,13 +48,13 @@ include './menu_list.php';
 
 <div>
 		<?php
-		include 'cfinancial_index_list.html';
-		include 'financial_index_page.php';
+		include 'cfinancialIndexList.html';
+		include 'financialIndexPage.php';
 		
 		if ( isset($_GET['cid']) ) {
 			$cid = $_GET['cid'];
 		
-			$object = new financial_index_page;
+			$object = new financialIndexPage;
 			$object->printFinancialIndexTable($cid);
 		}
 		
