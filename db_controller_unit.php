@@ -9,57 +9,56 @@ class db_controller_unit {
 	function connect_DB() {
 		// 設定連接DB名稱
 		$dbn = new mysqli ( 'localhost', // 主機位置
-			'root', // 帳號
-			'1234', // 密碼
-			'financial_schema_test' ); // 資料庫名稱
-		                      
+'root', // 帳號
+'1234', // 密碼
+'financial_schema_test' ); // 資料庫名稱
+		                           
 		// 設定編碼
 		$dbn->set_charset ( 'utf8' );
 		return $dbn;
 	}
-	function colseDB($conn){
-		mysqli_close($conn);
+	function colseDB($conn) {
+		mysqli_close ( $conn );
 	}
 	// 上傳 insert 資料
 	function insertData($tablename, $value) {
-		$dbn = $this->connect_DB();
+		$dbn = $this->connect_DB ();
 		$sql = 'INSERT INTO `' . $tablename . '` ' . $value . '';
-		//echo $sql;
-		$retval = $dbn->query($sql);
-		if(! $retval ) {
-			die('Could not insert data: ' .  $dbn->error);
+		// echo $sql;
+		$retval = $dbn->query ( $sql );
+		if (! $retval) {
+			die ( 'Could not insert data: ' . $dbn->error );
 			echo "資料表名稱：$tablename\n 輸入資料：$value";
 			echo "insert data";
 		}
-		 
-		//echo "Entered data successfully\n";
-		$this->colseDB($dbn);
+		
+		// echo "Entered data successfully\n";
+		$this->colseDB ( $dbn );
 	}
 	
 	// 修改 update 資料
 	function updateData($tablename, $colname, $value, $condition) {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
-		//echo $sql;
-		$dbn = $this->connect_DB();
-		$retval = $dbn->query($sql);
-		if(! $retval ) {
+		// echo $sql;
+		$dbn = $this->connect_DB ();
+		$retval = $dbn->query ( $sql );
+		if (! $retval) {
 			return 'Could not update data: ' . $dbn->error;
-			//die("資料表名稱：$tablename\n 改動屬性：$colname");
-			//die( "updateData");
+			// die("資料表名稱：$tablename\n 改動屬性：$colname");
+			// die( "updateData");
 		}
-			
-		//echo "Entered data successfully\n";
-		$this->colseDB($dbn);
+		
+		// echo "Entered data successfully\n";
+		$this->colseDB ( $dbn );
 		return "update sucess!";
 	}
-	//取得資料(未完成）
-	function GetDatawithCondition($tablename, $AttributeArray, $condition){
-		
-		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' .$tablename . '`WHERE ' . $condition;
-		$dbn = $this->connect_DB();
-		$result = $retval = $dbn->query($sql);
-		if (!$result) {
-			die('Invalid query: ' . mysql_error());
+	// 取得資料(未完成）
+	function GetDatawithCondition($tablename, $AttributeArray, $condition) {
+		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' . $tablename . '`WHERE ' . $condition;
+		$dbn = $this->connect_DB ();
+		$result = $retval = $dbn->query ( $sql );
+		if (! $result) {
+			die ( 'Invalid query: ' . mysql_error () );
 		}
 		return $result;
 	}
@@ -530,40 +529,27 @@ class db_controller_unit {
 		$dbn = $this->connect_DB ();
 		
 		// 取出該 產業 企業集團 有資料的季別列表
-		$seasonAll = $dbn->query ( 'SELECT `season`
+		$seasonQueryResult = $dbn->query ( 'SELECT `season`
 		FROM `sector_group_financial_information`
 		WHERE `name` = "' . $pageID . '"
 		ORDER BY `season` DESC' );
 		
-		$seasonNum = 0;
-		$temSeason = "";
+		// 處理季別資料
+		$seasonCount = 0; // seasom count
+		$temSeason = ""; // seasom query (逗點分隔）
 		
-		if (! empty ( $seasonAll )) {
-			for($i = 0; $i < mysqli_num_rows ( $seasonAll ); $i ++) {
-				$season_all_row = mysqli_fetch_row ( $seasonAll );
-				if (! empty ( $season_all_row )) {
+		if (! empty ( $seasonQueryResult )) {
+			for($i = 0; $i < mysqli_num_rows ( $seasonQueryResult ); $i ++) {
+				$seasonRow = mysqli_fetch_row ( $seasonQueryResult );
+				if (! empty ( $seasonRow )) {
 					if ($temSeason !== "")
 						$temSeason .= ", ";
-					$seasonList [$seasonNum] = $season_all_row [0];
-					$seasonNum = $seasonNum + 1;
-					$temSeason .= " '" . $season_all_row [0] . "'";
+					$seasonList [$seasonCount] = $seasonRow [0];
+					$seasonCount = $seasonCount + 1;
+					$temSeason .= " '" . $seasonRow [0] . "'";
 				}
 			}
 		}
-		
-		// 取得對應 產業 企業集團 的公司 tem_season季別 的風險值資料
-		$temSeason = " (" . $temSeason . ")";
-		
-		$companyDatatem = $dbn->query ( 'SELECT `company_basic_information`.`company_id`, `company_basic_information`.`company_nickname`, `company_financial_information`.`season`, `company_financial_information`.`value_at_risk`
-							FROM `company_basic_information`, `company_financial_information`
-							WHERE `company_basic_information`.`company_id` = `company_financial_information`.`company_id` AND `company_basic_information`.`' . $class . '` = "' . $pageID . '" AND `company_financial_information`.`season` IN ' . $temSeason . '
-							ORDER BY `company_basic_information`.`company_id` ASC, `company_financial_information`.`season` DESC' );
-		
-		// 取得對應 產業 企業集團 的財務資料
-		$sectorGroupDatatem = $dbn->query ( 'SELECT *
-							FROM `sector_group_financial_information`
-							WHERE `name` = "' . $pageID . '"
-							ORDER BY `season` DESC' );
 		
 		// 儲存季別資料
 		$financialInfoDataArray [0] [0] = $pageID;
@@ -572,82 +558,88 @@ class db_controller_unit {
 			$financialInfoDataArray [0] [1 + $i] = $seasonList [$i];
 		}
 		
-		$array_index = 0;
+		// 取得對應 產業 企業集團 的公司 tem_season季別 的風險值資料
+		$temSeason = " (" . $temSeason . ")";
 		
-		$rowNum = 1;
-		$colNum = 0;
+		$companyDataQueryResult = $dbn->query ( 'SELECT `company_basic_information`.`company_id`, `company_basic_information`.`company_nickname`, `company_financial_information`.`season`, `company_financial_information`.`value_at_risk`
+							FROM `company_basic_information`, `company_financial_information`
+							WHERE `company_basic_information`.`company_id` = `company_financial_information`.`company_id` AND `company_basic_information`.`' . $class . '` = "' . $pageID . '" AND `company_financial_information`.`season` IN ' . $temSeason . '
+							ORDER BY `company_basic_information`.`company_id` ASC, `company_financial_information`.`season` DESC' );
 		
-		$datatem = $companyDatatem;
+		$seasonDataCount = 0;
+		
+		$rowCount = 0;
+		$colCount = 0;
+		$currentCompany = - 1;
+		$Result = $companyDataQueryResult;
 		
 		// 儲存該 產業 企業集團 下的公司資料
-		if (! empty ( $datatem )) {
-			for($i = 0; $i < mysqli_num_rows ( $datatem ); $i ++) {
-				$data_row = mysqli_fetch_row ( $datatem );
-				if (! empty ( $data_row )) {
-					if ($i === 0) {
-						$financialInfoDataArray [$rowNum] [$colNum] = $data_row [0] . " " . $data_row [1];
-						//公司名稱 與 公司暱稱 使用空格分開
-						
-						$colNum = 1;
-						$company_now = $data_row [0];//公司id
-					} else {
-						if ($company_now !== $data_row [0]) {
-							for($i = $array_index; $i < count ( $seasonList ); $i ++) {
-								$financialInfoDataArray [$rowNum] [$colNum] = "-";
-								$colNum = $colNum + 1;
+		if (! empty ( $Result )) {
+			for($i = 0; $i < mysqli_num_rows ( $Result ); $i ++) {
+				$dataRow = mysqli_fetch_row ( $Result );
+				if (! empty ( $dataRow )) {
+					if ($currentCompany !== $dataRow [0]) {
+						// 已經沒有現在這一家公司的資料，將此家公司剩餘season全部補零
+						if ($currentCompany != - 1) {
+							for($i = $seasonDataCount; $i < count ( $seasonList ); $i ++) {
+								$financialInfoDataArray [$rowCount] [$colCount] = "-";
+								$colCount = $colCount + 1;
 							}
-							
-							$rowNum = $rowNum + 1;
-							$colNum = 0;
-							
-							$financialInfoDataArray [$rowNum] [$colNum] = $data_row [0] . " " . $data_row [1];
-							
-							$colNum = 1;
-							$company_now = $data_row [0];
-							$array_index = 0;
 						}
+						
+						$rowCount = $rowCount + 1;
+						$colCount = 0;
+						
+						$financialInfoDataArray [$rowCount] [$colCount] = $dataRow [0] . " " . $dataRow [1];
+						
+						$colCount = 1;
+						$currentCompany = $dataRow [0];
+						$seasonDataCount = 0;
 					}
 					
 					do {
-						if ($data_row [2] === $seasonList [$array_index] and $data_row [3] !== null) {
-							$financialInfoDataArray [$rowNum] [$colNum] = $this->convertValueatRisk ( $data_row [3] );
-							$colNum = $colNum + 1;
+						if ($dataRow [2] === $seasonList [$seasonDataCount] and $dataRow [3] !== null) {
+							$financialInfoDataArray [$rowCount] [$colCount] = $this->convertValueatRisk ( $dataRow [3] );
+							$colCount = $colCount + 1;
 							
-							$array_index = $array_index + 1;
+							$seasonDataCount = $seasonDataCount + 1;
 							break;
-						} else if ($data_row [2] === $seasonList [$array_index] and $data_row [3] === null) {
-							$financialInfoDataArray [$rowNum] [$colNum] = "-";
-							$colNum = $colNum + 1;
+						} else if ($dataRow [2] === $seasonList [$seasonDataCount] and $dataRow [3] === null) {
+							$financialInfoDataArray [$rowCount] [$colCount] = "-";
+							$colCount = $colCount + 1;
 							
-							$array_index = $array_index + 1;
+							$seasonDataCount = $seasonDataCount + 1;
 							break;
 						} else {
-							$financialInfoDataArray [$rowNum] [$colNum] = "-";
-							$colNum = $colNum + 1;
-							
-							$array_index = $array_index + 1;
+							$financialInfoDataArray [$rowCount] [$colCount] = "-";
+							$colCount = $colCount + 1;
+							$seasonDataCount = $seasonDataCount + 1;
 						}
 					} while ( 1 );
 				}
 			}
-			
-			for($i = $array_index; $i < count ( $seasonList ); $i ++) {
-				$financialInfoDataArray [$rowNum] [$colNum] = "-";
-				$colNum = $colNum + 1;
-			}//剩下的全部補空資料
+			for($i = $seasonDataCount; $i < count ( $seasonList ); $i ++) {
+				$financialInfoDataArray [$rowCount] [$colCount] = "-";
+				$colCount = $colCount + 1;
+			} // 剩下的全部補空資料（最後一筆的）
 		} else {
 			echo "沒有資料";
 		}
 		
-		$datatem = $sectorGroupDatatem;
+		// 取得對應 產業 企業集團 的財務資料
+		$sectorGroupDataQueryResult = $dbn->query ( 'SELECT *
+							FROM `sector_group_financial_information`
+							WHERE `name` = "' . $pageID . '"
+							ORDER BY `season` DESC' );
+		$Result = $sectorGroupDataQueryResult;
 		
 		// 該 產業 企業集團 的資料
-		if (! empty ( $datatem )) {
-			for($i = 0; $i < mysqli_num_rows ( $datatem ); $i ++) {
-				$data_row = mysqli_fetch_row ( $datatem );
-				if (! empty ( $data_row )) {
-					for($j = 0; $j < count ( $data_row ); $j ++) {
-						$sectorGroupInfoArray [$i] [$j] = $data_row [$j];
+		if (! empty ( $Result )) {
+			for($i = 0; $i < mysqli_num_rows ( $Result ); $i ++) {
+				$dataRow = mysqli_fetch_row ( $Result );
+				if (! empty ( $dataRow )) {
+					for($j = 0; $j < count ( $dataRow ); $j ++) {
+						$sectorGroupInfoArray [$i] [$j] = $dataRow [$j];
 					}
 				}
 			}
@@ -684,40 +676,41 @@ class db_controller_unit {
 			];
 		}
 		
-		$rowNum = count ( $financialInfoDataArray );
+		$rowCount = count ( $financialInfoDataArray );
 		
 		define ( "VALUEATRISK_INDEX", 2 );
 		define ( "PERCENT_INDEX", 4 );
 		define ( "DECIMAL_DOT2", 7 );
 		
 		for($k = 2; $k < count ( $sectorGroupInfoArray [0] ); $k ++) {
-			//K是$sector_group_info的第二維度（行）
-			//L是第一維度（列）
-			$colNum = 0;
-			$financialInfoDataArray [$rowNum] [$colNum] = $dataTitte[$k - 2];//標題名稱
-			$colNum = $colNum + 1;
+			// K是$sector_group_info的第二維度（行）
+			// L是第一維度（列）
+			$colCount = 0;
+			$financialInfoDataArray [$rowCount] [$colCount] = $dataTitte [$k - 2]; // 標題名稱
+			$colCount = $colCount + 1;
 			
 			for($l = 0; $l < count ( $sectorGroupInfoArray ); $l ++) {
 				
 				if ($k === VALUEATRISK_INDEX)
-					$financialInfoDataArray [$rowNum] [$colNum] = $this->convertValueatRisk ( $sectorGroupInfoArray [$l] [$k] );
+					$financialInfoDataArray [$rowCount] [$colCount] = $this->convertValueatRisk ( $sectorGroupInfoArray [$l] [$k] );
 				else if ($k === PERCENT_INDEX)
-					$financialInfoDataArray [$rowNum] [$colNum] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] * 100 ) . "%";
+					$financialInfoDataArray [$rowCount] [$colCount] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] * 100 ) . "%";
 				else if ($k === DECIMAL_DOT2)
-					$financialInfoDataArray [$rowNum] [$colNum] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] );
+					$financialInfoDataArray [$rowCount] [$colCount] = sprintf ( "%1\$.2f", $sectorGroupInfoArray [$l] [$k] );
 				else
-					$financialInfoDataArray [$rowNum] [$colNum] = $sectorGroupInfoArray [$l] [$k];
+					$financialInfoDataArray [$rowCount] [$colCount] = $sectorGroupInfoArray [$l] [$k];
 				
-				$colNum = $colNum + 1;
-			}//這邊是在做資料轉置
-			$rowNum = $rowNum + 1;
+				$colCount = $colCount + 1;
+			} // 這邊是在做資料轉置
+			$rowCount = $rowCount + 1;
 		}
 		
-		$financialInfoDataArray [$rowNum] [0] = $dataTitte[count($dataTitte)-1];
+		$financialInfoDataArray [$rowCount] [0] = $dataTitte [count ( $dataTitte ) - 1];
 		
 		for($m = 0; $m < count ( $sectorGroupInfoArray ); $m ++) {
-			$financialInfoDataArray [$rowNum] [$m + 1] = $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 3] + $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 4];
-		}//最後總合的資料
+			// '營業內創現金流量(千元)' = '營業活動之淨現金流入(千元)'+'投資活動之淨現金流入(千元)',
+			$financialInfoDataArray [$rowCount] [$m + 1] = $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 3] + $sectorGroupInfoArray [$m] [count ( $sectorGroupInfoArray [0] ) - 4];
+		} // 最後總合的資料
 		
 		mysqli_close ( $dbn );
 		return $financialInfoDataArray;
