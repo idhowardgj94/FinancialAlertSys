@@ -12,8 +12,12 @@ function count(t)
 <?php
 set_time_limit(0);
 include_once 'constant_definition.php';
-// 因為有中文資料，所以要有這行
+include_once "Classes/PHPExcel.php";
+include_once 'data_maintain_action.php';
+
 header ( "Content-Type:text/html; charset=utf-8" );
+// 因為有中文資料，所以要有這行
+
 // 定義常數變數
 define ( "FIRSTCOLUMN", 0 );
 define ( "SECONDCOLUMN", 1 );
@@ -24,45 +28,44 @@ define ( "FOURTHCOLUMN", 3 );
 // csv檔 season 格式 = 201412 201406
 // excel檔 season 格式 = 2014Q4 2014Q3
 
-include_once 'data_maintain_action.php';
-include_once "Classes/PHPExcel.php";
-//使用者選擇上傳的文件分類
-$fileClassification = $_POST ['selected_uploaddata'];
-//上傳的檔案
-$upload_file = $_FILES ['upload_file'] ['tmp_name'];
-$upload_file_name = $_FILES ['upload_file'] ['name'];
-$upload_file_size = $_FILES ["upload_file"] ["size"];
 
-if ($upload_file) {
-	$tem_upload_file_name = explode ( ".", $upload_file_name );
+
+//使用者選擇上傳的文件分類
+$uploadDataType = $_POST ['selected_uploaddata'];
+//上傳的檔案
+$uploadFile = $_FILES ['upload_file'] ['tmp_name'];
+$uploadFileName = $_FILES ['upload_file'] ['name'];
+$uploadFileSize = $_FILES ["upload_file"] ["size"];
+
+if ($uploadFile) {
+	$tem_upload_file_name = explode ( ".", $uploadFileName );
 	$upload_file_name_extention = $tem_upload_file_name [count ( $tem_upload_file_name ) - 1];
 	// 取得副檔名（count回傳陣列元素個數）
-	if ($upload_file_name_extention != 'csv' and $upload_file_name_extention != 'xls' and $upload_file_name_extention != 'xlsx') {
-		printError ( "檔案類型不符合規定" );
-	}
 	
-	$file_size_max = 10000 * 10000; // 1M限制檔上傳最大容量(bytes)
+	if (!isAcceptableFormat($upload_file_name_extention)) {
+		printError ( "檔案類型不符合規定" );
+	}	
 	                              
 	// 檢查檔大小
-	if ($upload_file_size > $file_size_max) {
+	if (isFileMax($uploadFileSize)) {
 		printError ( "對不起，你的檔容量大於規定" );
 	}
 	
 	// 檢查file2是否正確上傳
-	if ($fileClassification === 'cfinancial_index') {
-		$upload_file2 = $_FILES ['upload_file_more'] ['tmp_name'];
-		$upload_file2_name = $_FILES ['upload_file'] ['name'];
-		$upload_file2_size = $_FILES ["upload_file"] ["size"];
+	if ($uploadDataType === 'cfinancial_index') {
+		$uploadFile2 = $_FILES ['upload_file_more'] ['tmp_name'];
+		$uploadFile2Name = $_FILES ['upload_file'] ['name'];
+		$uploadFile2Size = $_FILES ["upload_file"] ["size"];
 		
-		if ($upload_file2) {
-			$tem_upload_file_name = explode ( ".", $upload_file2_name );
+		if ($uploadFile2) {
+			$tem_upload_file_name = explode ( ".", $uploadFile2Name );
 			$upload_file_name_extention = $tem_upload_file_name [count ( $tem_upload_file_name ) - 1];
 			
-			if ($upload_file_name_extention != 'csv' and $upload_file_name_extention != 'xls' and $upload_file_name_extention != 'xlsx') {
+			if (!isAcceptableFormat($upload_file_name_extention)) {
 				printError ( "檔案類型不符合規定" );
 			}
 			
-			if ($upload_file2_size > $file_size_max) {
+			if (isFileMax($uploadFile2Size)) {
 				printError ( "對不起，你的檔容量大於規定" );
 			}
 		}
@@ -76,45 +79,45 @@ if ($upload_file) {
 			// 上傳季別
 			$upload_season = $_POST ['upload_year'] . $_POST ['upload_season'];
 			
-			echo '選擇上傳了 ' . $fileClassification . ' 類型的檔案<br><br>';
+			echo '選擇上傳了 ' . $uploadDataType . ' 類型的檔案<br><br>';
 			
-			switch ($fileClassification) {
+			switch ($uploadDataType) {
 				case 'cvalue_at_risk_tse_otc' : // 公司風險值(上市/上櫃)
 				                               // uploadValueAtRisk(); sheet(0) 上市 sheet(1) 上櫃
-					uploadValueAtRisk ( TAIWAN, tse, $upload_file );
-					uploadValueAtRisk ( TAIWAN, otc, $upload_file );
+					uploadValueAtRisk ( TAIWAN, tse, $uploadFile );
+					uploadValueAtRisk ( TAIWAN, otc, $uploadFile );
 					break;
 				case 'cvalue_at_risk_es_public' : // 公司風險值(興櫃/公開發行)
 				                                 // uploadValueAtRisk(); sheet(0) 興櫃 sheet(1) 公開發行
-					uploadValueAtRisk ( TAIWAN, es, $upload_file );
-					uploadValueAtRisk ( TAIWAN, gopublic, $upload_file );
+					uploadValueAtRisk ( TAIWAN, es, $uploadFile );
+					uploadValueAtRisk ( TAIWAN, gopublic, $uploadFile );
 					break;
 				case 'cfinancial_index' : // 公司財務指標
-					uploadFinancialIndex ( $upload_file, $upload_file2 );
+					uploadFinancialIndex ( $uploadFile, $uploupload_f
 					break;
 				case 'cstock' : // 公司股價
 				               // uploadStock($upload_file);
-					uploadStockorCashflow ( TAIWAN, STOCK, $upload_file );
+					uploadStockorCashflow ( TAIWAN, STOCK, $uploadFile );
 					break;
 				case 'ccashflow' : // 公司現金流量
 				                  // uploadCashflow(TAIWAN, $upload_file);
-					uploadStockorCashflow ( TAIWAN, CASHFLOW, $upload_file );
+					uploadStockorCashflow ( TAIWAN, CASHFLOW, $uploadFile );
 					break;
 				case 'sector_financial_info' : // 產業風險資料
-					uploadSectorGroupFinancialInfo ( SECTOR, $upload_file );
+					uploadSectorGroupFinancialInfo ( SECTOR, $uploadFile );
 					break;
 				case 'group_financial_info' : // 企業集團風險資料
-					uploadSectorGroupFinancialInfo ( GROUP, $upload_file );
+					uploadSectorGroupFinancialInfo ( GROUP, $uploadFile );
 					break;
 				case 'top_100_financial_info' : // 上市櫃百大競爭力資料
-					uploadTop100FinancialInfo ( $upload_file );
+					uploadTop100FinancialInfo ( $uploadFile );
 					break;
 				case 'china_cvalue_at_risk' : // 中國公司風險值
-					uploadValueAtRisk ( CHINA, "T", $upload_file );
+					uploadValueAtRisk ( CHINA, "T", $uploadFile );
 					break;
 				case 'china_ccashflow' : // 中國公司現金流量
 				                        // uploadCashflow(CHINA, $upload_file);
-					uploadStockorCashflow ( CHINA, CASHFLOW, $upload_file );
+					uploadStockorCashflow ( CHINA, CASHFLOW, $uploadFile );
 					break;
 			}
 		}
@@ -167,6 +170,31 @@ echo "<br>";
  * }
  */
 
+/**
+ * 檢查檔案格式
+ * @param
+ * fileNameExtention：檔案副檔名
+ * @return 
+ * ture or false
+ */
+function isAcceptableFormat($fileNameExtention){
+	if ($fileNameExtention != 'csv' and $fileNameExtention != 'xls' and $fileNameExtention != 'xlsx')
+		return false;
+	return true;
+}
+
+/**
+ * 檢查檔案大小有沒有超過上限
+ * 檔案大小常數：FILESIZEMAX
+ * 定義在 constant_definition.php中
+ * @param fileSize：檔案大小
+ * @return true or false
+ * */
+function isFileMax($fileSize){
+	if ($fileSize > FILESIZEMAX)
+		return true;
+	return false;
+}
 // 輸出error字串然後離開php腳本
 function printError($str) {
 	exit ( $str );

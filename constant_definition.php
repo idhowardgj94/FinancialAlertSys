@@ -23,7 +23,7 @@ define("SECTOR_GROUP_INFO", "sector_group_info");
 
 define("TOP100_COMPANYLIST", "top100_companylist");
 define("CRISIS_COMPANYLIST", "crisis_companylist");
-
+define("FILESIZEMAX", 10000 * 10000);
 
 
 /*
