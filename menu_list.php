@@ -131,7 +131,7 @@
 			<li><a href="chinac.php">中國公司</a></li>
 		</ul></li>
 
-	<li id="menu_financialIndex"><a href="cfinancial_index.php?cid=1101">企業財務指標</a></li>
+	<li id="menu_financialIndex"><a href="cfinancialIndex.php?cid=1101">企業財務指標</a></li>
 
 	<li id="menu_sector"><a href="#">產業風險監控</a>
 		<ul>

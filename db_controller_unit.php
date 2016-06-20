@@ -27,38 +27,106 @@ class db_controller_unit {
 		// echo $sql;
 		$retval = $dbn->query ( $sql );
 		if (! $retval) {
-			die ( 'Could not insert data: ' . $dbn->error );
-			echo "資料表名稱：$tablename\n 輸入資料：$value";
-			echo "insert data";
+			$ret=( 'Could not insert data: ' . $dbn->error );
+			$this->colseDB($dbn);
+			return $ret;
 		}
 		
 		// echo "Entered data successfully\n";
 		$this->colseDB ( $dbn );
+		return true;
 	}
-	
-	// 修改 update 資料
-	function updateData($tablename, $colname, $value, $condition) {
-		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
-		// echo $sql;
-		$dbn = $this->connect_DB ();
-		$retval = $dbn->query ( $sql );
+	function deleteData($tableName, $condition){
+		$sqlQuery = "DELETE FROM `$tablename` WHERE ";
+		while ( list ( , $key ) = each ( $condition ) ) {
+			list ( , $value ) = each ( $condition );
+			if ($firstFlag) {
+				$sqlQuery .= "`$key`= \"$value\" ";
+				$firstFlag = false;
+			} else
+				$sqlQuery .= "AND `$key`= \"$value\" ";
+		}
+		$dbn = $this->connect_DB();
+		$retval = $dbn -> query($sqlQuery);
 		if (! $retval) {
-			return 'Could not update data: ' . $dbn->error;
+			$ret= 'Could not DELETE data: ' . $dbn->error;
+			echo $ret;
+			$this->colseDB ( $dbn );
+			return $ret;
 			// die("資料表名稱：$tablename\n 改動屬性：$colname");
 			// die( "updateData");
 		}
 		
 		// echo "Entered data successfully\n";
 		$this->colseDB ( $dbn );
-		return "update sucess!";
+		return true;
+		
 	}
-	// 取得資料(未完成）
-	function GetDatawithCondition($tablename, $AttributeArray, $condition) {
-		$sqlQuery = 'SELECT `' . $AttributeArray . '` FROM `' . $tablename . '`WHERE ' . $condition;
+	/**
+	 * 修改資料
+	 * 
+	 * @param 資料表名  $tablename  	
+	 * @param 修改的欄位名稱  $colname
+	 * @param 值 $value
+	 * @param WHERE，要做好字串處理 $condition
+	 *        	
+	 *        	
+	 */
+	function updateData($tablename, $colname, $value, $condition) {
+		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
+		//echo $sql.'<br>';
 		$dbn = $this->connect_DB ();
-		$result = $retval = $dbn->query ( $sql );
+		$retval = $dbn->query ( $sql );
+		if (! $retval) {
+			$ret= 'Could not update data: ' . $dbn->error;
+			$dbn->close();
+			return $ret;
+			// die("資料表名稱：$tablename\n 改動屬性：$colname");
+			// die( "updateData");
+		}
+		
+		// echo "Entered data successfully\n";
+		$dbn->close();
+		return true;
+	}
+	/**
+	 * 取得資料庫搜尋結果
+	 * @param database con $dbn
+	 * @param tablename 表格名稱，字串        	
+	 * @param AttributeArray 要搜尋的欄位，陣列，第一個值使用 "＊"表示全部
+	 * @param condition 選擇條件，array格式：key, value
+	 *        	
+	 */
+	function getDatawithCondition(&$dbn, $tablename, $AttributeArray, $condition) {
+		$sqlQuery = "SELECT ";
+		if (strcmp ( $AttributeArray [0], "*" ) == 0)
+			$sqlQuery .= "*";
+		else {
+			$firstFlag = true;
+			foreach ( $AttributeArray as $attrName ) {
+				if ($firstFlag) {
+					$sqlQuery .= "`$attrName`";
+					$firstFlag = false;
+				} else
+					$sqlQuery .= ", `$attrName`";
+			}
+		}
+		$sqlQuery .= " FROM `$tablename` WHERE ";
+		$firstFlag = true;
+		while ( list ( , $key ) = each ( $condition ) ) {
+			list ( , $value ) = each ( $condition );
+			if ($firstFlag) {
+				$sqlQuery .= "`$key`= \"$value\" ";
+				$firstFlag = false;
+			} else
+				$sqlQuery .= "AND `$key`= \"$value\" ";
+		}
+		$dbn = $this->connect_DB ();
+		$result = $dbn->query ( $sql );
+		
 		if (! $result) {
-			die ( 'Invalid query: ' . mysql_error () );
+			echo  "Invalid query:" . mysql_error ();
+			return null;
 		}
 		return $result;
 	}
@@ -66,7 +134,7 @@ class db_controller_unit {
 	 * 檢查該id的公司 在財務指標頁面下 是否存在
 	 */
 	function isExistedFinancialIndexData($input_str) {
-		// 為什麼這裡要先呼叫
+		
 		$dbn = $this->connect_DB ();
 		
 		$temdata = $dbn->query ( 'SELECT DISTINCT a.`company_id` FROM `company_basic_information` a, `financial_index_all` b
@@ -242,7 +310,7 @@ class db_controller_unit {
 		}
 		
 		// colse dbn
-		mysqli_close ( $dbn );
+		//mysqli_close ( $dbn );
 		
 		// 回傳儲存好的風險值array
 		return $ValueatRiskData;

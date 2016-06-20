@@ -23,9 +23,9 @@ function checkCompany($class, $cid) {
 		case CHINA_CFINANCIAL_INFO:
 			$table_name = "china_company_basic_information";
 			break;
-		case CRISIS_DATE:
+		/*case CRISIS_DATE:
 			$table_name = "company_financial_crisis";
-			break;
+			break;*/
 		default:
 	}
 	
@@ -40,7 +40,20 @@ function checkCompany($class, $cid) {
 			return 0;
 	}
 }
-
+/** 
+ * 查循該季別資料是否存在資料庫中
+ * @param season: 上傳的資料季別
+ * @param table: 要查循的資料表*/
+function checkSeasonExist($season, $table){
+	global $dbc_object;
+	$askData="*";
+	$condition[]="season";
+	$condition[]=$season;
+	$return=$dbc_object->getDatawithCondition($table, $askData, $condition);
+	if($return)
+		return true;
+	return false;
+}
 // 檢查該筆財務資料是否存在
 function checkFinancialInfo($class, $cid, $season) {
 	// c : taiwan or china
@@ -72,6 +85,24 @@ function checkFinancialInfo($class, $cid, $season) {
 		else
 			return 0;
 	}
+}
+/**
+ * 跳出確認視窗
+ * 問題：php無法非同步直到使用者按下確認才繼續執行
+ * 可能解法：
+ * jquery，但要大改架構…
+ * */
+function confirm($String){
+	echo '<script type="text/javascript">';
+	echo 'var check = confirm('.$String.')';
+	echo 'document.cookie="check="+check';
+	echo '</script>'; 
+	$check=$_COOKIE['check'];
+	if($check=="true")
+		return true;
+	else 
+		return false;
+	return true;
 }
 
 ?>

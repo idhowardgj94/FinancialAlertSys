@@ -83,6 +83,10 @@
 	請選擇檔案： <br>
 	<input name="upload_file" id="upload_file" type="file"><br>
 	<input name="upload_file_more" id="upload_file_more" type="file" style="display:none;"><br>
+	<p>如果遇到檔案中的資料已經存在資料庫時，請選擇處理方式：<br>
+	<input type="radio" name="ifUpdate" value="no">略過 &nbsp;
+	<input type="radio" name="ifUpdate" value="yes" checked="checked"> 覆蓋<br></p>
+	
 	<input type="submit" value="上傳文件">
 	</form>
 	</div>
