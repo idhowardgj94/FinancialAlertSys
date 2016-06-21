@@ -606,6 +606,7 @@ function uploadSectorGroupFinancialInfo($class, $file) {
 					
 					if (! checkSectorGroupFinancialInfo ( $name, $season )) {
 						// 將原本該產業 企業集團分類下的公司分類改為未分類
+						unset ( $condition );
 						$condition = '`' . $class . '`="' . $name . '"';
 						$GLOBALS ['dbc_object']->updateData ( 'company_basic_information', $class, 'null', $condition );
 						
@@ -613,16 +614,14 @@ function uploadSectorGroupFinancialInfo($class, $file) {
 						// 讀取該產業 企業集團分類下的公司代號並修改該公司分類
 						while ( strpos ( $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue (), '總風險值' ) === false and $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue () !== '' and $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row + 1 )->getValue () !== '' ) {
 							$cid = $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue ();
-							
 							$condition = '`company_id`="' . $cid . '"';
 							$update_value = '"' . $name . '"';
 							$GLOBALS ['dbc_object']->updateData ( 'company_basic_information', $class, $update_value, $condition );
-							
 							$row = $row + 1;
 						}
 						
 						// 新增該季產業 企業集團財務資料
-						$insertvalue = '(`name`, `season`, `total_value_at_risk`, `total_assets`, `debt_asset_ratio`, `net_sales`, `net_income`, `eps`, `cashflow_operating`, `cashflow_investment`, `cashflow_financing`, `proceed_fm_newIssue`) 
+						$insertvalue = '(`name`, `season`, `total_value_at_risk`, `total_assets`, `debt_asset_ratio`, `net_sales`, `net_income`, `eps`, `cashflow_operating`, `cashflow_investment`, `cashflow_financing`, `proceed_fm_newIssue`)
 						VALUES ( "' . $name . '", "' . $season . '"';
 						for($i = 0; $i < $data_num; $i ++) { // 預設檔案排序為資料庫中schema排序 財務資料數為10種
 							if ($fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row + $i )->getValue () !== '' or $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row + $i )->getValue () !== '#') {
@@ -675,7 +674,7 @@ function uploadTop100FinancialInfo($file) {
 				if ($isUpdate == 'yes') {
 					unset ( $condition );
 					array_push ( $condition, 'season', $season );
-					$GLOBALS ['dbc_object']->deleteData ( 'top_100_company' );
+					$GLOBALS ['dbc_object']->deleteData ( 'top_100_company', $condition );
 				}
 			}
 			if (! checkTop100Data ( $season )) {
@@ -762,8 +761,8 @@ function uploadFinancialIndex($file, $fileMore) {
 		
 		$dataNum = 0;
 		$mysql_command = '';
-		
-		while ( $file1Row = fgetcsv ( $file1 ) ) {
+		$isUpload=true;
+		while ( $file1Row = fgetcsv ( $file1 )AND $isUpload ) {
 			for($i = 0; $i < count ( $colIndexArray ); $i ++)
 				$financialIndexData [$dataNum] [$colIndexArray [$i] [0]] = $file1Row [$colIndexArray [$i] [1]];
 			
@@ -786,7 +785,7 @@ function uploadFinancialIndex($file, $fileMore) {
 				
 				// 檢查是資料庫中是否要該季的公司財務指標資料
 				$isInsert = true;
-				$season = $financialIndexData [$dataNum] [1];
+				$season = convertDate2Season($financialIndexData [$dataNum] [1]);
 				$company_id = $financialIndexData [$dataNum] [0];
 				unset ( $condition );
 				array_push ( $condition, "season", $season );
@@ -825,8 +824,10 @@ function uploadFinancialIndex($file, $fileMore) {
 					
 					$GLOBALS ['dbc_object']->insertData ( 'financial_index_all', $insertValue );
 				}
-			} else
+			} else{
 				printError ( '檔案內的季別與輸入的上傳季別不一致 取消上傳動作' );
+				$isUpload=false;
+			}
 		}
 	}
 }
