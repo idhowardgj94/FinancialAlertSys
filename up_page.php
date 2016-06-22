@@ -277,7 +277,7 @@ function uploadValueAtRisk($c, $status, $file) {
 		// line 2 start : data列 公司ID 公司名稱 該季風險值
 		
 	// step 1 : checkCompany(cid)
-		// step 2 : checkFinancialInfo(taiwan, cid, season) ? 修改該id x season資料風險值欄位 : 新增該id x season資料
+		// step 2 : ch	eckFinancialInfo(taiwan, cid, season) ? 修改該id x season資料風險值欄位 : 新增該id x season資料
 		// 同時儲存公司ID LIST
 		
 	// loop step 1 2 until data[0] = ''
@@ -317,16 +317,16 @@ function uploadValueAtRisk($c, $status, $file) {
 				
 				if ($fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue () === '')
 					break;
-					
+						
 					// 讀取該公司資料
 				$cid = $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue ();
 				$company_name = $fp->getCellByColumnAndRow ( SECONDCOLUMN, $row )->getValue ();
 				$value_at_risk = checkNull ( $fp->getCellByColumnAndRow ( THIRDCOLUMN, $row )->getCalculatedValue () );
 				
 				// 檢查公司是否存在於資料庫 若存在 existedCompany = 1 反之 = 0
-				$existedCompany = checkCompany ( $c, $cid );
+				$isCompanyExisted = checkCompany ( $c, $cid );
 				
-				if ($existedCompany) {
+				if ($isCompanyExisted) {
 					// 檢查該id x season資料是否存在
 					if (checkFinancialInfo ( $c, $cid, $season )) {
 						echo '公司代號' . $cid . ' 季別' . $season . '風險值資料已存在<br>';
@@ -339,7 +339,6 @@ function uploadValueAtRisk($c, $status, $file) {
 							else
 								echo "公司代號 $cid 季別 $season 風險值資料覆蓋失敗！錯誤訊息：$ret <br>";
 						}
-						// 之後要記得加上update
 					} else {
 						if ($c === TAIWAN) {
 							$insert_value = '(`company_id`, `season`, `value_at_risk`, `stock`, `cashflow_operating`, `cashflow_investment`, `proceed_fm_newIssue`) 
@@ -579,7 +578,7 @@ function uploadSectorGroupFinancialInfo($class, $file) {
 					// row = 1 為檔案中第一家產業 企業集團
 					// 其餘用'#'分隔
 				if ($row === 1 or $fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue () === '#') {
-					if ($row > 1) { // 判斷是檔案中第一家還是其他產業 企業集團
+					if ($row > 1) {
 						$row ++;
 						$isFirst = 0;
 					} else {
