@@ -91,6 +91,10 @@ class db_controller_unit {
 	}
 	/**
 	 * 取得資料庫搜尋結果
+	 * <p>$attrabute如果只放*，則回傳所有資料
+	 * 若只放 count(小寫），則回傳資料總筆數<br>
+	 * 若放sum（小寫），在放一個欄位名稱，則回傳該欄位總筆數
+	 * </p>
 	 * @param database con $dbn
 	 * @param tablename 表格名稱，字串        	
 	 * @param AttributeArray 要搜尋的欄位，陣列，第一個值使用 "＊"表示全部
@@ -101,6 +105,12 @@ class db_controller_unit {
 		$sqlQuery = "SELECT ";
 		if (strcmp ( $AttributeArray [0], "*" ) == 0)
 			$sqlQuery .= "*";
+		else if(strcmp($AttributeArray[0], "count")==0){
+			$sqlQuery.="COUNT(*)";
+		}
+		else if(strcmp($AttributeArray[0], "sum")==0){
+			$sqlQuery.="SUM($AttributeArray[1])";
+		}
 		else {
 			$firstFlag = true;
 			foreach ( $AttributeArray as $attrName ) {
