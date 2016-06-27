@@ -34,6 +34,7 @@ function checkCompany($class, $cid) {
 
 	if(!empty($tem_companydata)) {
 		$companydata=mysqli_fetch_row($tem_companydata);
+		$GLOBALS [ 'dbc_object' ]->closeDB($dbn);
 		if(!empty($companydata))
 			return 1;
 		else

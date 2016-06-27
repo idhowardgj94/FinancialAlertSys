@@ -155,36 +155,6 @@ echo $_FILES ['upload_file'] ['size'];
 // 已上傳檔的大小，單位為位元組。
 echo "<br>";
 
-// Echo "檔上傳後被臨時儲存為:";
-// echo $_FILES['uploadFile']['tmp_name'];
-// 檔被上傳後在服務端儲存的暫存檔案名。
-// echo "<br>";
-
-/*
- * $Erroe=$_FILES['uploadFile']['error'];
- * switch($Erroe){
- * case 0:
- * Echo "上傳成功";
- * Echo "<Script Language='JavaScript'>count(3000);</Script>";
- * break;
- * case 1:
- * Echo "上傳的檔案超過了 php.ini 中 upload_max_filesize 選項限制的值.";
- * Echo "<Script Language='JavaScript'>count(5000);</Script>";
- * break;
- * case 2:
- * Echo "上傳檔案的大小超過了 HTML 表單中 MAX_FILE_SIZE 選項指定的值。";
- * Echo "<Script Language='JavaScript'>count(5000);</Script>";
- * break;
- * case 3:
- * Echo "檔案只有部分被上傳";
- * Echo "<Script Language='JavaScript'>count(5000);</Script>";
- * break;
- * case 4:
- * Echo "沒有檔案被上傳";
- * Echo "<Script Language='JavaScript'>count(5000);</Script>";
- * break;
- * }
- */
 
 /**
  * 檢查檔案的正確性（有沒有空白列，EXCEL檔才需要）
@@ -208,16 +178,15 @@ function isFileCorrectness($file) {
 		echo"row count=$rowCount<br>";
 		
 		for($row = 1; $row <= $rowCount; $row ++) {
-			echo "row=$row ";
-			echo "value: ".$fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue ()."<br>";
 			if ($fp->getCellByColumnAndRow ( FIRSTCOLUMN, $row )->getValue () ==	 '')
 				return false;
 		}
 		$sheetNumber ++;
 	}
+	echo "<p>檔案驗証通過</p>";
 	return true;
 }
-/*
+/**
  * 檢查檔案格式
  *
  * @param
@@ -346,6 +315,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			
 			// 取得資料列數
 			$totalRow = $fp->getHighestRow ();
+			$testRow=$totalRow;
 			$testSum=0;
 			// 照row的順序讀取每一家公司資料
 			// row start from 1, and column start from 0?
@@ -380,7 +350,7 @@ function uploadValueAtRisk($c, $status, $file) {
 							$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn, $tableName, "value_at_risk", $condition);
 							$retValueList=mysqli_fetch_row($ret);
 							$testSum+=$retValueList[0];
-							$GLOBALS["dbc_object"]->colseDB($dbn);
+							$GLOBALS["dbc_object"]->closeDB($dbn);
 						}
 					} else {
 						if ($c === TAIWAN) {
@@ -404,6 +374,8 @@ function uploadValueAtRisk($c, $status, $file) {
 						unset ( $oldCompanyList [$index] );
 				} else {
 					echo '公司ID' . $cid . '不存在於資料庫中<br>';
+					$testRow--;
+					$testSum-=$valueAtRisk;
 				}
 			}
 			
@@ -419,10 +391,13 @@ function uploadValueAtRisk($c, $status, $file) {
 			 * 包含確認資料總筆數正不正確
 			 * 季別風險資料的總合是否跟檔案內容一樣
 			 */
-			if(!testTotalDataCount($season, $tableName, $totalRow) or !testDataSum($season, $tableName, $testSum)){
+			$tableNameArray= array($tableName);
+			array_push($tableNameArray, "company_basic_information");
+			if(!testTotalDataCount($season, $tableNameArray, $testRow-1, $status) or !testDataSum($season, $tableNameArray, $testSum, $status)){
 				unset($condition);
-				array_push($condition, "season", $season);
-				$GLOBALS["dbc_object"]->deleteData($tableName, $condition);
+				$condition=[];
+				array_push($condition, "season", $season, "status", $status);
+				//$GLOBALS["dbc_object"]->deleteData($tableName, $condition);
 			}
 			
 		} else
@@ -434,42 +409,51 @@ function uploadValueAtRisk($c, $status, $file) {
  * @param $season, $tablename, $testSum
  * @return true or false
  * */
-function testDataSum($season, $tableName, $testSum){
+function testDataSum($season, $tableNameArray, $testSum, $status){
 	$dbn=null;
 	$selectList=null;
 	$verification=true;
 	unset($selectList);
+	$selectList=[];
 	array_push($selectList, "sum", "value_at_risk");
 	unset($condition);
-	array_push($condition, "season", $season);
-	$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn, $table, $selectList, $condition);
+	$condition=[];
+	array_push($condition, "company_financial_information.season", $season,"company_basic_information.status", $status);
+	array_push($condition, "company_financial_information.company_id","company_basic_information.company_id");
+	$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn, $tableNameArray, $selectList, $condition);
 	$retValueList=mysqli_fetch_row($ret);
+	echo "<p>$testSum, $retValueList[0]</p>";
 	if($testSum!=$retValueList[0]){
-		echo "<p>資料上傳驗証不通過！將刪除本季（$season）資料！</p>";
+		echo "<p>資料上傳驗証不通過！將刪除本季（ $season ）資料！</p>";
 		$verification=false;
 	}
-	$GLOBALS["dbc_object"]->colseDB($dbn);
+	$GLOBALS["dbc_object"]->closeDB($dbn);
+	echo "<p>資料總合驗証通過！</p>";
 	return $verification;
 }
 /**
  * 驗証資料總筆數是否相同
- * @param $season, $tableName, $totalRow
+ * @param $season, $tableName, $testRow
  * @return true or false
  * */
-function testTotalDataCount($season, $tableName, $totalRow){
+function testTotalDataCount($season, $tableNameArray, $testRow, $status){
 	$dbn=null;
-	$selectList=null;
+	$selectList=[];
 	$verification=true;
 	array_push($selectList, "count");
 	unset($condition);
-	array_push($condition, "season", $season);
-	$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn,$tableName,$selectList, $condition);
+	$condition=[];
+	array_push($condition, "company_financial_information.season", $season, "company_basic_information.status", $status);
+	array_push($condition, "company_financial_information.company_id","company_basic_information.company_id");
+	$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn,$tableNameArray,$selectList, $condition);
 	$retValueList=mysqli_fetch_row($ret);
-	if($totalRow!=$retValueList[0]){
+	echo "<p>$testRow, $retValueList[0]</p>";
+	if($testRow!=$retValueList[0]){
 		echo "<p>資料總筆數不相同，將取消此資更新資料！</p>";
 		$verification=false;
 	}
-	$GLOBALS["dbc_object"]->colseDB($dbn);
+	$GLOBALS["dbc_object"]->closeDB($dbn);
+	echo "<p>資料總筆數驗証通過</p>";
 	return $verification;
 }
 /**
@@ -633,28 +617,6 @@ function uploadSectorGroupFinancialInfo($class, $file) {
 	global $isUpdate;
 	$fp = loadExcelFile ( $file, 0 );
 	
-	// '#' 為 分隔線 代表下一個產業 企業集團 開始
-	
-	// line 1 : sector or group name (1,1)
-	// line 2 : title列 公司ID 公司名稱 季別(3,2)
-	// line 3 start : 公司data列 公司ID 公司名稱 風險值(不重要)
-	// 儲存公司名稱list company_list
-	// until data(n,1) = __總風險值
-	
-	// line n start : 產業 企業集團data列 : 財務指標名稱 該季該財務指標數值
-	// 依順序 `total_value_at_risk`, `total_assets`, `debt_asset_ratio`, `net_sales`,
-	// `net_income`, `eps`, `cashflow_operating`, `cashflow_investment`,
-	// `cashflow_financing`, `proceed_fm_newIssue`
-	// 最後一行為cashflow_operating + cashflow_investment不記入資料庫資料
-	
-	// start a = 1 to highestRow
-	// step 1 : 紀錄 sector or group name (0,a+1) : name
-	// step 2 : 紀錄 season(2, a+2) : season
-	// step 3 : check 該 name x season 資料是否存在, 若存在則break以下動作
-	// step 4 : 紀錄 公司ID : company_list[i] until (0, a)=__總風險值
-	// step 5 : 取得(2,a)~(2,a+10)資料上傳到 name x season 資料 check (0,a)~(0,a+10)!=''or'#'
-	// step 6 : checkSectorGroupCompanyList( class, name, company_list)
-	// if (0,a) = '#' loop 以上動作step1~6 : until (0,a) = '' or 無下一列資料
 	
 	$data_num = 10; // 預設檔案排序為資料庫中schema排序 財務資料數為10種
 	$isFirst = 0;
@@ -888,7 +850,7 @@ function uploadFinancialIndex($file, $fileMore) {
 					} else if ($isUpdate == 'no')
 						$isInsert = false;
 				}
-				$GLOBALS ['dbc_object']->colseDB ( $dbn );
+				$GLOBALS ['dbc_object']->closeDB ( $dbn );
 				
 				if ($isInsert) {
 					$sql = '';

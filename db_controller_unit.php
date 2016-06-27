@@ -17,7 +17,7 @@ class db_controller_unit {
 		$dbn->set_charset ( 'utf8' );
 		return $dbn;
 	}
-	function colseDB($conn) {
+	function closeDB($conn) {
 		mysqli_close ( $conn );
 	}
 	// 上傳 insert 資料
@@ -28,37 +28,39 @@ class db_controller_unit {
 		$retval = $dbn->query ( $sql );
 		if (! $retval) {
 			$ret=( 'Could not insert data: ' . $dbn->error );
-			$this->colseDB($dbn);
+			$this->closeDB($dbn);
 			return $ret;
 		}
 		
 		// echo "Entered data successfully\n";
-		$this->colseDB ( $dbn );
+		$this->closeDB ( $dbn );
 		return true;
 	}
 	function deleteData($tableName, $condition){
-		$sqlQuery = "DELETE FROM `$tablename` WHERE ";
+		$firstFlag=true;
+		$sqlQuery = "DELETE FROM `$tableName` WHERE ";
 		while ( list ( , $key ) = each ( $condition ) ) {
 			list ( , $value ) = each ( $condition );
 			if ($firstFlag) {
-				$sqlQuery .= "`$key`= \"$value\" ";
+				$sqlQuery .= "`$key`=\"$value\" ";
 				$firstFlag = false;
 			} else
-				$sqlQuery .= "AND `$key`= \"$value\" ";
+				$sqlQuery .= "AND `$key`=\"$value\" ";
 		}
+		echo "<p>$sqlQuery</p>";
 		$dbn = $this->connect_DB();
 		$retval = $dbn -> query($sqlQuery);
 		if (! $retval) {
 			$ret= 'Could not DELETE data: ' . $dbn->error;
 			echo $ret;
-			$this->colseDB ( $dbn );
+			$this->closeDB ( $dbn );
 			return $ret;
 			// die("資料表名稱：$tablename\n 改動屬性：$colname");
 			// die( "updateData");
 		}
 		
 		// echo "Entered data successfully\n";
-		$this->colseDB ( $dbn );
+		$this->closeDB ( $dbn );
 		return true;
 		
 	}
@@ -121,18 +123,36 @@ class db_controller_unit {
 					$sqlQuery .= ", `$attrName`";
 			}
 		}
-		$sqlQuery .= " FROM `$tablename` WHERE ";
+		$sqlQuery .= " FROM ";
+		$firstFlag = true;
+		foreach ($tablename AS $name){
+			if($firstFlag){
+				$sqlQuery.="`$name`";
+				$firstFlag=false;
+			}
+			else
+				$sqlQuery.=", `$name`";
+		}
+		$sqlQuery .= " WHERE ";
 		$firstFlag = true;
 		while ( list ( , $key ) = each ( $condition ) ) {
 			list ( , $value ) = each ( $condition );
 			if ($firstFlag) {
-				$sqlQuery .= "`$key`= \"$value\" ";
+				if(strpos($value, "."))
+					$sqlQuery .= "$key= $value ";
+				else
+					$sqlQuery .= "$key= \"$value\" ";
 				$firstFlag = false;
-			} else
-				$sqlQuery .= "AND `$key`= \"$value\" ";
+			} else{
+				if(strpos($value, "."))
+					$sqlQuery .= "AND $key= $value ";
+				else
+					$sqlQuery .= "AND $key= \"$value\" ";
+			}
 		}
+		echo "<p>$sqlQuery</p>";
 		$dbn = $this->connect_DB ();
-		$result = $dbn->query ( $sql );
+		$result = $dbn->query ( $sqlQuery );
 		
 		if (! $result) {
 			echo  "Invalid query:" . mysql_error ();
@@ -319,7 +339,7 @@ class db_controller_unit {
 			echo "沒有資料";
 		}
 		
-		// colse dbn
+		// close dbn
 		//mysqli_close ( $dbn );
 		
 		// 回傳儲存好的風險值array
