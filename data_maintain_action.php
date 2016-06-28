@@ -40,21 +40,9 @@ function checkCompany($class, $cid) {
 		else
 			return 0;
 	}
+	$GLOBALS [ 'dbc_object' ]->closeDB($dbn);
 }
-/** 
- * 查循該季別資料是否存在資料庫中
- * @param season: 上傳的資料季別
- * @param table: 要查循的資料表*/
-function checkSeasonExist($season, $table){
-	global $dbc_object;
-	$askData="*";
-	$condition[]="season";
-	$condition[]=$season;
-	$return=$dbc_object->getDatawithCondition($table, $askData, $condition);
-	if($return)
-		return true;
-	return false;
-}
+
 // 檢查該筆財務資料是否存在
 function checkFinancialInfo($class, $cid, $season) {
 	// c : taiwan or china
@@ -81,11 +69,13 @@ function checkFinancialInfo($class, $cid, $season) {
 		$tem_companydata = $dbn->query('SELECT * FROM `'. $table_name .'` WHERE `company_id`="'. $cid .'" AND `season`="'. $season .'"');
 	if(!empty($tem_companydata)) {
 		$companydata=mysqli_fetch_row($tem_companydata);
+		$GLOBALS ['dbc_object']->closeDB($dbn);
 		if(!empty($companydata))
 			return 1;
 		else
 			return 0;
 	}
+	$GLOBALS ['dbc_object']->closeDB($dbn);
 }
 /**
  * 跳出確認視窗

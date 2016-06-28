@@ -315,7 +315,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			
 			// 取得資料列數
 			$totalRow = $fp->getHighestRow ();
-			$testRow=$totalRow;
+			$testRow=$totalRow-1;
 			$testSum=0;
 			// 照row的順序讀取每一家公司資料
 			// row start from 1, and column start from 0?
@@ -341,6 +341,7 @@ function uploadValueAtRisk($c, $status, $file) {
 								echo "公司代號 $cid 季別 $season 風險值資料已成功覆蓋為 $valueAtRisk <br>";
 							else
 								echo "公司代號 $cid 季別 $season 風險值資料覆蓋失敗！錯誤訊息：$ret <br>";
+							
 						}
 						else{
 							$testSum-=$valueAtRisk;
@@ -361,13 +362,13 @@ function uploadValueAtRisk($c, $status, $file) {
 						VALUES ("' . $cid . '","' . $season . '",' . $valueAtRisk . ', null, null, null)';
 						}
 						$GLOBALS ['dbc_object']->insertData ( $tableName, $insert_value );
+						echo "公司代號 $cid 季別 $season 風險值資料已成功新增為 $valueAtRisk <br>";	
 					}
 					
 					// 將該公司狀態改為status
 					$status_value = '"' . $status . '"';
 					$condition = '`company_id`="' . $cid . '"';
 					$GLOBALS ['dbc_object']->updateData ( COMPANYBASICINFORMATION, 'status', $status_value, $condition );
-					
 					// search 公司id是否存在於old_company_list並刪除該element
 					$index = array_search ( $cid, $oldCompanyList );
 					if ($index !== FALSE)
@@ -393,7 +394,7 @@ function uploadValueAtRisk($c, $status, $file) {
 			 */
 			$tableNameArray= array($tableName);
 			array_push($tableNameArray, "company_basic_information");
-			if(!testTotalDataCount($season, $tableNameArray, $testRow-1, $status) or !testDataSum($season, $tableNameArray, $testSum, $status)){
+			if(!testTotalDataCount($season, $tableNameArray, $testRow, $status) or !testDataSum($season, $tableNameArray, $testSum, $status)){
 				unset($condition);
 				$condition=[];
 				array_push($condition, "season", $season, "status", $status);
@@ -423,7 +424,7 @@ function testDataSum($season, $tableNameArray, $testSum, $status){
 	$ret=$GLOBALS["dbc_object"]->getDatawithCondition($dbn, $tableNameArray, $selectList, $condition);
 	$retValueList=mysqli_fetch_row($ret);
 	echo "<p>$testSum, $retValueList[0]</p>";
-	if($testSum!=$retValueList[0]){
+	if(abs($testSum-$retValueList[0])>0.00001){
 		echo "<p>資料上傳驗証不通過！將刪除本季（ $season ）資料！</p>";
 		$verification=false;
 	}

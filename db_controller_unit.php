@@ -88,6 +88,7 @@ class db_controller_unit {
 		}
 		
 		// echo "Entered data successfully\n";
+		
 		$dbn->close();
 		return true;
 	}
