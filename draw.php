@@ -40,7 +40,7 @@ BODY {
 		$dbn = $obj1->connect_DB ();
 		
 		if (isset ( $companyId )) {
-			$datatem = $dbn->query ( 'SELECT * FROM `company_basic_information` WHERE `companyId` = "' . $companyId . '" ' );
+			$datatem = $dbn->query ( 'SELECT * FROM `company_basic_information` WHERE `company_Id` = "' . $companyId . '" ' );
 			$dataRow = mysqli_fetch_row ( $datatem );
 		}
 		?>

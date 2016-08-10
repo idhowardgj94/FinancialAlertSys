@@ -397,8 +397,10 @@ function uploadValueAtRisk($c, $status, $file) {
 			if(!testTotalDataCount($season, $tableNameArray, $testRow, $status) or !testDataSum($season, $tableNameArray, $testSum, $status)){
 				unset($condition);
 				$condition=[];
-				array_push($condition, "season", $season, "status", $status);
-				//$GLOBALS["dbc_object"]->deleteData($tableName, $condition);
+				$condition=[];
+	array_push($condition, "company_financial_information.season", $season,"company_basic_information.status", $status);
+	array_push($condition, "company_financial_information.company_id","company_basic_information.company_id");
+				$GLOBALS["dbc_object"]->deleteData($tableName, $condition);
 			}
 			
 		} else

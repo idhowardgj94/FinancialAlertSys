@@ -38,7 +38,18 @@ class db_controller_unit {
 	}
 	function deleteData($tableName, $condition){
 		$firstFlag=true;
-		$sqlQuery = "DELETE FROM `$tableName` WHERE ";
+		$sqlQuery = "DELETE FROM ";
+		
+		$firstFlag = true;
+		foreach ($tablename AS $name){
+			if($firstFlag){
+				$sqlQuery.="`$name`";
+				$firstFlag=false;
+			}
+			else
+				$sqlQuery.=", `$name`";
+		}
+		$sqlQuery.="WHERE ";
 		while ( list ( , $key ) = each ( $condition ) ) {
 			list ( , $value ) = each ( $condition );
 			if ($firstFlag) {
