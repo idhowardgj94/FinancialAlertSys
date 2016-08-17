@@ -31,8 +31,6 @@ function jumpPage(cid) {
 }
 
 function searchCompanyFiancialIndex(e){
-	// serchInput 當作變數丟到 jumpPage
-	alert('hello, ');
 	// 取消表單提交 ex: submit
 	e.preventDefault();
 	// do somthing with inputs
@@ -42,7 +40,6 @@ function searchCompanyFiancialIndex(e){
 		cid = Trim(document.getElementById('searchInputAdv').value);
 		status++;
 	}
-	alert(cid);
 	//var pattern_isdigit =/^[0-9]*$/; //是否全部數字的正則式
 	//var pattern_isChinese =/^[\u4e00-\u9fa5]+$/;//只能是漢字
 	if(cid.length>STRINGLENTH){
