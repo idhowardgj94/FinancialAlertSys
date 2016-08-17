@@ -1,7 +1,7 @@
 /**
  * 此javascript必須與foolprove一同被載入
  */
-const FINANCIAL_INDEX_LINK = "cfinancial_index";
+const FINANCIAL_INDEX_LINK = "cfinancialIndex";
 const STRINGLENTH = 20;
 function changeColor() {
 	document.getElementById("menu_financialIndex").style.background = "#333";
@@ -95,7 +95,7 @@ function buildCompanyList(index) {
 
 }
 
-const FINANCIAL_INDEX_LINK = "cfinancial_index";
+
 
 // http://whereiswelly.tw/?p=407
 function Trim(InputString)
@@ -120,51 +120,4 @@ function jumpPage(cid) {
 				alert(cid+'公司資料不存在');
 		}
 	});
-}
-
-function searchCompanyFiancialIndex(e){
-	// serchInput 當作變數丟到 jumpPage
-				
-	// 取消表單提交 ex: submit
-	e.preventDefault();
-	// do somthing with inputs
-	
-	var cid = Trim(document.getElementById('serchInput').value);
-	jumpPage(cid);
-
-	return false;
-}
-
-function changeColor() {
-	document.getElementById("menu_financialIndex").style.background = "#333";
-}
-
-
-// 對應下拉式選單選擇的status產生正確的公司選單
-function buildCompanyList(index) {
-	$.ajax({
-		url: './returnsql_companylist.php?status=' + index,
-		type: 'POST',
-		async: false,
-		success: function(msg){
-		
-		var ctr=1;
-		var cnamelist = [];
-		document.CompanyListForm.CompanyList.selectedIndex=0; 
-		document.CompanyListForm.CompanyList.options[0]=new Option("請選擇公司...","");
-		
-		var com_list = $.parseJSON(msg);
-		
-		for (var i=0;i<com_list[0].length;i++) {
-			cnamelist.push(com_list[0][i] + " " + com_list[1][i]);
-		}
-		
-		// 產生公司選單
-		for(i = 0; i< cnamelist.length; i++) {
-			document.CompanyListForm.CompanyList.options[ctr]=new Option(cnamelist[i],FINANCIAL_INDEX_LINK+".php?cid="+com_list[0][i]);
-			ctr=ctr+1;
-		}
-		}
-	});
-
 }

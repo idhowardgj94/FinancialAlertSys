@@ -14,6 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="css/component.css" />
 		<script src="js/modernizr.custom.js"></script>
 		<script type="text/javascript" src="js/financial_index_page_action.js"></script>
+		<script type="text/javascript" src="js/foolprove.js"></script>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 		<script type="text/javascript" src="Grid.js"></script>
 		<script src="js/classie.js"></script>
