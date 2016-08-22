@@ -81,13 +81,14 @@
 	
 	<!-- 選擇上傳檔案 -->
 	請選擇檔案： <br>
-	<input name="upload_file" id="upload_file" type="file"><br>
-	<input name="upload_file_more" id="upload_file_more" type="file" style="display:none;"><br>
+	  <input type="hidden" name="max_file_uploads" value="20">
+	<input name="upload_file" id="upload_file" type="file"/><br>
+	<input name="upload_file_more" id="upload_file_more" type="file" style="display:none;" /><br>
 	<p>如果遇到檔案中的資料已經存在資料庫時，請選擇處理方式：<br>
 	<input type="radio" name="ifUpdate" value="no">略過 &nbsp;
 	<input type="radio" name="ifUpdate" value="yes" checked="checked"> 覆蓋<br></p>
 	
-	<input type="submit" value="上傳文件">
+	<input type="submit" name="submit" value="上傳文件">
 	</form>
 	</div>
 	<br>

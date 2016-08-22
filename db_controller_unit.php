@@ -23,12 +23,15 @@ class db_controller_unit {
 	// 上傳 insert 資料
 	function insertData($tablename, $value) {
 		$dbn = $this->connect_DB ();
-		$sql = 'INSERT INTO `' . $tablename . '` ' . $value . '';
-		// echo $sql;
+		$sql = "INSERT INTO `$tablename` $value";
+		echo $sql;
+		// echo"hahahahaha";
 		$retval = $dbn->query ( $sql );
+		// echo "<p>$retval</p>";
 		if (! $retval) {
-			$ret=( 'Could not insert data: ' . $dbn->error );
-			$this->closeDB($dbn);
+			$ret = ('Could not insert data: ' . $dbn->error);
+			echo $ret;
+			$this->closeDB ( $dbn );
 			return $ret;
 		}
 		
@@ -36,20 +39,22 @@ class db_controller_unit {
 		$this->closeDB ( $dbn );
 		return true;
 	}
-	function deleteData($tableName, $condition){
-		$firstFlag=true;
+	function deleteData($tableName, $condition) {
+		$firstFlag = true;
 		$sqlQuery = "DELETE FROM ";
 		
 		$firstFlag = true;
-		foreach ($tablename AS $name){
-			if($firstFlag){
-				$sqlQuery.="`$name`";
-				$firstFlag=false;
+		if (is_array ( 	$tableName ) && ! empty ( $tableName )) {
+			foreach ( $tableName as $name ) {
+				if ($firstFlag) {
+					$sqlQuery .= "`$name`";
+					$firstFlag = false;
+				} else
+					$sqlQuery .= ", `$name`";
 			}
-			else
-				$sqlQuery.=", `$name`";
-		}
-		$sqlQuery.="WHERE ";
+		} else
+			$sqlQuery .= "`$tableName` ";
+		$sqlQuery .= "WHERE ";
 		while ( list ( , $key ) = each ( $condition ) ) {
 			list ( , $value ) = each ( $condition );
 			if ($firstFlag) {
@@ -59,10 +64,10 @@ class db_controller_unit {
 				$sqlQuery .= "AND `$key`=\"$value\" ";
 		}
 		echo "<p>$sqlQuery</p>";
-		$dbn = $this->connect_DB();
-		$retval = $dbn -> query($sqlQuery);
+		$dbn = $this->connect_DB ();
+		$retval = $dbn->query ( $sqlQuery );
 		if (! $retval) {
-			$ret= 'Could not DELETE data: ' . $dbn->error;
+			$ret = 'Could not DELETE data: ' . $dbn->error;
 			echo $ret;
 			$this->closeDB ( $dbn );
 			return $ret;
@@ -73,26 +78,25 @@ class db_controller_unit {
 		// echo "Entered data successfully\n";
 		$this->closeDB ( $dbn );
 		return true;
-		
 	}
 	/**
 	 * 修改資料
-	 * 
-	 * @param 資料表名  $tablename  	
-	 * @param 修改的欄位名稱  $colname
-	 * @param 值 $value
-	 * @param WHERE，要做好字串處理 $condition
-	 *        	
-	 *        	
+	 *
+	 * @param 資料表名 $tablename        	
+	 * @param 修改的欄位名稱 $colname        	
+	 * @param 值 $value        	
+	 * @param WHERE，要做好字串處理 $condition        	
+	 *
+	 *
 	 */
 	function updateData($tablename, $colname, $value, $condition) {
 		$sql = 'UPDATE `' . $tablename . '` SET `' . $colname . '`=' . $value . ' WHERE ' . $condition;
-		//echo $sql.'<br>';
+		// echo $sql.'<br>';
 		$dbn = $this->connect_DB ();
 		$retval = $dbn->query ( $sql );
 		if (! $retval) {
-			$ret= 'Could not update data: ' . $dbn->error;
-			$dbn->close();
+			$ret = 'Could not update data: ' . $dbn->error;
+			$dbn->close ();
 			return $ret;
 			// die("資料表名稱：$tablename\n 改動屬性：$colname");
 			// die( "updateData");
@@ -100,7 +104,7 @@ class db_controller_unit {
 		
 		// echo "Entered data successfully\n";
 		
-		$dbn->close();
+		$dbn->close ();
 		return true;
 	}
 	/**
@@ -109,23 +113,26 @@ class db_controller_unit {
 	 * 若只放 count(小寫），則回傳資料總筆數<br>
 	 * 若放sum（小寫），在放一個欄位名稱，則回傳該欄位總筆數
 	 * </p>
-	 * @param database con $dbn
-	 * @param tablename 表格名稱，字串        	
-	 * @param AttributeArray 要搜尋的欄位，陣列，第一個值使用 "＊"表示全部
-	 * @param condition 選擇條件，array格式：key, value
+	 *
+	 * @param
+	 *        	database con $dbn
+	 * @param
+	 *        	tablename 表格名稱，字串
+	 * @param
+	 *        	AttributeArray 要搜尋的欄位，陣列，第一個值使用 "＊"表示全部
+	 * @param
+	 *        	condition 選擇條件，array格式：key, value
 	 *        	
 	 */
 	function getDatawithCondition(&$dbn, $tablename, $AttributeArray, $condition) {
 		$sqlQuery = "SELECT ";
 		if (strcmp ( $AttributeArray [0], "*" ) == 0)
 			$sqlQuery .= "*";
-		else if(strcmp($AttributeArray[0], "count")==0){
-			$sqlQuery.="COUNT(*)";
-		}
-		else if(strcmp($AttributeArray[0], "sum")==0){
-			$sqlQuery.="SUM($AttributeArray[1])";
-		}
-		else {
+		else if (strcmp ( $AttributeArray [0], "count" ) == 0) {
+			$sqlQuery .= "COUNT(*)";
+		} else if (strcmp ( $AttributeArray [0], "sum" ) == 0) {
+			$sqlQuery .= "SUM($AttributeArray[1])";
+		} else {
 			$firstFlag = true;
 			foreach ( $AttributeArray as $attrName ) {
 				if ($firstFlag) {
@@ -136,27 +143,32 @@ class db_controller_unit {
 			}
 		}
 		$sqlQuery .= " FROM ";
-		$firstFlag = true;
-		foreach ($tablename AS $name){
-			if($firstFlag){
-				$sqlQuery.="`$name`";
-				$firstFlag=false;
+		
+		if (is_array ( $tablename ) && ! empty ( $tablename )) {
+			$firstFlag = true;
+			foreach ( $tablename as $name ) {
+				if ($firstFlag) {
+					$sqlQuery .= "`$name`";
+					$firstFlag = false;
+				} else
+					$sqlQuery .= ", `$name`";
 			}
-			else
-				$sqlQuery.=", `$name`";
+		} else {
+			$sqlQuery .= "`$tablename`";
 		}
+		
 		$sqlQuery .= " WHERE ";
 		$firstFlag = true;
 		while ( list ( , $key ) = each ( $condition ) ) {
 			list ( , $value ) = each ( $condition );
 			if ($firstFlag) {
-				if(strpos($value, "."))
+				if (strpos ( $value, "." ))
 					$sqlQuery .= "$key= $value ";
 				else
 					$sqlQuery .= "$key= \"$value\" ";
 				$firstFlag = false;
-			} else{
-				if(strpos($value, "."))
+			} else {
+				if (strpos ( $value, "." ))
 					$sqlQuery .= "AND $key= $value ";
 				else
 					$sqlQuery .= "AND $key= \"$value\" ";
@@ -167,7 +179,7 @@ class db_controller_unit {
 		$result = $dbn->query ( $sqlQuery );
 		
 		if (! $result) {
-			echo  "Invalid query:" . mysql_error ();
+			echo "Invalid query:" . mysql_error ();
 			return null;
 		}
 		return $result;
@@ -176,7 +188,6 @@ class db_controller_unit {
 	 * 檢查該id的公司 在財務指標頁面下 是否存在
 	 */
 	function isExistedFinancialIndexData($input_str) {
-		
 		$dbn = $this->connect_DB ();
 		
 		$temdata = $dbn->query ( 'SELECT DISTINCT a.`company_id` FROM `company_basic_information` a, `financial_index_all` b
@@ -352,7 +363,7 @@ class db_controller_unit {
 		}
 		
 		// close dbn
-		//mysqli_close ( $dbn );
+		// mysqli_close ( $dbn );
 		
 		// 回傳儲存好的風險值array
 		return $ValueatRiskData;
