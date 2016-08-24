@@ -174,12 +174,12 @@ class db_controller_unit {
 					$sqlQuery .= "AND $key= \"$value\" ";
 			}
 		}
-		echo "<p>$sqlQuery</p>";
+		//echo "<p>$sqlQuery</p>";
 		$dbn = $this->connect_DB ();
 		$result = $dbn->query ( $sqlQuery );
 		
 		if (! $result) {
-			echo "Invalid query:" . mysql_error ();
+			echo "Invalid query:" . $dbn->error;
 			return null;
 		}
 		return $result;
