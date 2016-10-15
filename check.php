@@ -34,7 +34,7 @@ if($username !== null && $pw !==null){
 	$condition=[];
 	array_push($condition, "username", $username, "pw", $pw);
 	$result=$dbc_object->getDatawithCondition($dbn, $tablename, $AttributeArray, $condition);
-	
+	$dbc_object->closeDB($dbn);
 	//$sqlstr = "SELECT * FROM member_table WHERE username = " .$username. " AND pw =" .$pw. "";
 	//$result = $dbn->query($sqlstr);
 }else{
@@ -48,13 +48,12 @@ if(!empty($result) AND $user_account=mysqli_fetch_row($result)){
 	//input username to session to identify user
 	
 	echo '登入成功';
-	$dbc_object->closeDB($dbn);
 	echo '<meta http-equiv=REFRESH CONTENT=1;url=index.php>';
 	//echo '<meta http-equiv=REFRESH CONTENT=1;url=index.php>';
 	//return to index( index will show butten)
 }
 else{
 	echo '登入失敗';
-	//echo '<meta http-equiv=REFRESH CONTENT=1;url=login.php>';
+	echo '<meta http-equiv=REFRESH CONTENT=1;url=login.php>';
 }
 ?>

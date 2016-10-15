@@ -1,9 +1,9 @@
 <?php
-include 'db_controller_unit.php';
+include_once 'db_controller_unit.php';
 class valueatRiskPage {
 	var $companyList;
 	var $id;
-	// 判斷風險值是否為高 中風險
+	// 	判斷風險值是否為高 中風險
 	// 高 > 50.00 （改為30？
 	// 中 > 35.00 （改為40？ 因為之前換過公式？
 	/**

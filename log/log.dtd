@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT Record (ConnectIP)>
+<!ATTLIST Record
+	Number CDATA "0"
+>
+<!ELEMENT ConnectIP (Page, UserID, Time)>
+<!ELEMENT Page (#PCDATA)>
+<!ELEMENT UserID (#PCDATA)>
+<!ELEMENT Time (Date, Hour, Minute)>
+<!ELEMENT Date (#PCDATA)>
+<!ELEMENT Hour (#PCDATA)>
+<!ELEMENT Minute (#PCDATA)>

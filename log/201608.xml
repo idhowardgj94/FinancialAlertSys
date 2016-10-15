@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Record SYSTEM "log.dtd" >
+<Record Number="0">
+  <ConnectIP>
+    <Page>Page</Page>
+    <UserID>UserID</UserID>
+    <Time>
+      <Date>Date</Date>
+      <Hour>Hour</Hour>
+      <Minute>Minute</Minute>
+    </Time>
+  </ConnectIP>
+</Record>

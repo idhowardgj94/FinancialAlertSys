@@ -1,5 +1,5 @@
 <?php
-include 'db_controller_unit.php';
+include_once  'db_controller_unit.php';
 
 class top100Page {
 

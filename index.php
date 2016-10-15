@@ -25,6 +25,7 @@ session_start ();
 
 </head>
 <body>
+
 	<?php
 	if (isset ( $_SESSION ['username'] )) {
 		?>
@@ -39,5 +40,7 @@ session_start ();
 		// 重新導向到login.php
 	}
 	?>
+	<div class="realtimeuserscounter realtimeuserscounter--styled"></div>
+<script src="https://realtimeusers.bycontrast.co/realtimeusers.js"></script>
 </body>
 </html>
