@@ -201,6 +201,9 @@
 			<li><a href="#"
 				onclick="window.open('GroupRiskExplanation.html', '企業集團風險監控系統', 
       'alwaysRaised=yes, top=300, left=500, width=400, height=200, location=no');">企業集團風險監控系統</a></li>
+      <li><a href="#"
+				onclick="window.open('explanation.html', '預警系統使用說明', 
+      'alwaysRaised=yes, top=300, left=500, width=1080, height=500, location=no');">預警系統使用說明</a></li>
 		</ul></li>
 	<?php
 	include 'checkAdminAccount.php';
@@ -215,8 +218,3 @@
 	}
 	?>
 </ul>
-<script id="_waufso">var _wau = _wau || []; _wau.push(["classic", "hczyejp911ke", "fso"]);
-(function() {var s=document.createElement("script"); s.async=true;
-s.src="//widgets.amung.us/classic.js";
-document.getElementsByTagName("head")[0].appendChild(s);
-})();</script>

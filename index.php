@@ -32,6 +32,7 @@ session_start ();
 		<div id="nav">
 			<?php include './menu_list.php';?>
 		</div>
+		<?php include 'explanation.html';?>
 	<?php
 	} else {
 		echo '您無權觀看此頁面！';
@@ -40,7 +41,6 @@ session_start ();
 		// 重新導向到login.php
 	}
 	?>
-	<div class="realtimeuserscounter realtimeuserscounter--styled"></div>
-<script src="https://realtimeusers.bycontrast.co/realtimeusers.js"></script>
+	
 </body>
 </html>
