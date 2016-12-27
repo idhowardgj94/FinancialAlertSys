@@ -21,7 +21,9 @@
 		
 }
 #container #item {
-	text-indent: 2em;
+	position: relative;
+	left: 2em;
+	
 }
 #container {
 	
